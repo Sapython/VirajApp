@@ -1,0 +1,90 @@
+:host{
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+}
+h4{
+  padding: 0px 20px;
+}
+mat-date-range-input {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  color:var(--Vrajera-primary-text)
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0px 10px;
+  button{
+    border-radius: 12px;
+    border: 2px solid #FF5E35;
+    background: #FFF;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    gap:8px;
+    color: #FF5E35;
+    font-size: 12px;
+    i{
+      font-size: 20px;
+      color: #FF5E35;
+    }
+  }
+}
+.body {
+  height: 100%;
+  .tableContainer {
+    border: 1px solid #b3b3b3;
+    background: #fff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.25);
+    height: 100%;
+    overflow-y: auto;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      font-size: 12px;
+      font-family: sans-serif;
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      border-collapse: collapse;
+      border-radius: 1em;
+    }
+    table thead {
+      position: sticky;
+      top: 0px;
+    }
+    table thead tr {
+      background-color: var(--Vrajera-primary-text);
+      color: #ffffff;
+      text-align: left;
+      th {
+        font-size: var(--Vrajera-font-xlarge);
+      }
+    }
+    table th,
+    table td {
+      padding: 6px 10px;
+    }
+    table tbody tr {
+      border-bottom: 1px solid #dddddd;
+    }
+
+    table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+    }
+
+    table tbody tr:last-of-type {
+      border-bottom: 2px solid var(--Vrajera-primary-text);
+    }
+    table tbody tr.active-row {
+      font-weight: bold;
+      color: var(--Vrajera-primary-text);
+    }
+    .spacer {
+      height: 200px;
+    }
+  }
+}

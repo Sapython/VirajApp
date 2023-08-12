@@ -1,0 +1,51 @@
+<div class="notFound" *ngIf="!currentTax && editMode">
+  <h3>Not Found</h3>
+  <p>The category you are looking for is not available.</p>
+</div>
+<ion-list *ngIf="currentTax || !editMode">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../../taxes">{{editMode ? 'Add Tax' : 'Taxes'}}</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">Add Tax</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <ion-item>
+    <ion-label>
+      <h1>New Tax</h1>
+    </ion-label>
+  </ion-item>
+  <form [formGroup]="taxForm" (ngSubmit)="submit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Tax Name <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input formControlName="name" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Tax Type</ion-label>
+        <ion-select formControlName="type" value="percentage" multiple="false" placeholder="Select Tax">
+          <ion-select-option value="percentage">Percentage</ion-select-option>
+          <ion-select-option value="flat">Flat</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Tax Mode</ion-label>
+        <ion-select formControlName="mode" value="product" multiple="false" placeholder="Select Tax">
+          <ion-select-option value="product">Product</ion-select-option>
+          <ion-select-option value="bill">Bill</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Tax Cost <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input formControlName="cost" required type="number"></ion-input>
+      </ion-item>
+      <br>
+      <br>
+      <ion-row class="ion-justify-content-around">
+        <ion-button (click)="cancel()" expand="full" color="warning">
+          Cancel
+        </ion-button>
+        <ion-button type="submit" expand="full">
+          Save
+        </ion-button>
+      </ion-row>
+    </ion-list>
+  </form>
+</ion-list>

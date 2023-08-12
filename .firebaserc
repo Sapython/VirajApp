@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fbms-shreeva-demo": {
+      "hosting": {
+        "app": [
+          "fbms-shreeva-demo"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fbms-shreeva-demo"
+  }
+}

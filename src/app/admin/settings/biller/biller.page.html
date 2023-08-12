@@ -1,0 +1,49 @@
+<app-header [showOutletSelector]="false" pageTitle="Biller" backRoute="../"></app-header>
+<ion-content [fullscreen]="true">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../settings">Settings</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">Biller</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Total Time to mark a table as late</ion-label>
+      <ion-input (change)="isValidNumber(tableTimeout.value) ? updateSettings({ tableTimeOutTime: tableTimeout.value }) : tableTimeout.value = 0;" type="number" placeholder="Time in minutes" #tableTimeout></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">This text will be added as a note on printed bill</ion-label>
+      <ion-input (change)="updateSettings({ customBillNote:  endBillNote.value})" type="text" placeholder="Thank you for visiting us" #endBillNote></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Prefix will be added to printed bill no</ion-label>
+      <ion-input type="text" placeholder="2023-" (change)="updateSettings({ billNoSuffix: billNoSuffix.value })" #billNoSuffix></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Enable re-print kot option in manage kot panel</ion-label>
+      <ion-toggle (change)="updateSettings({kotRePrintable:kotRePrintable.value})" #kotRePrintable></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Enable smart mode to make your work efficient</ion-label>
+      <ion-toggle disabled></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Allow kot edit</ion-label>
+      <ion-toggle #kotEditable (change)="updateSettings({ kotEditable: kotEditable.value })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Total time till you can edit KOT</ion-label>
+      <ion-input (change)="isValidNumber(editKotTime.value) ? this.updateSettings({ editKotTime: editKotTime.value }) : editKotTime.value = 0;" #editKotTime type="number" placeholder="Time in seconds"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Directly print a bill when finalized</ion-label>
+      <ion-toggle (change)="updateSettings({printBillAfterFinalize: printBillAfterFinalize.value})" #printBillAfterFinalize></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Directly print a bill when settled</ion-label>
+      <ion-toggle (change)="updateSettings({printBillAfterSettle: printBillAfterSettle.value})" #printBillAfterSettle></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Allow to add multiple discounts to a bill</ion-label>
+      <ion-toggle #multipleDiscount (change)="updateSettings({ multipleDiscount: multipleDiscount.value })"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,169 @@
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .selectors {
+    display: flex;
+    gap: 10px;
+	  justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+    .select {
+      border-radius: 12px;
+      border: 2px solid #ff5e35;
+      background: #fff;
+      color: #ff5e35;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  }
+  mat-date-range-input {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    color: var(--Vrajera-primary-text);
+  }
+  .summary {
+    // margin: 20px;
+    border-radius: 16px;
+    border: 2px solid #d8d8d8;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.1);
+    .heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 17px;
+      border-bottom: 2px solid #c7c7c7;
+      gap: 10px;
+      p {
+        margin: 0px;
+      }
+    }
+    .cards {
+      display: grid;
+      grid-template-areas: "totalKot totalBill" "startKot endKot" "total total";
+      padding: 20px;
+      gap: 20px;
+      p {
+        margin: 0px;
+      }
+      div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        background: #fff8f6;
+        border: 1px solid #ff5e35;
+        padding: 20px;
+        font-size: 18px;
+      }
+      .totalKot {
+        grid-area: totalKot;
+        p:nth-child(1){
+          font-weight: 600;
+        }
+        p:nth-child(2){
+          color:var(--Vrajera-success);
+          font-size:var(--Vrajera-font-xxlarge);
+        }
+      }
+      .totalBills {
+        grid-area: totalBill;
+        p:nth-child(1){
+          font-weight: 600;
+        }
+        p:nth-child(2){
+          color:var(--Vrajera-primary);
+          font-size:var(--Vrajera-font-xxlarge);
+        }
+      }
+      .startingKot {
+        grid-area: startKot;
+        p:nth-child(1){
+          // font-weight: 600;
+        }
+        p:nth-child(2){
+          color:rgba(0, 183, 255,1);
+          font-size:var(--Vrajera-font-xxlarge);
+        }
+      }
+      .endingKot {
+        grid-area: endKot;
+        p:nth-child(1){
+          // font-weight: 600;
+        }
+        p:nth-child(2){
+          color:rgba(0, 183, 255,1);
+          font-size:var(--Vrajera-font-xxlarge);
+        }
+      }
+      .totalSales {
+        grid-area: total;
+        flex-direction: row;
+        justify-content: space-between;
+        p:nth-child(1){
+          font-weight: 600;
+        }
+        p:nth-child(2){
+          color:var(--Vrajera-success);
+          font-size:var(--Vrajera-font-xxlarge);
+        }
+      }
+    }
+  }
+  .downloadOptions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .bills {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 20px;
+    .bill {
+      border-radius: 12px;
+      border: 1px solid #d8d8d8;
+      background: #fff;
+      box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      gap: 15px;
+      p {
+        margin: 0px;
+      }
+      span {
+        i {
+          color: var(--Vrajera-primary);
+        }
+      }
+      .title {
+        display: flex;
+        justify-content: space-between;
+      }
+      .detail {
+        display: flex;
+        justify-content: space-between;
+        span {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          strong {
+            color: var(--Vrajera-success);
+          }
+        }
+      }
+      .actions {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        ion-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

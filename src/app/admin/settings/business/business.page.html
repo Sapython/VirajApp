@@ -1,0 +1,37 @@
+<app-header [showOutletSelector]="false" pageTitle="Biller" backRoute="../"></app-header>
+<ion-content [fullscreen]="true">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../settings">Settings</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">Biller</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <form [formGroup]="settingsForm" (ngSubmit)="submit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Business Name</ion-label>
+        <ion-input formControlName="hotelName" placeholder="Business Name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Phone Number</ion-label>
+        <ion-input formControlName="phone" placeholder="Phone Number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Address</ion-label>
+        <ion-textarea formControlName="address" placeholder="Address"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">GST Number</ion-label>
+        <ion-input formControlName="gst" placeholder="GST Number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">FSSAI Number</ion-label>
+        <ion-input formControlName="fssai" placeholder="FSSAI Number"></ion-input>
+      </ion-item>
+      <br />
+      <br />
+      <ion-row class="ion-justify-content-around">
+        <ion-button color="light" type="button" routerLink="../"> Cancel </ion-button>
+        <ion-button type="submit"> Submit </ion-button>
+      </ion-row>
+    </ion-list>
+  </form>
+</ion-content>

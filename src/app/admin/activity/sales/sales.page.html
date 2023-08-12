@@ -1,0 +1,1634 @@
+<div class="summaryCard fadeUp">
+  <div class="paddedBody">
+    <div class="title">
+      <h1>Dashboard</h1>
+      <ion-button (click)="picker.open()" fill="clear">
+        <ion-icon slot="icon-only" name="calendar"></ion-icon>
+      </ion-button>
+    </div>
+    <div class="dates">
+      <p>Selected Range: </p>
+      <mat-date-range-picker hidden touchUi #picker></mat-date-range-picker>
+      <mat-date-range-input
+        tabindex="-1"
+        hidden
+        [formGroup]="dateRangeFormGroup"
+        [rangePicker]="picker"
+      >
+        <input matStartDate formControlName="startDate" placeholder="Start date" />
+        <input matEndDate formControlName="endDate" placeholder="End date" />
+      </mat-date-range-input>
+    </div>
+  </div>
+</div>
+<div class="summaryCard fadeUp" style="animation-delay:200ms">
+  <div class="heading">
+    <p>Summary</p>
+    <select (change)="slideNext(selector.value,swiperAnalytics)" #selector>
+      <option [value]="0">All</option>
+      <option [value]="1">Dine In</option>
+      <option [value]="2">Takeaway</option>
+      <option [value]="3">Online</option>
+    </select>
+  </div>
+  <div class="body">
+    <swiper
+      #swiperAnalytics
+      [slidesPerView]="1"
+      [spaceBetween]="50"
+      (slideChange)="slideChanged(selector,swiperContainer)"
+      #swiperContainer
+    >
+      <ng-template swiperSlide>
+        <div class="mode">
+          <div class="card total">
+            <h3>Total Sales:</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.all?.totalSales | currency
+              : "INR" }}</strong
+            >
+            <p>
+              Net Sales: {{ this.analyticsData?.salesChannels?.all?.netSales |
+              currency : "INR" }}
+            </p>
+            <p>
+              Settled Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.all?.totalSettledBills}}</span
+              >
+            </p>
+            <p>
+              Running Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.all?.totalUnsettledBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card discount">
+            <p>Discounts</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.all?.totalDiscount |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.all?.totalDiscountedBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card nc">
+            <p>NC</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.all?.totalNC| currency :
+              "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.all?.totalNcBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card taxes">
+            <h3>Taxes</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.all?.totalTaxes | currency
+              : "INR" }}</strong
+            >
+          </div>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="mode">
+          <div class="card total">
+            <h3>Total Sales:</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.dineIn?.totalSales |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Net Sales: {{ this.analyticsData?.salesChannels?.dineIn?.netSales
+              | currency : "INR" }}
+            </p>
+            <p>
+              Settled Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.dineIn?.totalSettledBills}}</span
+              >
+            </p>
+            <p>
+              Running Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.dineIn?.totalUnsettledBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card discount">
+            <p>Discounts</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.dineIn?.totalDiscount |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.dineIn?.totalDiscountedBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card nc">
+            <p>NC</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.dineIn?.totalNC| currency :
+              "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.dineIn?.totalNcBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card taxes">
+            <h3>Taxes</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.dineIn?.totalTaxes |
+              currency : "INR" }}</strong
+            >
+          </div>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="mode">
+          <div class="card total">
+            <h3>Total Sales:</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.takeaway?.totalSales |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Net Sales: {{
+              this.analyticsData?.salesChannels?.takeaway?.netSales | currency :
+              "INR" }}
+            </p>
+            <p>
+              Settled Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.takeaway?.totalSettledBills}}</span
+              >
+            </p>
+            <p>
+              Running Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.takeaway?.totalUnsettledBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card discount">
+            <p>Discounts</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.takeaway?.totalDiscount |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.takeaway?.totalDiscountedBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card nc">
+            <p>NC</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.takeaway?.totalNC| currency
+              : "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.takeaway?.totalNcBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card taxes">
+            <h3>Taxes</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.takeaway?.totalTaxes |
+              currency : "INR" }}</strong
+            >
+          </div>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="mode">
+          <div class="card total">
+            <h3>Total Sales:</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.online?.totalSales |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Net Sales: {{ this.analyticsData?.salesChannels?.online?.netSales
+              | currency : "INR" }}
+            </p>
+            <p>
+              Settled Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.online?.totalSettledBills}}</span
+              >
+            </p>
+            <p>
+              Running Bills -
+              <span
+                >{{this.analyticsData?.salesChannels?.online?.totalUnsettledBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card discount">
+            <p>Discounts</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.online?.totalDiscount |
+              currency : "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.online?.totalDiscountedBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card nc">
+            <p>NC</p>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.online?.totalNC| currency :
+              "INR" }}</strong
+            >
+            <p>
+              Bills
+              <span
+                >{{this.analyticsData?.salesChannels?.online?.totalNcBills}}</span
+              >
+            </p>
+          </div>
+          <div class="card taxes">
+            <h3>Taxes</h3>
+            <strong
+              >{{ this.analyticsData?.salesChannels?.online?.totalTaxes |
+              currency : "INR" }}</strong
+            >
+          </div>
+        </div>
+      </ng-template>
+    </swiper>
+  </div>
+</div>
+<div class="summaryCard fadeUp" style="animation-delay:300ms">
+  <div class="heading">
+    <p>Quick Links</p>
+  </div>
+  <div class="quickLinks">
+    <div class="link gm" (click)="itemWiseSalesSection.scrollIntoView()">Item Wise Sales</div>
+    <div class="link gm" (click)="userWiseActionSection.scrollIntoView()">User wise actions</div>
+  </div>
+</div>
+<div class="summaryCard fadeUp" style="animation-delay:400ms">
+  <div class="heading">
+    <p><span class="actual"></span> Actual Sales Vs <span class="average"></span> Avg Sales</p>
+  </div>
+  <div class="salesVsActualGraph gm">
+    <canvas id="salesData"></canvas>
+  </div>
+</div>
+<div class="summaryCard fadeUp" style="animation-delay:500ms">
+  <div class="heading">
+    <p>Payment Received</p>
+    <select
+      (change)="slideNext(paymentSelector.value,swiperPaymentModes)"
+      #paymentSelector
+    >
+      <option [value]="0">All</option>
+      <option [value]="1">Dine In</option>
+      <option [value]="2">Takeaway</option>
+      <option [value]="3">Online</option>
+    </select>
+  </div>
+  <div class="body">
+    <swiper
+      #swiperPaymentModes
+      [slidesPerView]="1"
+      [config]="{autoHeight: true}"
+      [spaceBetween]="50"
+      (slideChange)="slideChanged(paymentSelector,swiperPaymentModes)"
+    >
+      <ng-template swiperSlide>
+        <div class="paymentReceived">
+          <p>All Channel</p>
+          <div
+            class="modes"
+            *ngIf="this.analyticsData?.salesChannels?.all?.paymentReceived"
+          >
+            <div
+              class="channel"
+              *ngFor="let channel of this.analyticsData?.salesChannels?.all?.paymentReceived | keyvalue"
+            >
+              <div class="title">
+                <p>{{ channel.key }}</p>
+                <p>{{ channel.value }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                width:
+                  (channel.value / (this.analyticsData?.salesChannels?.all?.totalSales || 0)) * 100 + '%'
+                }"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <img
+            *ngIf="!(this.analyticsData?.salesChannels?.all?.paymentReceived | keyvalue)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="paymentReceived">
+          <p>Dine-In Channel</p>
+          <div
+            class="modes"
+            *ngIf="this.analyticsData?.salesChannels?.dineIn?.paymentReceived"
+          >
+            <div
+              class="channel"
+              *ngFor="let channel of this.analyticsData?.salesChannels?.dineIn?.paymentReceived | keyvalue"
+            >
+              <div class="title">
+                <p>{{ channel.key }}</p>
+                <p>{{ channel.value }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                width:
+                  (channel.value / (this.analyticsData?.salesChannels?.dineIn?.totalSales || 0)) * 100 + '%'
+                }"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <img
+            *ngIf="!(this.analyticsData?.salesChannels?.dineIn?.paymentReceived | keyvalue)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="paymentReceived">
+          <p>Takeaway Channel</p>
+          <div
+            class="modes"
+            *ngIf="this.analyticsData?.salesChannels?.takeaway?.paymentReceived"
+          >
+            <div
+              class="channel"
+              *ngFor="let channel of this.analyticsData?.salesChannels?.takeaway?.paymentReceived | keyvalue"
+            >
+              <div class="title">
+                <p>{{ channel.key }}</p>
+                <p>{{ channel.value }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                width:
+                  (channel.value / (this.analyticsData?.salesChannels?.takeaway?.totalSales || 0)) * 100 + '%'
+                }"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <img
+            *ngIf="!(this.analyticsData?.salesChannels?.takeaway?.paymentReceived | keyvalue)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="paymentReceived">
+          <p>Online Channel</p>
+          <div
+            class="modes"
+            *ngIf="this.analyticsData?.salesChannels?.online?.paymentReceived"
+          >
+            <div
+              class="channel"
+              *ngFor="let channel of this.analyticsData?.salesChannels?.online?.paymentReceived | keyvalue"
+            >
+              <div class="title">
+                <p>{{ channel.key }}</p>
+                <p>{{ channel.value }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+              width:
+                (channel.value / (this.analyticsData?.salesChannels?.online?.totalSales || 0)) * 100 + '%'
+              }"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <img
+            *ngIf="!(this.analyticsData?.salesChannels?.online?.paymentReceived | keyvalue)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+    </swiper>
+  </div>
+</div>
+<div class="summaryCard fadeUp">
+  <div class="heading">
+    <p>Bill Wise Sales</p>
+    <select #typeSelector (change)="updateSlides(billWiseSwiperContainer)">
+      <option value="range">By Range</option>
+      <option value="table">By Table</option>
+      <option value="time">By Time</option>
+    </select>
+    <select
+      #channelSelector
+      (change)="slideNext(channelSelector.value,billWiseSwiperContainer)"
+    >
+      <option [value]="0">All</option>
+      <option [value]="1">Dine In</option>
+      <option [value]="2">Takeaway</option>
+      <option [value]="3">Online</option>
+    </select>
+  </div>
+  <div class="body">
+    <swiper
+      [slidesPerView]="1"
+      [spaceBetween]="50"
+      [config]="{autoHeight: true}"
+      #billWiseSwiperContainer
+      (slideChange)="slideChanged(channelSelector,billWiseSwiperContainer)"
+    >
+      <ng-template swiperSlide>
+        <div class="modes" *ngIf="typeSelector.value == 'range'">
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Medium Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.totalSettledBills || 0))*100) + '%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <ng-container
+            *ngFor="let table of analyticsData?.salesChannels?.all?.billWiseSales?.tableWise; let i = index"
+          >
+            <div class="channel" *ngIf="i < 10">
+              <div class="title">
+                <p>{{table.table}}</p>
+                <p>{{ table.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                  width: (((table.totalBills || 0) / (analyticsData?.salesChannels?.all?.billWiseSales?.maxTables || 0)) * 100)+'%'
+                  }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <ng-container
+            *ngFor="let time of analyticsData?.salesChannels?.all?.billWiseSales?.time; let i = index"
+          >
+            <div class="channel" *ngIf="i<10">
+              <div class="title">
+                <p>
+                  {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
+                  {{time.time + 1}}:00 {{(time.timeNumber +1) > 12 ? 'AM' :
+                  'PM'}}
+                </p>
+                <p>{{ time.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                    width: (((time.totalBills || 0) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
+                  }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="modes" *ngIf="typeSelector.value == 'range'">
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.lowRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Medium Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.mediumRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100) + '%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <ng-container
+            *ngFor="let table of analyticsData?.salesChannels?.dineIn?.billWiseSales?.tableWise; let i = index"
+          >
+            <div class="channel" *ngIf="i<10">
+              <div class="title">
+                <p>{{table.table}}</p>
+                <p>{{ table.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                  width: (((table.totalBills || 0) / (analyticsData?.salesChannels?.all?.billWiseSales?.maxTables || 0))*100) + '%'
+                }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <ng-container
+            *ngFor="let time of analyticsData?.salesChannels?.dineIn?.billWiseSales?.time; let i = index"
+          >
+            <div class="channel" *ngIf="i < 10">
+              <div class="title">
+                <p>
+                  {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
+                  {{time.time + 1}}:00 {{(time.timeNumber +1) > 12 ? 'AM' :
+                  'PM'}}
+                </p>
+                <p>{{ time.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                  width: ((time.totalBills || 0) / ((analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0) + (analyticsData?.salesChannels?.dineIn?.totalUnsettledBills || 0))*100)+'%'
+                  }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="modes" *ngIf="typeSelector.value == 'range'">
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.lowRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Medium Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.mediumRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0))*100) + '%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.highRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <ng-container
+            *ngFor="let table of analyticsData?.salesChannels?.takeaway?.billWiseSales?.tableWise; let i = index"
+          >
+            <div class="channel" *ngIf="i <10">
+              <div class="title">
+                <p>{{table.table}}</p>
+                <p>{{ table.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                    width: ((table.totalBills || 0) / (analyticsData?.salesChannels?.takeaway?.billWiseSales?.maxTables || 0)) + '%'
+                  }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <ng-container
+            *ngFor="let time of analyticsData?.salesChannels?.takeaway?.billWiseSales?.time; let i = index"
+          >
+            <div class="channel" *ngIf="i < 10">
+              <div class="title">
+                <p>
+                  {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
+                  {{time.time + 1}}:00 {{(time.timeNumber +1) > 12 ? 'AM' :
+                  'PM'}}
+                </p>
+                <p>{{ time.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                    width: ((time.totalBills || 0) / ((analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0) + (analyticsData?.salesChannels?.takeaway?.totalUnsettledBills || 0))*100)+'%'
+                  }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10"></p>
+          </ng-container>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="modes" *ngIf="typeSelector.value == 'range'">
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.lowRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Medium Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.mediumRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.totalSettledBills || 0))*100) + '%'
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="channel">
+            <div class="title">
+              <p>Low Range</p>
+              <p>
+                {{
+                (analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.highRange?.bills
+                || []).length }}
+              </p>
+            </div>
+            <div class="progressBar">
+              <div
+                class="progress"
+                [ngStyle]="{
+                  width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.totalSettledBills || 0))*100)+'%'
+                }"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <ng-container
+            *ngFor="let table of analyticsData?.salesChannels?.online?.billWiseSales?.tableWise; let i = index"
+          >
+            <div class="channel" *ngIf="i < 10">
+              <div class="title">
+                <p>{{table.table}}</p>
+                <p>{{ table.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                width: ((table.totalBills || 0) / (analyticsData?.salesChannels?.online?.billWiseSales?.maxTables || 0)) + '%'
+                }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+        <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <ng-container
+            *ngFor="let time of analyticsData?.salesChannels?.online?.billWiseSales?.time; let i = index"
+          >
+            <div class="channel" *ngIf="i<10">
+              <div class="title">
+                <p>
+                  {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
+                  {{time.time + 1}}:00 {{(time.timeNumber +1) > 12 ? 'AM' :
+                  'PM'}}
+                </p>
+                <p>{{ time.totalBills }}</p>
+              </div>
+              <div class="progressBar">
+                <div
+                  class="progress"
+                  [ngStyle]="{
+                width: ((time.totalBills || 0) / ((analyticsData?.salesChannels?.online?.totalSettledBills || 0) + (analyticsData?.salesChannels?.online?.totalUnsettledBills || 0))*100)+'%'
+                }"
+                ></div>
+              </div>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+      </ng-template>
+    </swiper>
+  </div>
+</div>
+<div class="summaryCard fadeUp" #itemWiseSalesSection>
+  <div class="heading">
+    <p>Item Wise Sales</p>
+    <select
+      #itemWiseSalesSelector
+      (change)="slideNext(itemWiseSalesSelector.value,swiperItemSales)"
+    >
+      <option [value]="0">All</option>
+      <option [value]="1">Dine In</option>
+      <option [value]="2">Takeaway</option>
+      <option [value]="3">Online</option>
+    </select>
+  </div>
+  <div class="body">
+    <swiper
+      [slidesPerView]="1"
+      [spaceBetween]="50"
+      [config]="{autoHeight: true}"
+      #swiperItemSales
+      (slideChange)="slideChanged(itemWiseSalesSelector,swiperItemSales)"
+    >
+      <ng-template swiperSlide>
+        <div class="itemWiseSales">
+          <div class="category">
+            <p>Most Selling category</p>
+            <p *ngIf="mostSellingToggle.value == 'byPrice'">
+              {{analyticsData?.salesChannels?.all?.itemWiseSales?.priceTopCategory?.name}}
+            </p>
+            <p *ngIf="mostSellingToggle.value == 'byQuantity'">
+              {{analyticsData?.salesChannels?.all?.itemWiseSales?.quantityTopCategory?.name}}
+            </p>
+          </div>
+          <hr />
+          <select hidden #mostSellingToggle>
+            <option value="byPrice"></option>
+            <option value="byQuantity"></option>
+          </select>
+          <div class="toggles">
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byPrice'}"
+              (click)="mostSellingToggle.value = 'byPrice'"
+            >
+              By Price
+            </button>
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byQuantity'}"
+              (click)="mostSellingToggle.value = 'byQuantity'"
+            >
+              By Quantity
+            </button>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice; let i = index;"
+            >
+              <div class="channel" *ngIf="i<10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.price }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.price / (analyticsData?.salesChannels?.all?.itemWiseSales?.byPriceMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i==10">See More</p>
+            </ng-container>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.all?.itemWiseSales?.byQuantity; let i = index"
+            >
+              <div *ngIf="i < 10" class="channel">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.quantity }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.quantity / (analyticsData?.salesChannels?.all?.itemWiseSales?.byQuantityMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i == 10">See More</p>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="itemWiseSales">
+          <div class="category">
+            <p>Most Selling category</p>
+            <p>Category Name</p>
+          </div>
+          <hr />
+          <select hidden #mostSellingToggle>
+            <option value="byPrice"></option>
+            <option value="byQuantity"></option>
+          </select>
+          <div class="toggles">
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byPrice'}"
+              (click)="mostSellingToggle.value = 'byPrice'"
+            >
+              By Price
+            </button>
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byQuantity'}"
+              (click)="mostSellingToggle.value = 'byQuantity'"
+            >
+              By Quantity
+            </button>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice; let i = index;"
+            >
+              <div class="channel" *ngIf="i < 10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.price }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.price / (analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPriceMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i == 10">See More</p>
+            </ng-container>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byQuantity; let i = index"
+            >
+              <div class="channel" *ngIf="i < 10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.quantity }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.quantity / (analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byQuantityMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i == 10">See More</p>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="itemWiseSales">
+          <div class="category">
+            <p>Most Selling category</p>
+            <p>Category Name</p>
+          </div>
+          <hr />
+          <select hidden #mostSellingToggle>
+            <option value="byPrice"></option>
+            <option value="byQuantity"></option>
+          </select>
+          <div class="toggles">
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byPrice'}"
+              (click)="mostSellingToggle.value = 'byPrice'"
+            >
+              By Price
+            </button>
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byQuantity'}"
+              (click)="mostSellingToggle.value = 'byQuantity'"
+            >
+              By Quantity
+            </button>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice; let i = index;"
+            >
+              <div class="channel" *ngIf="i<10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.price }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.price / (analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPriceMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i==10">See More</p>
+            </ng-container>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byQuantity; let i = index"
+            >
+              <div class="channel" *ngIf="i<10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.quantity }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.quantity / (analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byQuantityMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i==10">See More</p>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="itemWiseSales">
+          <div class="category">
+            <p>Most Selling category</p>
+            <p>Category Name</p>
+          </div>
+          <hr />
+          <select hidden #mostSellingToggle>
+            <option value="byPrice"></option>
+            <option value="byQuantity"></option>
+          </select>
+          <div class="toggles">
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byPrice'}"
+              (click)="mostSellingToggle.value = 'byPrice'"
+            >
+              By Price
+            </button>
+            <button
+              class="toggle"
+              [ngClass]="{active:mostSellingToggle.value == 'byQuantity'}"
+              (click)="mostSellingToggle.value = 'byQuantity'"
+            >
+              By Quantity
+            </button>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice; let i = index;"
+            >
+              <div class="channel" *ngIf="i<10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.price }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.price / (analyticsData?.salesChannels?.online?.itemWiseSales?.byPriceMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i==10">See More</p>
+            </ng-container>
+          </div>
+          <div
+            class="modes"
+            *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
+          >
+            <ng-container
+              *ngFor="let channel of analyticsData?.salesChannels?.online?.itemWiseSales?.byQuantity; let i = index"
+            >
+              <div class="channel" *ngIf="i<10">
+                <div class="title">
+                  <p>{{ channel.name }}</p>
+                  <p>{{ channel.quantity }}</p>
+                </div>
+                <div class="progressBar">
+                  <div
+                    class="progress"
+                    [ngStyle]="{
+                      width: ((channel.quantity / (analyticsData?.salesChannels?.online?.itemWiseSales?.byQuantityMax || 0))*100)+'%'
+                    }"
+                  ></div>
+                </div>
+              </div>
+              <p *ngIf="i==10">See More</p>
+            </ng-container>
+          </div>
+        </div>
+      </ng-template>
+    </swiper>
+  </div>
+</div>
+<div class="summaryCard fadeUp">
+  <div class="heading">
+    <p>Suspicious Activity</p>
+    <select
+      (change)="slideNext(suspiciousSelector.value,swiperSuspiciousActivity)"
+      #suspiciousSelector
+      value="0"
+    >
+      <option [value]="0">All</option>
+      <option [value]="1">Dine In</option>
+      <option [value]="2">Takeaway</option>
+      <option [value]="3">Online</option>
+    </select>
+  </div>
+  <div class="body">
+    <swiper
+      #swiperSuspiciousActivity
+      [slidesPerView]="1"
+      [spaceBetween]="50"
+      [config]="{autoHeight: true}"
+      (slideChange)="slideChanged(suspiciousSelector,swiperSuspiciousActivity)"
+    >
+      <ng-template swiperSlide>
+        <div class="suspiciousActivity">
+          <ng-container
+            *ngFor="let item of analyticsData?.salesChannels?.all?.suspiciousActivities; let i = index"
+          >
+            <div class="activity" *ngIf="i < 10">
+              <div class="title">
+                <!-- <p>{{item.activity.type}}</p> -->
+                <p *ngIf="item.activity.type == 'billDiscounted'">
+                  Bill Discounted
+                </p>
+                <p *ngIf="item.activity.type == 'lineDiscounted'">
+                  Item Discount
+                </p>
+                <p *ngIf="item.activity.type == 'lineCancelled'">
+                  Item Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billCancelled'">
+                  Bill Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billNC'">Bill NC</p>
+                <span
+                  ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                  date:'shortTime'}}</span
+                >
+                <span><i class="ri-user-line"></i>{{item.activity.user}}</span>
+              </div>
+              <p>{{item.activity.message}}</p>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+        </div>
+        <img
+          *ngIf="!(analyticsData?.salesChannels?.all?.suspiciousActivities)?.length"
+          src="assets/notFound.jpg"
+          class="noData"
+          alt=""
+        />
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="suspiciousActivity">
+          <ng-container
+            *ngFor="let item of analyticsData?.salesChannels?.dineIn?.suspiciousActivities; let i = index"
+          >
+            <div class="activity" *ngIf="i < 10">
+              <div class="title">
+                <!-- <p>{{item.activity.type}}</p> -->
+                <p *ngIf="item.activity.type == 'billDiscounted'">
+                  Bill Discounted
+                </p>
+                <p *ngIf="item.activity.type == 'lineDiscounted'">
+                  Item Discount
+                </p>
+                <p *ngIf="item.activity.type == 'lineCancelled'">
+                  Item Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billCancelled'">
+                  Bill Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billNC'">Bill NC</p>
+                <span
+                  ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                  date:'shortTime'}}</span
+                >
+                <span><i class="ri-user-line"></i>{{item.activity.user}}</span>
+              </div>
+              <p>{{item.activity.message}}</p>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+          <img
+            *ngIf="!(analyticsData?.salesChannels?.dineIn?.suspiciousActivities)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="suspiciousActivity">
+          <ng-container
+            *ngFor="let item of analyticsData?.salesChannels?.takeaway?.suspiciousActivities; let i = index"
+          >
+            <div class="activity" *ngIf="i < 10">
+              <div class="title">
+                <!-- <p>{{item.activity.type}}</p> -->
+                <p *ngIf="item.activity.type == 'billDiscounted'">
+                  Bill Discounted
+                </p>
+                <p *ngIf="item.activity.type == 'lineDiscounted'">
+                  Item Discount
+                </p>
+                <p *ngIf="item.activity.type == 'lineCancelled'">
+                  Item Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billCancelled'">
+                  Bill Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billNC'">Bill NC</p>
+                <span
+                  ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                  date:'shortTime'}}</span
+                >
+                <span><i class="ri-user-line"></i>{{item.activity.user}}</span>
+              </div>
+              <p>{{item.activity.message}}</p>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+          <img
+            *ngIf="!(analyticsData?.salesChannels?.takeaway?.suspiciousActivities)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+      <ng-template swiperSlide>
+        <div class="suspiciousActivity">
+          <ng-container
+            *ngFor="let item of analyticsData?.salesChannels?.online?.suspiciousActivities; let i = index"
+          >
+            <div class="activity" *ngIf="i < 10">
+              <div class="title">
+                <!-- <p>{{item.activity.type}}</p> -->
+                <p *ngIf="item.activity.type == 'billDiscounted'">
+                  Bill Discounted
+                </p>
+                <p *ngIf="item.activity.type == 'lineDiscounted'">
+                  Item Discount
+                </p>
+                <p *ngIf="item.activity.type == 'lineCancelled'">
+                  Item Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billCancelled'">
+                  Bill Cancelled
+                </p>
+                <p *ngIf="item.activity.type == 'billNC'">Bill NC</p>
+                <span
+                  ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                  date:'shortTime'}}</span
+                >
+                <span><i class="ri-user-line"></i>{{item.activity.user}}</span>
+              </div>
+              <p>{{item.activity.message}}</p>
+            </div>
+            <p *ngIf="i == 10">See More</p>
+          </ng-container>
+          <img
+            *ngIf="!(analyticsData?.salesChannels?.online?.suspiciousActivities)?.length"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
+        </div>
+      </ng-template>
+    </swiper>
+  </div>
+</div>
+<div class="summaryCard fadeUp" #userWiseActionSection>
+  <div class="heading">
+    <p>User Wise Actions</p>
+    <select
+      (change)="slideNext(actionSelector.value,userWiseActionSwiper)"
+      #actionSelector
+      [value]="0"
+    >
+      <option
+        [value]="i"
+        *ngFor="let user of analyticsData?.salesChannels?.all?.userWiseActions;let i = index"
+      >
+        {{user.userId}}
+      </option>
+    </select>
+  </div>
+  <div class="userWiseActions">
+    <swiper
+      #userWiseActionSwiper
+      [slidesPerView]="1"
+      [spaceBetween]="20"
+      [config]="{autoHeight: true}"
+      (slideChange)="slideChanged(actionSelector,userWiseActionSwiper)"
+    >
+      <ng-container
+        *ngFor="let user of analyticsData?.salesChannels?.all?.userWiseActions"
+      >
+        <ng-template swiperSlide>
+          <div class="userActions gm">
+            <div class="user">
+              <img
+                src="https://api.dicebear.com/6.x/initials/svg?seed={{user.userId}}"
+                alt=""
+              />
+              <p class="name">{{user.userId}}</p>
+              <select
+                #activityMode
+                (change)="updateSlides(userWiseActionSwiper)"
+              >
+                <option value="kots">KOTs</option>
+                <option value="bills">Bills</option>
+                <option value="discounts">Discounts</option>
+                <option value="settlements">Settlements</option>
+                <option value="ncs">NCs</option>
+              </select>
+            </div>
+            <div class="suspiciousActivity">
+              <ng-container *ngIf="activityMode.value=='kots'">
+                <div class="activity" *ngFor="let item of user.actions?.kots">
+                  <div class="title">
+                    <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
+                    <p *ngIf="item.activity.type == 'newKot'">New Kot</p>
+                    <p *ngIf="item.activity.type == 'kotPrinted'">
+                      Kot Printed
+                    </p>
+                    <p *ngIf="item.activity.type == 'kotEdited'">Kot Edited</p>
+                    <p *ngIf="item.activity.type == 'kotCancelled'">
+                      Kot Cancelled
+                    </p>
+                    <p *ngIf="item.activity.type == 'lineCancelled'">
+                      Line Cancelled
+                    </p>
+                    <span
+                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                      date:'shortTime'}}</span
+                    >
+                    <span
+                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                    >
+                  </div>
+                  <p>{{item.activity.message}}</p>
+                </div>
+                <img
+                  *ngIf="!(user.actions?.kots)?.length"
+                  src="assets/notFound.jpg"
+                  class="noData"
+                  alt=""
+                />
+              </ng-container>
+              <ng-container *ngIf="activityMode.value=='bills'">
+                <div class="activity" *ngFor="let item of user.actions?.bills">
+                  <div class="title">
+                    <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
+                    <p *ngIf="item.activity.type == 'billPrinted'">
+                      Bill Printed
+                    </p>
+                    <p *ngIf="item.activity.type == 'billEdited'">
+                      Bill Edited
+                    </p>
+                    <p *ngIf="item.activity.type == 'billCancelled'">
+                      Bill Cancelled
+                    </p>
+                    <p *ngIf="item.activity.type == 'billSplit'">Bill Split</p>
+                    <p *ngIf="item.activity.type == 'customerDetailEntered'">
+                      Customer Applied
+                    </p>
+                    <p *ngIf="item.activity.type == 'billNormal'">
+                      Bill to normal
+                    </p>
+                    <p *ngIf="item.activity.type == 'billFinalized'">
+                      Bill Finalized
+                    </p>
+                    <p *ngIf="item.activity.type == 'instructionSet'">
+                      Added Bill Note
+                    </p>
+                    <p *ngIf="item.activity.type == 'billReactivated'">
+                      Bill Reactivated
+                    </p>
+                    <span
+                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                      date:'shortTime'}}</span
+                    >
+                    <span
+                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                    >
+                  </div>
+                  <p>{{item.activity.message}}</p>
+                </div>
+                <img
+                  *ngIf="!(user.actions?.bills)?.length"
+                  src="assets/notFound.jpg"
+                  class="noData"
+                  alt=""
+                />
+              </ng-container>
+              <ng-container *ngIf="activityMode.value=='discounts'">
+                <div
+                  class="activity"
+                  *ngFor="let item of user.actions?.discounts"
+                >
+                  <div class="title">
+                    <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
+                    <p *ngIf="item.activity.type == 'billDiscounted'">
+                      Bill Discounted
+                    </p>
+                    <p *ngIf="item.activity.type == 'lineDiscounted'">
+                      Item Discount
+                    </p>
+                    <span
+                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                      date:'shortTime'}}</span
+                    >
+                    <span
+                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                    >
+                  </div>
+                  <p>{{item.activity.message}}</p>
+                </div>
+                <img
+                  *ngIf="!(user.actions?.discounts)?.length"
+                  src="assets/notFound.jpg"
+                  class="noData"
+                  alt=""
+                />
+              </ng-container>
+              <ng-container *ngIf="activityMode.value=='settlements'">
+                <div
+                  class="activity"
+                  *ngFor="let item of user.actions?.settlements"
+                >
+                  <div class="title">
+                    <p *ngIf="item.activity.type == 'billSettled'">
+                      Bill Settled
+                    </p>
+                    <span
+                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                      date:'shortTime'}}</span
+                    >
+                    <span
+                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                    >
+                  </div>
+                  <p>{{item.activity.message}}</p>
+                </div>
+                <img
+                  *ngIf="!(user.actions?.settlements)?.length"
+                  src="assets/notFound.jpg"
+                  class="noData"
+                  alt=""
+                />
+              </ng-container>
+              <ng-container *ngIf="activityMode.value=='ncs'">
+                <div class="activity" *ngFor="let item of user.actions?.ncs">
+                  <div class="title">
+                    <p *ngIf="item.activity.type == 'billNC'">Bill To NC</p>
+                    <span
+                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                      date:'shortTime'}}</span
+                    >
+                    <span
+                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                    >
+                  </div>
+                  <p>{{item.activity.message}}</p>
+                </div>
+                <img
+                  *ngIf="!(user.actions?.ncs)?.length"
+                  src="assets/notFound.jpg"
+                  class="noData"
+                  alt=""
+                />
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </swiper>
+  </div>
+</div>

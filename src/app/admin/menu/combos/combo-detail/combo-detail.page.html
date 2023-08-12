@@ -1,0 +1,265 @@
+<div class="notFound" *ngIf="!currentCombo && editMode">
+  <h3>Not Found</h3>
+  <p>The category you are looking for is not available.</p>
+</div>
+<ion-list *ngIf="currentCombo || !editMode">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../../combos">Categories</ion-breadcrumb>
+    <ion-breadcrumb routerLink="." *ngIf="currentCombo">{{currentCombo.name}}</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">New Combo</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <ion-item>
+    <ion-label>
+      <h1 *ngIf="currentCombo">{{currentCombo.name}}</h1>
+      <h1>New Combo</h1>
+    </ion-label>
+  </ion-item>
+  <form [formGroup]="comboForm">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Combo Name <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input formControlName="name" required></ion-input>
+      </ion-item>
+      <ion-item button>
+        <ion-label>Combo Image</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Number Of Products <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input formControlName="numberOfProducts" required type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Maximum Purchases</ion-label>
+        <ion-input formControlName="maximumNoOfPurchases" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Combo Type</ion-label>
+        <ion-select formControlName="type" value="combo" multiple="false" placeholder="Select Combo Type" #comboType>
+          <ion-select-option value="combo">Combo</ion-select-option>
+          <ion-select-option value="offer">Offer</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="comboType.value == 'offer'">
+        <ion-label position="floating">Offer Price</ion-label>
+        <ion-input formControlName="offerPrice" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Can be discounted</ion-label>
+        <ion-toggle formControlName="discounted"></ion-toggle>
+      </ion-item>
+      <ion-item-divider>
+        <ion-label>Time Groups</ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="addTimeGroup()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Add New
+          </ion-button>
+        </ion-buttons>
+      </ion-item-divider>
+      <ion-item *ngFor="let group of timeGroups">
+        <ion-checkbox slot="start" [ngModelOptions]="{standalone: true}" [(ngModel)]="group.selected"></ion-checkbox>
+        <ion-label>{{group.name}}</ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="editTimeGroup(group)">
+            <ion-icon slot="end" name="add"></ion-icon>
+            Edit
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item-divider>
+        <ion-label>Types</ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="addType()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Add New
+          </ion-button>
+        </ion-buttons>
+      </ion-item-divider>
+      <ion-item *ngFor="let type of types">
+        <ion-checkbox slot="start" [ngModelOptions]="{standalone: true}" [(ngModel)]="type.selected"></ion-checkbox>
+        <ion-label>{{type.name}}</ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="editType(type)">
+            <ion-icon slot="end" name="add"></ion-icon>
+            Edit
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item button (click)="selectItemsVisible=true">
+        <ion-label>Select Items</ion-label>
+        <ion-chip color="primary" slot="end" mode="ios" outline="true">
+          <ion-label>{{selectedTypes.length}}</ion-label>
+        </ion-chip>
+      </ion-item>
+      <ion-item-divider>
+        <ion-label>Configuration</ion-label>
+      </ion-item-divider>
+      <ion-segment>
+        <ion-segment-button (click)="selectedType = type" [value]="type.id" *ngFor="let type of selectedTypes">
+          <ion-label>{{type.name}}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <ng-container *ngFor="let type of selectedTypes">
+        <ng-container *ngIf="selectedType.id == type.id">
+          <ion-item>
+            <ion-label position="floating">Category Name</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Minimum Products</ion-label>
+            <ion-input type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Maximum Products</ion-label>
+            <ion-input type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Select Type</ion-label>
+            <ion-select value="discount" multiple="false" placeholder="Select Type">
+              <ion-select-option value="discount">Discount</ion-select-option>
+              <ion-select-option value="free">Free</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Offer Value</ion-label>
+            <ion-input type="number"></ion-input>
+          </ion-item>
+        </ng-container>
+      </ng-container>
+    </ion-list>
+    <ion-row class="ion-justify-content-around">
+      <ion-button (click)="cancel()" color="light" expand="block">
+        Cancel
+      </ion-button>
+      <ion-button (click)="cancel()" color="success" expand="block">
+        Save
+      </ion-button>
+    </ion-row>
+  </form>
+</ion-list>
+
+<ion-modal [isOpen]="timeGroupVisible" #timeGroupModal [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ng-template>
+    <ion-content>
+      <form [formGroup]="timeGroupForm" (ngSubmit)="addTimeGroup()">
+        <ion-list>
+          <ion-item>
+            <ion-label>Time Group Name</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <ion-item-divider>
+            <ion-label>Conditions</ion-label>
+            <ion-buttons slot="end">
+              <ion-button (click)="conditions.push({condition: 'is',type:'day',value: 'monday'})">
+                <ion-icon slot="start" name="add"></ion-icon>
+                Add
+              </ion-button>
+            </ion-buttons>
+          </ion-item-divider>
+          <ion-accordion-group [multiple]="false" *ngFor="let condition of conditions;let i = index">
+            <ion-accordion [value]="i">
+              <ion-item slot="header" color="light">
+                <ion-label>Condition {{i+1}}</ion-label>
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <ion-item>
+                  <ion-label>Condition</ion-label>
+                  <ion-select value="is" multiple="false" placeholder="Select Condition">
+                    <ion-select-option value="is">Is</ion-select-option>
+                    <ion-select-option value="is not">Is Not</ion-select-option>
+                    <ion-select-option value="is before">Is Before</ion-select-option>
+                    <ion-select-option value="is after">Is After</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Applied On</ion-label>
+                  <ion-select value="is" multiple="false" placeholder="Select Condition" #appliedOn>
+                    <ion-select-option value="day">Day</ion-select-option>
+                    <ion-select-option value="date">Date</ion-select-option>
+                    <ion-select-option value="time">Time</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item *ngIf="appliedOn.value == 'day'">
+                  <ion-label>Choose A Day</ion-label>
+                  <ion-select value="is" multiple="true" placeholder="Select Day">
+                    <ion-select-option [value]="day" *ngFor="let day of days">{{day | titlecase}}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item *ngIf="appliedOn.value == 'date'">
+                  <ion-label>Choose A Date</ion-label>
+                  <ion-input type="date" placeholder="Select Date"></ion-input>
+                </ion-item>
+                <ion-item *ngIf="appliedOn.value == 'time'">
+                  <ion-label>Choose A Time</ion-label>
+                  <ion-input type="time" placeholder="Select Time"></ion-input>
+                </ion-item>
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+          <ion-row class="ion-justify-content-around">
+            <ion-button color="light">
+              Cancel
+            </ion-button>
+            <ion-button>
+              Save
+            </ion-button>
+          </ion-row>
+        </ion-list>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal [isOpen]="typesFormVisible" #typeFormModal [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ng-template>
+    <ion-content>
+      <form [formGroup]="typesForm" (ngSubmit)="addTimeGroup()">
+        <ion-list>
+          <ion-item>
+            <ion-label><h1>Combo Type</h1></ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Type Name</ion-label>
+            <ion-input type="text" placeholder="Type Name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Type Name</ion-label>
+            <ion-textarea type="text" placeholder="Type Name"></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label>Type Image</ion-label>
+            <ion-input type="file"></ion-input>
+          </ion-item>
+          <ion-row class="ion-justify-content-around">
+            <ion-button color="light">
+              Cancel
+            </ion-button>
+            <ion-button color="primary">
+              Save
+            </ion-button>
+          </ion-row>
+        </ion-list>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal [isOpen]="selectItemsVisible" #itemSelection [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25,1]">
+  <ng-template>
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <ion-label><h1>Items</h1></ion-label>
+        </ion-item>
+        <ng-container *ngFor="let category of mainCategories">
+          <ion-item-divider>
+            <ion-label>{{category.name}}</ion-label>
+          </ion-item-divider>
+          <ion-item *ngFor="let item of category.products">
+            <ion-label>{{item.name}}</ion-label>
+            <ion-checkbox mode="ios" slot="start" [(ngModel)]="item.selected"></ion-checkbox>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

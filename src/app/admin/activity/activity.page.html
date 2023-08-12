@@ -1,0 +1,19 @@
+<!-- <ion-header [translucent]="true">
+
+  <ion-img src="assets/Vrajera.png" slot="start"></ion-img>
+  <ion-toolbar>
+    <ion-title>Activity</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <app-header pageTitle="Vrajera"></app-header>
+  <main id="content">
+    <app-tabs [tabs]="['sales','tables','customer']" #tab></app-tabs>
+    <div class="ion-padding">
+      <app-sales *ngIf="tab.currentTab=='sales'"></app-sales>
+      <app-table *ngIf="tab.currentTab=='tables'"></app-table>
+      <app-customer *ngIf="tab.currentTab=='customer'"></app-customer>
+    </div>
+  </main>
+</ion-content>

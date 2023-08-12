@@ -1,0 +1,111 @@
+<div class="summaryCard">
+	<div class="card">
+		<strong>{{stats.totalCustomers}}</strong>
+		<p>Total Customers</p>
+	</div>
+	<div class="card">
+		<strong>{{stats.averageBills}}</strong>
+		<p>Average Bills</p>
+	</div>
+	<div class="card">
+		<strong>{{stats.newCustomers}}</strong>
+		<p>New Customers</p>
+	</div>
+	<div class="card">
+		<strong>{{stats.existingCustomers}}</strong>
+		<p>Existing Customers</p>
+	</div>
+</div>
+
+<div class="search gm">
+	<input type="search" (input)="searchSubject.next(searchBar.value)" #searchBar placeholder="Search Customer">
+	<i class="ri-search-2-line"></i>
+</div>
+
+<h2>Recently Added</h2>
+<div class="tableContainer">
+	<table class="gm" [cellSpacing]="0" *ngIf="recentlyAddedCustomers.length > 0">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Address</th>
+				<th>Phone</th>
+				<th>Loyalty</th>
+				<th>GST</th>
+				<th>Average Bill Value</th>
+				<th>Last Bill Amount</th>
+				<th>Last Bill Date</th>
+				<th>Total Bills</th>
+				<th>Total Sales</th>
+				<th>Last Updated</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let customer of filteredRecentlyAddedCustomers.length ? filteredRecentlyAddedCustomers : recentlyAddedCustomers">
+				<td>{{customer.name}}</td>
+				<td>{{customer.address}}</td>
+				<td>{{customer.phone}}</td>
+				<td>{{customer.loyaltyPoints}}</td>
+				<td>{{customer.gst}}</td>
+				<td>{{customer.averageBillValue}}</td>
+				<td>{{customer.lastBillAmount | currency:'INR'}}</td>
+				<td>{{customer.lastBillDate?.toDate() | date}}</td>
+				<td>{{customer.totalBills}}</td>
+				<td>{{customer.totalSales}}</td>
+				<td>{{customer.updated?.toDate() | date}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="notFound" *ngIf="recentlyAddedCustomers.length==0">
+		<p>No New Customers Found</p>
+		<img
+          src="assets/notFound.jpg"
+          class="noData"
+          alt=""
+        />
+	</div>
+</div>
+
+<h2>All Customers</h2>
+<div class="tableContainer">
+	<table class="gm" [cellSpacing]="0" *ngIf="customers.length>0">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Address</th>
+				<th>Phone</th>
+				<th>Loyalty</th>
+				<th>GST</th>
+				<th>Average Bill Value</th>
+				<th>Last Bill Amount</th>
+				<th>Last Bill Date</th>
+				<th>Total Bills</th>
+				<th>Total Sales</th>
+				<th>Last Updated</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let customer of filteredCustomers.length ?  filteredCustomers : customers">
+				<td>{{customer.name}}</td>
+				<td>{{customer.address}}</td>
+				<td>{{customer.phone}}</td>
+				<td>{{customer.loyaltyPoints}}</td>
+				<td>{{customer.gst}}</td>
+				<td>{{customer.averageBillValue | currency:'INR'}}</td>
+				<td>{{customer.lastBillAmount | currency:'INR'}}</td>
+				<td>{{customer.lastBillDate?.toDate() | date}}</td>
+				<td>{{customer.totalBills}}</td>
+				<td>{{customer.totalSales | currency:'INR'}}</td>
+				<td>{{customer.updated?.toDate() | date}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="notFound" *ngIf="customers.length==0">
+		<p>No Customers Found</p>
+		<img
+          src="assets/notFound.jpg"
+          class="noData"
+          alt=""
+        />
+	</div>
+</div>

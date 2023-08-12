@@ -1,0 +1,29 @@
+<ion-content>
+  <app-header pageTitle="Vrajera"></app-header>
+  <main id="content">
+    <app-tabs [tabs]="['reports','history']" #tab></app-tabs>
+    <br />
+
+    <ng-container *ngIf="tab.currentTab == 'reports'">
+      <div class="search gm">
+        <input
+          type="search"
+          placeholder="Search Report"
+          (input)="reportSearchSubject.next(searchInput.value)"
+          #searchInput
+        />
+        <i class="ri-search-2-line"></i>
+      </div>
+      <div class="grid">
+        <div class="reportCard" data-aos="fade-up" *ngFor="let format of filteredReportFormats">
+          <h4>{{format.title}}</h4>
+          <p>{{format.description}}</p>
+          <ion-button color="primary" routerLink="view/{{format.code}}">
+            View Report <i class="ri-file-chart-line"></i>
+          </ion-button>
+        </div>
+      </div>
+    </ng-container>
+    <app-history *ngIf="tab.currentTab == 'history'"></app-history>
+  </main>
+</ion-content>

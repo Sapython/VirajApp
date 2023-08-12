@@ -1,0 +1,111 @@
+<form [formGroup]="onboardingBusinessForm">
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating"
+        >Business Name <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-input formControlName="name" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >Address <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-textarea formControlName="address" required></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >Phone <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-input formControlName="phone" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >Email <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-input formControlName="email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >Username <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-input
+        formControlName="username"
+        [counter]="true"
+        minlength="4"
+        maxlength="20"
+        required
+        (input)="checkUsername.next(usernameField.value)"
+        #usernameField
+      ></ion-input>
+      <ion-spinner
+        name="dots"
+        slot="end"
+        *ngIf="checkingUsername"
+      ></ion-spinner>
+      <ion-icon
+        name="dots"
+        slot="end"
+        *ngIf="userNameAvailable=='available'"
+      ></ion-icon>
+    </ion-item>
+    <ion-item-divider
+      *ngIf="userNameAvailable=='invalid' && !checkingUsername"
+    >
+      <ion-label color="danger">Username Invalid</ion-label>
+    </ion-item-divider>
+    <ion-item-divider
+      *ngIf="userNameAvailable=='invalid' && !checkingUsername"
+    >
+      <ion-label color="success">Username Available</ion-label>
+    </ion-item-divider>
+    <ion-item>
+      <ion-label position="floating"
+        >FSSAI Number <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-input formControlName="fssai" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >GST Number <ion-text color="danger">*</ion-text></ion-label
+      >
+      <ion-input formControlName="gst" required></ion-input>
+    </ion-item>
+  </ion-list>
+</form>
+<ion-modal
+  #modal
+  [isOpen]="loginModalVisible"
+  [initialBreakpoint]="0.25"
+  [breakpoints]="[0, 0.25, 0.5, 0.75]"
+>
+  <ng-template>
+    <ion-content>
+      <form [formGroup]="loginForm">
+        <ion-list>
+          <ion-item>
+            <ion-label>
+              <h1>Login</h1>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <p>
+              It looks like you already have an account so please login to
+              add this new business to the account
+            </p>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input formControlName="username"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input formControlName="password"></ion-input>
+          </ion-item>
+          <ion-button type="submit" expand="block" fill="clear" shape="round">
+            Login
+          </ion-button>
+        </ion-list>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

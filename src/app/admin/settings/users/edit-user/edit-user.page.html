@@ -1,0 +1,167 @@
+<app-header [showOutletSelector]="false" [pageTitle]="editMode ? 'Edit': 'Add'" backRoute="../../"></app-header>
+
+<ion-content [fullscreen]="true" *ngIf="currentUser || !editMode">
+  <ion-item *ngIf="currentUser">
+    <ion-avatar>
+      <img src="https://api.dicebear.com/6.x/initials/svg?seed={{currentUser.username}}" />
+    </ion-avatar>
+    <ion-label>&nbsp;&nbsp;<h1>{{currentUser.username | titlecase}}</h1></ion-label>
+  </ion-item>
+  <form [formGroup]="accessForm" (ngSubmit)="submit()">
+    <ion-list>
+      <ion-item *ngIf="!editMode">
+        <ion-label position="floating"
+          >Username <ion-text color="danger">*</ion-text></ion-label
+        >
+        <ion-input
+          formControlName="username"
+          [counter]="true"
+          minlength="4"
+          maxlength="20"
+          required
+          (input)="checkUsername.next(usernameField.value)"
+          #usernameField
+        ></ion-input>
+        <ion-spinner
+          name="dots"
+          slot="end"
+          *ngIf="checkingUsername"
+        ></ion-spinner>
+        <ion-icon
+          name="dots"
+          slot="end"
+          *ngIf="userNameAvailable=='available'"
+        ></ion-icon>
+      </ion-item>
+      <ion-item-divider
+        *ngIf="userNameAvailable=='invalid' && !checkingUsername"
+      >
+        <ion-label color="danger">Username Invalid</ion-label>
+      </ion-item-divider>
+      <ion-item-divider
+        *ngIf="userNameAvailable=='unavailable' && !checkingUsername"
+      >
+        <ion-label>Username already exists invite will be sent.</ion-label>
+      </ion-item-divider>
+      <ion-item-divider
+        *ngIf="userNameAvailable=='available' && !checkingUsername"
+      >
+        <ion-label>Username doesn't exists, new will be created.</ion-label>
+      </ion-item-divider>
+      <ng-container *ngIf="userNameAvailable=='available' && !checkingUsername">
+        <ion-item>
+          <ion-label position="floating">Person Email</ion-label>
+          <ion-input formControlName="email" type="email"></ion-input>
+        </ion-item>
+        <ion-item-divider>
+          <ion-label>Password for new account</ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label position="floating">New Password</ion-label>
+          <ion-input formControlName="password" type="password" #newPassword></ion-input>
+          <ion-buttons slot="end">
+            <ion-button (click)="newPassword.type == 'password' ? newPassword.type = 'text' : newPassword.type = 'password'">
+              <ion-icon *ngIf="newPassword.type != 'password'" slot="icon-only" name="eye"></ion-icon>
+              <ion-icon *ngIf="newPassword.type == 'password'" slot="icon-only" name="eye-off"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Confirm Password</ion-label>
+          <ion-input formControlName="confirmPassword" type="password" #confirmPassword></ion-input>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirmPassword.type == 'password' ? confirmPassword.type = 'text' : confirmPassword.type = 'password'">
+              <ion-icon *ngIf="confirmPassword.type != 'password'" slot="icon-only" name="eye"></ion-icon>
+              <ion-icon *ngIf="confirmPassword.type == 'password'" slot="icon-only" name="eye-off"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ng-container>
+      <ion-item>
+        <ion-label>Access Type</ion-label>
+        <ion-select
+          value="role"
+          multiple="false"
+          placeholder="Select Access Type"
+          formControlName="accessType"
+          #accessType
+        >
+          <ion-select-option value="role">Role</ion-select-option>
+          <ion-select-option value="custom">Custom</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="accessType.value == 'role'">
+        <ion-label>Select Role</ion-label>
+        <ion-select value="admin" multiple="false" formControlName="role" placeholder="Select Role">
+          <ion-select-option value="admin">Admin</ion-select-option>
+          <ion-select-option value="manager">Manager</ion-select-option>
+          <ion-select-option value="biller">Biller</ion-select-option>
+          <ion-select-option value="cashier">Cashier</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item button detail (click)="accessPropsModal.present()" *ngIf="accessType.value == 'custom'">
+        <ion-label>Select Access</ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-row class="ion-justify-content-around">
+      <ion-button type="submit">
+        Submit
+      </ion-button>
+      <ion-button type="button" routerLink="../../" color="light">
+        Cancel
+      </ion-button>
+    </ion-row>
+  </form>
+</ion-content>
+<ion-action-sheet [isOpen]="isActionSheetOpen" header="Actions" [buttons]="actionSheetButtons"></ion-action-sheet>
+<ion-modal #accessPropsModal [initialBreakpoint]="1" [breakpoints]="[0, 0.25, 0.5, 0.75,1]">
+  <ng-template>
+    <ion-content>
+      <ion-searchbar
+          placeholder="Filter Access"
+          #accessSearch
+          (input)="searchSubject.next(accessSearch.value)"
+        ></ion-searchbar>
+        <ion-list>
+          <ng-container *ngFor="let access of filteredAccessCodes">
+            <ion-item *ngIf="access.type == 'access'">
+              <ion-label>{{access.name}}</ion-label>
+              <ion-checkbox [ngModelOptions]="{standalone: true}" slot="end" [(ngModel)]="access.allowed"></ion-checkbox>
+            </ion-item>
+            <ion-item-divider *ngIf="access.type == 'divider'">
+              <ion-label>{{access.name}}</ion-label>
+            </ion-item-divider>
+          </ng-container>
+        </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+<ion-modal [isOpen]="enterOtpVisible" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ng-template>
+    <ion-header>
+      <ion-buttons slot="start">
+        <ion-button (click)="enterOtpVisible = false">
+          <ion-icon slot="start" name="arrow-back"></ion-icon>
+          Cancel
+        </ion-button>
+      </ion-buttons>
+      <ion-toolbar>
+        <ion-title>Enter OTP</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <ion-label><h2>Enter OTP</h2></ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>OTP <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input type="number" required #otpField></ion-input>
+        </ion-item>
+        <ion-button (click)="verifyOtp(otpField.value)">
+          Submit
+        </ion-button>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

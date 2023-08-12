@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { DatabaseService } from './core/services/database/database.service';
+import { DataProvider } from './core/services/data-provider/data-provider.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(private database:DatabaseService,private dataProvider:DataProvider) {}
 }

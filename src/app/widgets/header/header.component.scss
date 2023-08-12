@@ -1,0 +1,54 @@
+:host{
+	background: transparent;
+	z-index: 9999;
+}
+div.header{
+	border-bottom: 3px solid #FF5E35;
+	background: #FFF;
+	box-shadow: 0px 4px 16px 0px rgba(255, 94, 53, 0.15);
+	width: 100vw;
+	display: flex;
+	align-items: center;
+	gap:10px;
+	padding: 5px 10px;
+	margin-bottom: 15px;
+	justify-content: space-between;
+	button.back{
+		border: none;
+		background: transparent;
+		width: 30px;
+		height: 30px;
+	}
+	img{
+		width:60px;
+	}
+	p{
+		font-size: 30px;
+		margin: 0px;
+	}
+	.outlet{
+		border-radius: 8px;
+		border: 2px solid #FF5E35;
+		background: #FFF;
+		padding: 4px 8px;
+		color: #FF5E35;
+		width: 100px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-size: 14px;
+	}
+	button.profile{
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		padding: 5px;
+		font-size: 25px;
+		border: 2px solid #FF5E35;
+		background: white;
+	}
+	span{
+		display: flex;
+		align-items: center;
+		gap:10px;
+	}
+}

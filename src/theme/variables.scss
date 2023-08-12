@@ -1,15 +1,67 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$Vrajera-palette: (
+  50: #fadbd3,
+  100: #fbcabd,
+  200: #fdb19e,
+  300: #fe997f,
+  400: #f87554,
+  500: #fb7250,
+  600: #ff5e35,
+  700: #f85228,
+  800: #fb4619,
+  900: #ff4112,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+$Vrajera-primary: mat.define-palette($Vrajera-palette);
+$Vrajera-accent: mat.define-palette($Vrajera-palette, 200, 100, 400);
+$Vrajera-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $Vrajera-primary,
+      accent: $Vrajera-accent,
+      foreground: $Vrajera-palette,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($Vrajera-theme);
+
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #FF5E35;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary-shade: #db4c29;
+  --ion-color-primary-tint: #ff7957;
 
   /** secondary **/
   --ion-color-secondary: #3dc2ff;
@@ -76,7 +128,7 @@
   --ion-color-light-tint: #f5f6f9;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: none) {
   /*
    * Dark Colors
    * -------------------------------------------
@@ -234,3 +286,6 @@
     --ion-card-background: #1e1e1e;
   }
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

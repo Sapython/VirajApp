@@ -1,0 +1,64 @@
+<div class="notFound" *ngIf="!currentDiscount && editMode">
+  <h3>Not Found</h3>
+  <p>The category you are looking for is not available.</p>
+</div>
+<ion-list *ngIf="currentDiscount || !editMode">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../../discount">{{editMode ? 'Add Discount' : 'Discounts'}}</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">Add Discount</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <ion-item>
+    <ion-label>
+      <h1>New Discount</h1>
+    </ion-label>
+  </ion-item>
+  <form [formGroup]="discountForm" (ngSubmit)="submit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Discount Name <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Discount Cost <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Discount Type</ion-label>
+        <ion-select value="percentage" multiple="false" placeholder="Select Discount">
+          <ion-select-option value="percentage">Percentage</ion-select-option>
+          <ion-select-option value="flat">Flat</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Minimum Amount</ion-label>
+        <ion-input type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Minimum Products</ion-label>
+        <ion-input type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Maximum Discount</ion-label>
+        <ion-input type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Select Access</ion-label>
+        <ion-select value="admin" multiple="true" placeholder="Select Access Level">
+          <ion-select-option value="admin">Admin</ion-select-option>
+          <ion-select-option value="manager">Manager</ion-select-option>
+          <ion-select-option value="biller">Biller</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <br>
+      <br>
+      <ion-row>
+        <ion-button (click)="cancel()" expand="full" color="warning">
+          Cancel
+        </ion-button>
+        <ion-button type="submit" expand="full" color="success">
+          Save
+        </ion-button>
+      </ion-row>
+    </ion-list>
+  </form>
+</ion-list>

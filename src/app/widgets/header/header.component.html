@@ -1,0 +1,30 @@
+<div class="header">
+  <span>
+    <button class="back" [routerLink]="backRoute" *ngIf="backRoute"><i class="ri-arrow-left-s-line"></i></button>
+    <img src="assets/Vrajera.png" alt="">
+    <p class="virajFont">{{pageTitle}}</p>
+  </span>
+  <span>
+    <div class="outlet" (click)="outletSelector.present()" *ngIf="showOutletSelector">
+      {{(dataProvider.currentBusiness | async)?.name | titlecase}}
+    </div>
+    <button routerLink="../profile" class="profile"><i class="ri-user-line"></i></button>
+  </span>
+</div>
+
+<ion-modal #outletSelector [initialBreakpoint]="0.6" (didPresent)="reset()" [breakpoints]="[0,0.6,0.8,1]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Outlets</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-searchbar placeholder="Filter Outlet" type="search" (ionInput)="search($event)" [debounce]="250" showCancelButton="always"></ion-searchbar>
+      <ion-item button detail (click)="dataProvider.currentBusiness.next(outlet);outletSelector.dismiss()" *ngFor="let outlet of filteredBusiness.length ? filteredBusiness : this.dataProvider.allBusiness">
+        <ion-checkbox mode="ios"  [checked]="(dataProvider.currentBusiness | async)?.businessId == outlet.businessId"></ion-checkbox>
+        <ion-label>{{outlet.name |titlecase}}</ion-label>
+      </ion-item>
+    </ion-content>
+  </ng-template>
+</ion-modal>

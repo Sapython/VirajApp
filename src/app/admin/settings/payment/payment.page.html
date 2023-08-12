@@ -1,0 +1,27 @@
+<app-header [showOutletSelector]="false" pageTitle="Payment" backRoute="../"></app-header>
+<ion-content>
+  <ion-item>
+    <ion-label>Payment Methods</ion-label>
+    <ion-button slot="end" routerLink="edit/new">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Add
+    </ion-button>
+  </ion-item>
+  <ion-item-group>
+    <ion-breadcrumbs>
+      <ion-breadcrumb routerLink="../../settings">Settings</ion-breadcrumb>
+      <ion-breadcrumb routerLink=".">Payment Methods</ion-breadcrumb>
+    </ion-breadcrumbs>
+    <ion-item
+      detail
+      button
+      *ngFor="let method of paymentMethods"
+      routerLink="edit/{{method.id}}"
+    >
+      <ion-label>{{method.name}}</ion-label>
+      <ion-chip color="primary" mode="ios" outline="true">
+        <ion-label>Req: {{method.detail}}</ion-label>
+      </ion-chip>
+    </ion-item>
+  </ion-item-group>
+</ion-content>

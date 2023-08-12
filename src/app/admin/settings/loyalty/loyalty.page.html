@@ -1,0 +1,100 @@
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Loyalty</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../settings">Settings</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">Loyalty</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <form>
+    <ion-list>
+      <ion-item>
+        <ion-label>Enable loyalty</ion-label>
+        <ion-checkbox (change)="
+        updateSettings({ loyaltyEnabled: loyalty.checked })
+      " mode="ios" #loyalty></ion-checkbox>
+      </ion-item>
+      <ng-container *ngIf="loyalty.checked">
+        <ion-item-divider>
+          <ion-label>Options</ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Enable loyalty for dine in</ion-label>
+          <ion-checkbox (change)="updateSettings({ loyaltyOnDineIn: dinein.checked })" mode="ios" #dinein></ion-checkbox>
+        </ion-item>
+        <ion-item>
+          <ion-label>Enable loyalty for takeaway</ion-label>
+          <ion-checkbox (change)="updateSettings({ loyaltyOnDineIn: takeaway.checked })" mode="ios" #takeaway></ion-checkbox>
+        </ion-item>
+        <ion-item>
+          <ion-label>Enable loyalty for online</ion-label>
+          <ion-checkbox (change)="updateSettings({ loyaltyOnDineIn: online.checked })" mode="ios" #online></ion-checkbox>
+        </ion-item>
+        <ion-item-divider>
+          <ion-label>Rates</ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Set different rates for modes</ion-label>
+          <ion-checkbox (change)="updateSettings({ loyaltyOnDineIn: differentRates.checked })" mode="ios" #differentRates></ion-checkbox>
+        </ion-item>
+        <ion-item *ngIf="!differentRates.checked">
+          <ion-label>Loyalty rate</ion-label>
+          <ion-input (change)="isValidNumber(allRate.value) ? updateSettings({loyaltyRates:{dineIn: allRate.value,takeaway:allRate.value,online:allRate.value}}) : allRate.value = 0;" #allRate type="number" placeholder="0"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!differentRates.checked">
+          <ion-label>Expire in (days)</ion-label>
+          <ion-input (change)="isValidNumber(allExpiry.value) ? updateSettings({loyaltyRates:{dineIn: allExpiry.value,takeaway:allExpiry.value,online:allExpiry.value}}) : allExpiry.value = 0;" #allExpiry type="number" placeholder="Days"></ion-input>
+        </ion-item>
+        <ng-container *ngIf="dinein.checked && differentRates.checked">
+          <ion-item-divider>
+            <ion-label><h2>Dine In</h2></ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>Rate for dine in</ion-label>
+            <ion-input (change)="isValidNumber(dineInRate.value) ? updateSettings({loyaltyRates:{dineIn: dineInRate.value}}) : dineInRate.value = 0;" #dineInRate type="number" placeholder="0"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Expiry in days for dine in</ion-label>
+            <ion-input (change)="isValidNumber(dineInExpiry.value) ? updateSettings({loyaltyRates:{dineInExpiry: dineInExpiry.value}}) : dineInExpiry.value = 0;" #dineInExpiry type="number" placeholder="0"></ion-input>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="takeaway.checked && differentRates.checked">
+          <ion-item-divider>
+            <ion-label><h2>Takeaway</h2></ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>Rate for takeaway</ion-label>
+            <ion-input (change)="isValidNumber(takeawayRate.value) ? updateSettings({loyaltyRates:{dineIn: takeawayRate.value}}) : takeawayRate.value = 0;" #takeawayRate type="number" placeholder="0"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Expiry in days for takeaway</ion-label>
+            <ion-input (change)="isValidNumber(takeawayExpiry.value) ? updateSettings({loyaltyRates:{takeawayExpiry: takeawayExpiry.value}}) : takeawayExpiry.value = 0;" #takeawayExpiry type="number" placeholder="0"></ion-input>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="online.checked && differentRates.checked">
+          <ion-item-divider>
+            <ion-label><h2>Online</h2></ion-label>
+          </ion-item-divider>
+          <ion-item>
+            <ion-label>Rate for online</ion-label>
+            <ion-input (change)="isValidNumber(onlineRate.value) ? updateSettings({loyaltyRates:{dineIn: onlineRate.value}}) : onlineRate.value = 0;" #onlineRate type="number" placeholder="0"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Expiry in days for online</ion-label>
+            <ion-input (change)="isValidNumber(onlineExpiry.value) ? updateSettings({loyaltyRates:{onlineExpiry: onlineExpiry.value}}) : onlineExpiry.value = 0;" #onlineExpiry type="number" placeholder="0"></ion-input>
+          </ion-item>
+        </ng-container>
+      </ng-container>
+    </ion-list>
+    <ion-row class="ion-justify-content-around">
+      <ion-button (click)="cancel()" type="button" routerLink="../" expand="full" color="warning">
+        Cancel
+      </ion-button>
+      <ion-button type="submit" expand="full" color="success">
+        Save
+      </ion-button>
+    </ion-row>
+  </form>
+</ion-content>

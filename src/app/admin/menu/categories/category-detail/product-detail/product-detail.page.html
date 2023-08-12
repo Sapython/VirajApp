@@ -1,0 +1,80 @@
+<div class="notFound" *ngIf="!currentProduct">
+  <h3>Not Found</h3>
+  <p>The category you are looking for is not available.</p>
+</div>
+<ion-list *ngIf="currentProduct">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../../../../../categories">Categories</ion-breadcrumb>
+    <ion-breadcrumb routerLink="../../../{{categoryId}}">{{currentCategory?.name}}</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">{{currentProduct?.name}}</ion-breadcrumb>
+  </ion-breadcrumbs>
+</ion-list>
+<ion-item>
+  <ion-label><h1>{{currentProduct?.name}}</h1></ion-label>
+</ion-item>
+
+<form [formGroup]="productForm" (ngSubmit)="save()">
+  <ion-item>
+    <ion-label position="floating">Product Name</ion-label>
+    <ion-input formControlName="name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Product Price</ion-label>
+    <ion-input formControlName="price"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Type</ion-label>
+    <ion-select placeholder="Select Type" formControlName="type">
+      <ion-select-option value="veg">Veg</ion-select-option>
+      <ion-select-option value="non-veg">Non-Veg</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Portion Size</ion-label>
+    <ion-select placeholder="Portion Size" formControlName="tags">
+      <ion-select-option [value]="tag" *ngFor="let tag of tags">{{tag.name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Select Main Category</ion-label>
+    <ion-select placeholder="Select Main Category" formControlName="mainCategory" interface="sheet">
+      <ion-select-option [value]="mainCategory" *ngFor="let mainCategory of mainCategories">{{mainCategory.name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item-divider *ngIf="!this.selectedMainCategory">
+    <ion-label color="danger">Please choose a main category</ion-label>
+  </ion-item-divider>
+  <ion-item>
+    <ion-label>Select View Categories</ion-label>
+    <ion-select placeholder="Select Main Category" multiple="true" formControlName="mainCategory" interface="sheet">
+      <ion-select-option [value]="mainCategory" *ngFor="let mainCategory of mainCategories">{{mainCategory.name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <br>
+  <ion-row class="ion-justify-content-around">
+    <ion-button expand="full" color="light" routerLink="../../../{{categoryId}}">
+      Cancel
+    </ion-button>
+    <ion-button expand="full" type="submit">
+      Submit
+    </ion-button>
+  </ion-row>
+</form>
+
+<!-- <ion-modal #selectMainCategoryModal>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Select Category</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item *ngFor="let category of mainCategories" detail (click)="selectedMainCategory = category">
+          <ion-label>{{category.name}}</ion-label>
+          <ion-chip>{{category.products}}</ion-chip>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal> -->

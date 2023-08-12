@@ -1,0 +1,139 @@
+:host{
+	display: flex;
+	flex-direction: column;
+	gap:20px;
+}
+h1{
+	font-size: 25px;
+}
+h2{
+	font-size: 20px;
+}
+p{
+	margin:0pc;
+}
+h1,h2,h3,h4,h5,h6{
+	margin: 0px;
+}
+.summaryCard{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap:10px;
+	.card{
+		border-radius: 7px;
+		padding: 10px;
+		background: white;
+		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		display: flex;
+		flex-direction: column;
+		gap:10px;
+		backdrop-filter: blur(16px) saturate(180%);
+		-webkit-backdrop-filter: blur(16px) saturate(180%);
+		background-color: rgba(255, 255, 255, 0.75);
+		border-radius: 7px;
+		border: 3px solid rgba(209, 213, 219, 0.3);
+		strong{
+			font-size: 20px;
+			color:green;
+		}
+		span{
+			color:#888;
+		}
+		&:nth-child(2){
+			strong{
+				color:tomato;
+			}
+		}
+		&:nth-child(3){
+			strong{
+				color:coral;
+			}
+		}
+		&:nth-child(4){
+			strong{
+				color:cornflowerblue;
+			}
+		}
+	}
+}
+.quickLinks{
+	display: flex;
+	gap:10px;
+	.link{
+		padding: 10px;
+		background: white;
+		border-radius: 7px;
+	}
+}
+.search{
+	display: flex;
+	padding: 0px;
+	padding-right: 10px;
+	align-items: center;
+	background: white;
+	box-shadow: 2px 4px 20px rgba(0,0,0,0.2);
+	border-radius: 10px;
+	color: #FF5E35;
+	input{
+		background: transparent;
+		border: none;
+		width: 100%;
+		padding: 10px 0px 10px 20px;
+	}
+	i{
+		color:#aaa;
+		font-size: 25px;
+	}
+}
+.tableContainer{
+	border-radius: 16px;
+	border: 1px solid #D8D8D8;
+	background: rgba(255, 255, 255, 0.80);
+	box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.10);
+	overflow-x: scroll;
+	background: white;
+	box-shadow: 2px 4px 20px rgba(0,0,0,0.2);
+	border-radius: 10px;
+	table{
+		width: 100%;
+		padding: 0px;
+		font-size: 14px;
+		td{
+			border-bottom: 2px solid #EDEDED;
+		}
+		thead{
+			background: white;
+			padding: 15px;
+			color: #FF5E35;
+			th{
+				padding: 10px;
+				width: 100%;
+				word-break: keep-all;
+				white-space: nowrap;
+			}
+			th:nth-child(1){
+				border-top-left-radius: 10px;
+			}
+			th:last-child{
+				border-top-right-radius: 10px;
+			}
+		}
+		tbody{
+			color:#685E51;
+			tr{
+				td{
+					padding: 10px 20px;
+				}
+			}
+		}
+	}
+}
+.notFound{
+	display: grid;
+	place-items: center;
+	padding: 20px;
+	.noData{
+		width: 200px;
+		filter: saturate(0);
+	}
+}

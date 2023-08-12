@@ -1,0 +1,168 @@
+<h1>Tables</h1>
+<div class="summaryCard fadeUp">
+  <div class="heading">
+    <p>Tables Summary</p>
+  </div>
+  <div class="body stats">
+    <div class="card fadeUp">
+      <p>Empty Tables</p>
+      <strong>{{emptyTables}}</strong>
+    </div>
+    <div class="card fadeUp">
+      <p>Late Running</p>
+      <strong>{{lateRunningTables}}</strong>
+    </div>
+    <div class="card fadeUp">
+      <p>Finalized</p>
+      <strong>{{finalizedTables}}</strong>
+    </div>
+    <div class="card fadeUp">
+      <p>Active Tables</p>
+      <strong>{{activeTables}}</strong>
+    </div>
+  </div>
+</div>
+<div class="summaryCard fadeUp">
+  <div class="heading">
+    <p>Quick Links</p>
+  </div>
+  <div class="quickLinks">
+    <div class="link gm" (click)="dineInTableSection.scrollIntoView()">Dine In Tables</div>
+    <div class="link gm" (click)="takeawayTableSection.scrollIntoView()">Takeaway Tables</div>
+    <div class="link gm" (click)="onlineTableSection.scrollIntoView()">Online Tables</div>
+  </div>
+</div>
+<div class="summaryCard" #dineInTableSection>
+  <div class="heading noPad">
+    <p>Dine In</p>
+    <button mat-icon-button (click)="dineInLayout == 'four' ? dineInLayout = 'two' : dineInLayout = 'four'">
+      <mat-icon>grid_view</mat-icon>
+    </button>
+  </div>
+  <div class="body">
+    <div class="actions gm">
+      <div class="labels">
+        <div class="label">
+          <span></span>
+          Empty
+        </div>
+        <div class="label">
+          <span></span>
+          Late Running
+        </div>
+        <div class="label">
+          <span></span>
+          Finalized
+        </div>
+        <div class="label">
+          <span></span>
+          Active KOT
+        </div>
+      </div>
+    </div>
+    <div class="tablesGroup" [ngClass]="{'two':dineInLayout == 'two'}">
+      <div
+        class="table gm"
+        [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
+        *ngFor="let table of tables;let i =index"
+      >
+        <p>{{table.name}}</p>
+        <p>{{table.billPrice | currency:'INR'}}</p>
+        <p>{{table.timeSpent}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="summaryCard" #takeawayTableSection>
+  <div class="heading noPad">
+    <p>Takeaway</p>
+    <button mat-icon-button (click)="takeawayLayout == 'four' ? takeawayLayout = 'two' : takeawayLayout = 'four'">
+      <mat-icon>grid_view</mat-icon>
+    </button>
+  </div>
+  <div class="body">
+    <div class="actions gm">
+      <div class="labels">
+        <div class="label">
+          <span></span>
+          Empty
+        </div>
+        <div class="label">
+          <span></span>
+          Late Running
+        </div>
+        <div class="label">
+          <span></span>
+          Finalized
+        </div>
+        <div class="label">
+          <span></span>
+          Active KOT
+        </div>
+      </div>
+    </div>
+    <div class="tablesGroup" [ngClass]="{'two':takeawayLayout == 'two'}">
+      <div
+        class="table gm fadeUp"
+        [style]="'animation-delay:'+i*50+'ms'"
+        [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
+        *ngFor="let table of takeawayTokens; let i =index"
+      >
+        <p>{{table.name}}</p>
+        <p>{{table.billPrice | currency:'INR'}}</p>
+        <p>{{table.timeSpent}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="summaryCard" #onlineTableSection>
+  <div class="heading noPad">
+    <p>Online</p>
+    <button mat-icon-button (click)="onlineLayout == 'four' ? onlineLayout = 'two' : onlineLayout = 'four'">
+      <mat-icon>grid_view</mat-icon>
+    </button>
+  </div>
+  <div class="body">
+    <div class="actions gm">
+      <div class="labels">
+        <div class="label">
+          <span></span>
+          Empty
+        </div>
+        <div class="label">
+          <span></span>
+          Late Running
+        </div>
+        <div class="label">
+          <span></span>
+          Finalized
+        </div>
+        <div class="label">
+          <span></span>
+          Active KOT
+        </div>
+      </div>
+    </div>
+    <div class="tablesGroup" [ngClass]="{'two':onlineLayout == 'two'}">
+      <div
+        class="table gm fadeUp"
+        [style]="'animation-delay:'+i*50+'ms'"
+        [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
+        *ngFor="let table of onlineTokens; let i =index"
+      >
+        <p>{{table.name}}</p>
+        <p>{{table.billPrice | currency:'INR'}}</p>
+        <p>{{table.timeSpent}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>

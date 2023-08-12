@@ -16,7 +16,7 @@
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
-@import '@ionic/angular/css/display.css';
+@import "@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
@@ -24,3 +24,102 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+@import "swiper/scss";
+@import "swiper/scss/navigation";
+@import "swiper/scss/autoplay";
+@import "swiper/scss/pagination";
+@import "swiper/scss/controller";
+@import "remixicon/fonts/remixicon.css";
+
+@font-face {
+  font-family: "MergeOne-Regular";
+  src: url("assets/fonts/MergeOne-Regular.ttf");
+}
+@font-face {
+  font-family: "NATS-Regular";
+  src: url("assets/fonts/NATS-Regular.ttf");
+}
+
+:root {
+  // --ion-background-color:transparent;
+  --Vrajera-primary: #ff5e35;
+  --Vrajera-primary-hover: #dc5331;
+  --Vrajera-primary-hover-rgb: 255, 154, 129;
+  --Vrajera-primary-rgb: 255, 94, 53;
+  --Vrajera-primary: #ff5e35;
+  --Vrajera-accent: #ffc220;
+  --Vrajera-accent-hover: #ffb20f;
+  --Vrajera-primary-tint: #ff5e35;
+  --Vrajera-primary-shade: #ffe1c2;
+  --Vrajera-primary-text: #962e40;
+  --Vrajera-success: #038943;
+  --Vrajera-danger: #962e40;
+  --Vrajera-background: white;
+  --Vrajera-font: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-bold: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-regular: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-light: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-small: 12px;
+  --Vrajera-font-medium: 14px;
+  --Vrajera-font-large: 16px;
+  --Vrajera-font-xlarge: 18px;
+  --Vrajera-font-xxlarge: 20px;
+  --Vrajera-font-xxxlarge: 22px;
+  --Vrajera-font-xxxxlarge: 24px;
+  --Vrajera-icon-small: 28px;
+  --Vrajera-icon-medium: 24px;
+  --Vrajera-icon-large: 26px;
+  --Vrajera-icon-xlarge: 30px;
+  --Vrajera-button-small: 14px;
+  --Vrajera-button-medium: 18px;
+  --Vrajera-button-medium: 18px;
+  --Vrajera-button-medium: 24px;
+  --Vrajera-border-default: 2px solid #ccc;
+  --Vrajera-border-radius: 4px;
+  --Vrajera-border-radius-large: 7px;
+  --Vrajera-border-radius-xlarge: 14px;
+  --Vrajera-shadow-light: 4px 1px 16px rgba(22, 22, 22, 0.1);
+  --Vrajera-shadow-medium: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  --Vrajera-shadow-heavy: 0px 8px 16px rgba(0, 0, 0, 0.25);
+  font-family: "MergeOne-Regular", sans-serif;
+}
+html{
+  scroll-behavior: smooth;
+}
+.virajFont {
+  font-family: "NATS-Regular";
+}
+ion-app {
+  // background-image: url('assets/background.svg');
+  // background-repeat: repeat;
+  // background-size: 300px;
+  // background-position: center;
+}
+main#content {
+  background-image: url("assets/background.svg");
+  background-repeat: repeat;
+  background-size: 300px;
+  background-position: center;
+  height: 100%;
+}
+app-header{
+	position: sticky;
+	top:0px;
+}
+
+
+
+// animations
+.fadeUp{
+	animation: fadeUp 0.5s ease-in-out;
+}
+@keyframes fadeUp{
+	0%{
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	100%{
+		transform: translateY(0px);
+		opacity: 1;
+	}
+}

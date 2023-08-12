@@ -1,0 +1,89 @@
+<app-header backRoute="../../../reports" pageTitle="Vrajera"></app-header>
+<h4 *ngIf="stage == 'billWise'">All Bills Wise Report</h4>
+<h4 *ngIf="stage == 'kotWise'">Kot Wise Report</h4>
+<h4 *ngIf="stage == 'itemWise'">Item Wise Sales Report</h4>
+<h4 *ngIf="stage == 'discounted'">Discounted Bills Report</h4>
+<h4 *ngIf="stage == 'ncBills'">Non Chargeable Bills Report</h4>
+<h4 *ngIf="stage == 'takeawayBills'">Takeaway Bills Report</h4>
+<h4 *ngIf="stage == 'onlineBills'">Online Bills Report</h4>
+<h4 *ngIf="stage == 'daySummary'">Day Summary Report</h4>
+<h4 *ngIf="stage == 'consolidated'">Consolidated Report</h4>
+<h4 *ngIf="stage == 'takeawayTokenWise'">Takeaway Token Wise Report</h4>
+<h4 *ngIf="stage == 'onlineTokenWise'">Online Token Wise Report</h4>
+<h4 *ngIf="stage == 'tableWise'">Table Wise Report</h4>
+<h4 *ngIf="stage == 'billEdits'">Bill Edits Report</h4>
+<h4 *ngIf="stage == 'customerWiseReport'">Customer Wise Report</h4>
+<h4 *ngIf="stage == 'dineInBills'">Dine In Bills Report</h4>
+<h4 *ngIf="stage == 'hourlyItemSales'">Hourly Item Sales Report</h4>
+<h4 *ngIf="stage == 'kotEdits'">Kot Edits Report</h4>
+<h4 *ngIf="stage == 'paymentWise'">Payment Wise Report</h4>
+<h4 *ngIf="stage == 'waiterWiseItems'">Waiter Wise Items Report</h4>
+<h4 *ngIf="stage == 'tableWiseActivity'">Table Wise Activity</h4>
+<h4 *ngIf="stage == 'tableWiseSales'">Table Wise Sales</h4>
+<mat-date-range-picker hidden touchUi #picker></mat-date-range-picker>
+<mat-date-range-input
+  tabindex="-1"
+  hidden
+  [formGroup]="reportService.dateRangeFormGroup"
+  [rangePicker]="picker"
+>
+  <input matStartDate formControlName="startDate" placeholder="Start date" />
+  <input matEndDate formControlName="endDate" placeholder="End date" />
+</mat-date-range-input>
+<div class="actions">
+  <button expand="block" fill="outline" shape="round" (click)="reportService.downloadPdf.next()">
+    Download PDF <i class="ri-file-download-line"></i>
+  </button>
+  <button expand="block" fill="outline" shape="round" (click)="reportService.downloadExcel.next()">
+    Download Excel <i class="ri-file-download-line"></i>
+  </button>
+  <ion-button fill="clear" (click)="picker.open()">
+    <ion-icon slot="icon-only" name="calendar"></ion-icon>
+  </ion-button>
+  <!-- <Vrajera-button (click)="reportService.downloadExcel.next()"
+    >Download As Excel</Vrajera-button
+  >
+  <Vrajera-button (click)="reportService.downloadPdf.next()"
+    >Download As PDF</Vrajera-button
+  >
+  <Vrajera-button type="outline" (vclick)="picker.open()"
+    >Select Date Range <i class="ri-calendar-2-fill"></i
+  ></Vrajera-button> -->
+</div>
+<div class="body">
+  <div class="tableContainer">
+    <app-bill-wise *ngIf="stage == 'billWise'"></app-bill-wise>
+    <app-kot-wise-report *ngIf="stage == 'kotWise'"></app-kot-wise-report>
+    <app-item-wise-report *ngIf="stage == 'itemWise'"></app-item-wise-report>
+    <app-discounted-bills *ngIf="stage == 'discounted'"></app-discounted-bills>
+    <app-non-chargeable-bills
+      *ngIf="stage == 'ncBills'"
+    ></app-non-chargeable-bills>
+    <app-takeaway-bills *ngIf="stage == 'takeawayBills'"></app-takeaway-bills>
+    <app-online-bills *ngIf="stage == 'onlineBills'"></app-online-bills>
+    <app-day-summary *ngIf="stage == 'daySummary'"></app-day-summary>
+    <app-consolidated *ngIf="stage == 'consolidated'"></app-consolidated>
+    <app-takeaway-bills
+      *ngIf="stage == 'takeawayTokenWise'"
+    ></app-takeaway-bills>
+    <app-online-bills *ngIf="stage == 'onlineTokenWise'"></app-online-bills>
+    <app-table-wise *ngIf="stage == 'tableWise'"></app-table-wise>
+    <app-bill-edits *ngIf="stage == 'billEdits'"></app-bill-edits>
+    <app-customer-wise-report
+      *ngIf="stage == 'customerWiseReport'"
+    ></app-customer-wise-report>
+    <app-dine-in-bills *ngIf="stage == 'dineInBills'"></app-dine-in-bills>
+    <app-hourly-item-sales
+      *ngIf="stage == 'hourlyItemSales'"
+    ></app-hourly-item-sales>
+    <app-kot-edits *ngIf="stage == 'kotEdits'"></app-kot-edits>
+    <app-payment-wise *ngIf="stage == 'paymentWise'"></app-payment-wise>
+    <app-waiter-wise-items
+      *ngIf="stage == 'waiterWiseItems'"
+    ></app-waiter-wise-items>
+    <app-table-merges *ngIf="stage == 'tableWiseActivity'"></app-table-merges>
+    <app-table-wise *ngIf="stage == 'tableWiseSales'"></app-table-wise>
+    <div class="loader"></div>
+    <div class="spacer"></div>
+  </div>
+</div>

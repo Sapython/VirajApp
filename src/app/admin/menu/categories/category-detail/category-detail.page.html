@@ -1,0 +1,95 @@
+<div class="notFound" *ngIf="!currentCategory">
+  <h3>Not Found</h3>
+  <p>The category you are looking for is not available.</p>
+</div>
+<ion-list *ngIf="currentCategory">
+  <ion-breadcrumbs>
+    <ion-breadcrumb routerLink="../../../../categories">Categories</ion-breadcrumb>
+    <ion-breadcrumb routerLink=".">{{currentCategory.name}}</ion-breadcrumb>
+  </ion-breadcrumbs>
+  <ion-item>
+    <ion-label>
+      <h1>{{ currentCategory?.name }}</h1>
+      <ion-label *ngIf="categoryType == 'recommendedCategories'"><h2>Vrajera Categories</h2></ion-label>
+      <ion-label *ngIf="categoryType == 'viewCategories'"><h2>View Categories</h2></ion-label>
+      <ion-label *ngIf="categoryType == 'mainCategories'"><h2>Main Categories</h2></ion-label>
+    </ion-label>
+  </ion-item>
+  <ion-accordion-group *ngIf="categoryType == 'recommendedCategories'">
+    <ion-accordion value="first">
+      <ion-item slot="header" color="light">
+        <ion-label>Recommendation Settings</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ng-container *ngIf="currentCategory.id == 'highRange' || currentCategory.id == 'lowRange'">
+          <ion-item>
+            <ion-label>Min Range</ion-label>
+            <ion-input type="number" min="1"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Max Range</ion-label>
+            <ion-input type="number" min="1"></ion-input>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="currentCategory.id == 'mostSelling' || currentCategory.id == 'leastSelling'">
+          <ion-item>
+            <ion-label>Min Range</ion-label>
+            <ion-input type="number" min="1"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Max Range</ion-label>
+            <ion-input type="number" min="1"></ion-input>
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="currentCategory.id == 'newDishes'">
+          <ion-item button>
+            <ion-label>Min Date</ion-label>
+            <ion-buttons slot="end">
+              <ion-datetime-button datetime="datetime"></ion-datetime-button>
+            </ion-buttons>
+          </ion-item>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="datetime"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+          <ion-item button>
+            <ion-label>Max Date</ion-label>
+            <ion-buttons slot="end">
+              <ion-datetime-button datetime="maxDatetime"></ion-datetime-button>
+            </ion-buttons>
+          </ion-item>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="maxDatetime"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ng-container>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-item>
+    <ion-label>Actions</ion-label>
+    <ion-buttons slot="end">
+      <ion-button color="primary">
+        Sort
+      </ion-button>
+      <ion-button color="primary">
+        Disable All
+      </ion-button>
+      <ion-button color="primary">
+        Enable All
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+  <ion-item-divider>
+    <ion-label>Products </ion-label>
+  </ion-item-divider>
+  <ion-item *ngFor="let item of currentCategory?.products" detail button routerLink="product-detail/{{ item.id }}">
+    <ion-label>{{item.name}}</ion-label>
+    <ion-chip color="primary" mode="ios" outline="true">
+      <ion-label>{{item.price}}</ion-label>
+    </ion-chip>
+    <ion-toggle [(ngModel)]="item.visible"></ion-toggle>
+  </ion-item>
+</ion-list>

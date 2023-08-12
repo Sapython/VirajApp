@@ -1,0 +1,16 @@
+<app-header [showOutletSelector]="false" pageTitle="Users" backRoute="../"></app-header>
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-label>Users</ion-label>
+    <ion-button slot="end" routerLink="edit-user/new">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Add
+    </ion-button>
+  </ion-item>
+  <ion-item *ngFor="let user of users" detail button routerLink="edit-user/{{user.username}}">
+    <ion-avatar slot="start">
+      <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.username}}" />
+    </ion-avatar>
+    <ion-label>{{user.username}}</ion-label>
+  </ion-item>
+</ion-content>
