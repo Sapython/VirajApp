@@ -569,10 +569,10 @@ export class EditUserPage implements OnInit {
           .then((result: any) => {
             console.log('Result', result);
             let newUserData: any = {
-              lastUpdated: Timestamp.now(),
               updatedBy: this.dataProvider.currentUser?.uid,
               username: result.uid,
-              ...result.business[0].access
+              ...result.business[0].access,
+              lastUpdated: Timestamp.now(),
             };
             console.log("Adding new user",newUserData);
             this.databaseService.addUser(newUserData,this.currentBusiness!.businessId);

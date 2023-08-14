@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
 import { Timestamp } from '@angular/fire/firestore';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-table-merges',
@@ -18,7 +19,7 @@ export class TableMergesComponent implements OnInit, OnDestroy {
     TableActivity[]
   >(1);
   loading: boolean = true;
-  constructor(private reportService: ReportService,private dataProvider: DataProvider,) {}
+  constructor(private reportService: ReportService,private dataProvider: DataProvider,private downloadService:DownloadService) {}
   ngOnDestroy(): void {
     throw new Error('Method not implemented.');
   }
@@ -73,7 +74,8 @@ y = data.cursor.y;
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Table Merge/exchange Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Table Merge/exchange report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -120,6 +122,10 @@ y = data.cursor.y;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Table Merge/exchange Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 }
 

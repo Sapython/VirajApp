@@ -1,12 +1,13 @@
 <div class="header">
   <span>
-    <button class="back" [routerLink]="backRoute" *ngIf="backRoute"><i class="ri-arrow-left-s-line"></i></button>
+    <button class="back" routerDirection="back" [routerLink]="backRoute" *ngIf="backRoute"><i class="ri-arrow-left-s-line"></i></button>
     <img src="assets/Vrajera.png" alt="">
     <p class="virajFont">{{pageTitle}}</p>
   </span>
   <span>
     <div class="outlet" (click)="outletSelector.present()" *ngIf="showOutletSelector">
-      {{(dataProvider.currentBusiness | async)?.name | titlecase}}
+      <p>{{(dataProvider.currentBusiness | async)?.name | titlecase}}</p>
+      <ion-icon name="chevron-down-outline"></ion-icon>
     </div>
     <button routerLink="../profile" class="profile"><i class="ri-user-line"></i></button>
   </span>

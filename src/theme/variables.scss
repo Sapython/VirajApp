@@ -57,19 +57,19 @@ $Vrajera-theme: mat.define-light-theme(
 :root {
   /** primary **/
   --ion-color-primary: #FF5E35;
-  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary-rgb: 255, 94, 53;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #db4c29;
   --ion-color-primary-tint: #ff7957;
 
   /** secondary **/
-  --ion-color-secondary: #3dc2ff;
-  --ion-color-secondary-rgb: 61, 194, 255;
+  --ion-color-secondary: #FF5E35;
+  --ion-color-secondary-rgb: 255, 94, 53;
   --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --ion-color-secondary-contrast-rgb:255, 255, 255;
+  --ion-color-secondary-shade: #db4c29;
+  --ion-color-secondary-tint: #ff7957;
 
   /** tertiary **/
   --ion-color-tertiary: #5260ff;

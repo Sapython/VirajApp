@@ -10,6 +10,11 @@ import { Subject, debounceTime } from 'rxjs';
 export class ReportsPage implements OnInit {
   reportFormats:ReportFormat[] = [
     {
+      title: 'Consolidated Report',
+      code: 'consolidated',
+      description: 'Consolidated report for a given range of bill amount.',
+    },
+    {
       title: 'Item Wise Sales',
       code: 'itemWise',
       description: 'List of items and their sales, with bills and kots.',
@@ -102,6 +107,11 @@ export class ReportsPage implements OnInit {
       code: 'tableWiseActivity',
       description: 'List of tables with merge, exchange, split actions.',
     },
+    {
+      title: 'Bill Split',
+      code: 'billSplits',
+      description: 'List of tables with merge, exchange, split actions.',
+    },
   ];
   fuseSearchInstance:Fuse<ReportFormat> = new Fuse(this.reportFormats,{keys:['title','description']});
   filteredReportFormats:ReportFormat[] = [];
@@ -119,6 +129,7 @@ export class ReportsPage implements OnInit {
     | 'takeawayTokenWise'
     | 'onlineTokenWise'
     | 'tableWise'
+    | 'billSplits'
     | false = false;
   range = new FormGroup({
     start: new FormControl<Date | null>(new Date(), [Validators.required]),
@@ -162,6 +173,7 @@ interface ReportFormat {
   | 'paymentWise'
   | 'waiterWiseItems'
   | 'tableWiseSales'
+  | 'billSplits'
   | 'tableWiseActivity';
   description: string;
 }

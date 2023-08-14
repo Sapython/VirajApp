@@ -5,6 +5,7 @@ import { Subscription, ReplaySubject } from 'rxjs';
 import { ReportService } from '../../report.service';
 import { KotConstructor } from 'src/app/core/types/kot.structure';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-combo',
@@ -27,6 +28,7 @@ export class ComboComponent {
   constructor(
     private reportService: ReportService,
     private dataProvider: DataProvider,
+    private downloadService:DownloadService
   ) {}
 
   ngOnInit(): void {
@@ -70,21 +72,17 @@ export class ComboComponent {
         },
       );
     });
-    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadPdf();
-      },
-    );
-    this.downloadExcelSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadExcel();
-      },
-    );
+    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(()=>{
+      this.downloadPdf();
+    });
+    this.downloadExcelSubscription = this.reportService.downloadExcel.subscribe(()=>{
+      this.downloadExcel();
+    });
   }
 
   async downloadPdf() {
     const doc = new jsPDF();
-    let title = 'Bill Wise';
+    let title = 'Combo Wise';
     let logo = new Image();
     logo.src = 'assets/images/Vrajera.png';
     doc.addImage(logo, 'JPEG', 10, 10, 30.5, 17.5);
@@ -117,7 +115,8 @@ y = data.cursor.y;
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Combo Wise Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Combo Wise Report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -164,6 +163,10 @@ y = data.cursor.y;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Combo Wise Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 
   ngOnDestroy(): void {

@@ -7,16 +7,22 @@
       </ion-button>
     </div>
     <div class="dates">
-      <p>Selected Range: </p>
+      <p>Date: </p>
       <mat-date-range-picker hidden touchUi #picker></mat-date-range-picker>
+      <span>
+        {{ dateRangeFormGroup.get("startDate")?.value | date: "dd/MM/yyyy" }}
+        - 
+        {{ dateRangeFormGroup.get("endDate")?.value | date: "dd/MM/yyyy" }}
+      </span>
       <mat-date-range-input
+        style="width: 0px;height: 0px;opacity: 0;"
         tabindex="-1"
         hidden
         [formGroup]="dateRangeFormGroup"
         [rangePicker]="picker"
       >
-        <input matStartDate formControlName="startDate" placeholder="Start date" />
-        <input matEndDate formControlName="endDate" placeholder="End date" />
+        <input hidden matStartDate formControlName="startDate" placeholder="Start date" />
+        <input hidden matEndDate formControlName="endDate" placeholder="End date" />
       </mat-date-range-input>
     </div>
   </div>
@@ -35,6 +41,7 @@
     <swiper
       #swiperAnalytics
       [slidesPerView]="1"
+      [pagination]="true"
       [spaceBetween]="50"
       (slideChange)="slideChanged(selector,swiperContainer)"
       #swiperContainer
@@ -317,6 +324,7 @@
     <swiper
       #swiperPaymentModes
       [slidesPerView]="1"
+      [pagination]="true"
       [config]="{autoHeight: true}"
       [spaceBetween]="50"
       (slideChange)="slideChanged(paymentSelector,swiperPaymentModes)"
@@ -482,6 +490,7 @@
     <swiper
       [slidesPerView]="1"
       [spaceBetween]="50"
+      [pagination]="true"
       [config]="{autoHeight: true}"
       #billWiseSwiperContainer
       (slideChange)="slideChanged(channelSelector,billWiseSwiperContainer)"
@@ -501,7 +510,7 @@
               <div
                 class="progress"
                 [ngStyle]="{
-                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.totalSettledBills || 0))*100)+'%'
+                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
                 }"
               ></div>
             </div>
@@ -519,7 +528,7 @@
               <div
                 class="progress"
                 [ngStyle]="{
-                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.totalSettledBills || 0))*100) + '%'
+                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100) + '%'
                 }"
               ></div>
             </div>
@@ -537,17 +546,18 @@
               <div
                 class="progress"
                 [ngStyle]="{
-                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.totalSettledBills || 0))*100)+'%'
+                  width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
                 }"
               ></div>
             </div>
           </div>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseTableWiseSeeMore hidden>
           <ng-container
             *ngFor="let table of analyticsData?.salesChannels?.all?.billWiseSales?.tableWise; let i = index"
           >
-            <div class="channel" *ngIf="i < 10">
+            <div class="channel" *ngIf="i < 10 || billWiseTableWiseSeeMore.checked">
               <div class="title">
                 <p>{{table.table}}</p>
                 <p>{{ table.totalBills }}</p>
@@ -561,14 +571,17 @@
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseTableWiseSeeMore.click()">
+              {{billWiseTableWiseSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseTimeWiseSeeMore hidden>
           <ng-container
             *ngFor="let time of analyticsData?.salesChannels?.all?.billWiseSales?.time; let i = index"
           >
-            <div class="channel" *ngIf="i<10">
+            <div class="channel" *ngIf="i<10 || billWiseTimeWiseSeeMore.checked">
               <div class="title">
                 <p>
                   {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
@@ -581,12 +594,14 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: (((time.totalBills || 0) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
+                    width: (((time.totalBills || 0) / (((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
                   }"
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseTimeWiseSeeMore.click()">
+              {{billWiseTimeWiseSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
       </ng-template>
@@ -648,10 +663,11 @@
           </div>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseTableWiseSalesSeeMore hidden>
           <ng-container
             *ngFor="let table of analyticsData?.salesChannels?.dineIn?.billWiseSales?.tableWise; let i = index"
           >
-            <div class="channel" *ngIf="i<10">
+            <div class="channel" *ngIf="i<10 || billWiseTableWiseSalesSeeMore.checked">
               <div class="title">
                 <p>{{table.table}}</p>
                 <p>{{ table.totalBills }}</p>
@@ -665,14 +681,17 @@
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseTableWiseSalesSeeMore.click()">
+              {{billWiseTableWiseSalesSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseDineinTableWiseTimeSeeMore hidden>
           <ng-container
             *ngFor="let time of analyticsData?.salesChannels?.dineIn?.billWiseSales?.time; let i = index"
           >
-            <div class="channel" *ngIf="i < 10">
+            <div class="channel" *ngIf="i < 10 || billWiseDineinTableWiseTimeSeeMore.checked">
               <div class="title">
                 <p>
                   {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
@@ -690,7 +709,9 @@
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseDineinTableWiseTimeSeeMore.click()">
+              {{billWiseDineinTableWiseTimeSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
       </ng-template>
@@ -752,10 +773,11 @@
           </div>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseTakeawayTableWiseTimeSeeMore hidden>
           <ng-container
             *ngFor="let table of analyticsData?.salesChannels?.takeaway?.billWiseSales?.tableWise; let i = index"
           >
-            <div class="channel" *ngIf="i <10">
+            <div class="channel" *ngIf="i <10 || billWiseTakeawayTableWiseTimeSeeMore.checked">
               <div class="title">
                 <p>{{table.table}}</p>
                 <p>{{ table.totalBills }}</p>
@@ -769,7 +791,9 @@
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseTakeawayTableWiseTimeSeeMore.click()">
+              {{billWiseTakeawayTableWiseTimeSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'time'">
@@ -856,10 +880,11 @@
           </div>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'table'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseOnlineTableWiseTimeSeeMore hidden>
           <ng-container
             *ngFor="let table of analyticsData?.salesChannels?.online?.billWiseSales?.tableWise; let i = index"
           >
-            <div class="channel" *ngIf="i < 10">
+            <div class="channel" *ngIf="i < 10 || billWiseOnlineTableWiseTimeSeeMore.checked">
               <div class="title">
                 <p>{{table.table}}</p>
                 <p>{{ table.totalBills }}</p>
@@ -873,14 +898,17 @@
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseOnlineTableWiseTimeSeeMore.click()">
+              {{billWiseOnlineTableWiseTimeSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
         <div class="modes" *ngIf="typeSelector.value == 'time'">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseSalesOnlineSeeMore hidden>
           <ng-container
             *ngFor="let time of analyticsData?.salesChannels?.online?.billWiseSales?.time; let i = index"
           >
-            <div class="channel" *ngIf="i<10">
+            <div class="channel" *ngIf="i<10 || billWiseSalesOnlineSeeMore.checked">
               <div class="title">
                 <p>
                   {{time.time}}:00 {{time.timeNumber > 12 ? 'AM' : 'PM'}} -
@@ -898,7 +926,9 @@
                 ></div>
               </div>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="billWiseSalesOnlineSeeMore.click()">
+              {{billWiseSalesOnlineSeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
       </ng-template>
@@ -922,6 +952,7 @@
     <swiper
       [slidesPerView]="1"
       [spaceBetween]="50"
+      [pagination]="true"
       [config]="{autoHeight: true}"
       #swiperItemSales
       (slideChange)="slideChanged(itemWiseSalesSelector,swiperItemSales)"
@@ -962,10 +993,11 @@
             class="modes"
             *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
           >
+            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesByPriceSeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice; let i = index;"
             >
-              <div class="channel" *ngIf="i<10">
+              <div class="channel" *ngIf="i<10 || itemWiseSalesByPriceSeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.price }}</p>
@@ -979,17 +1011,27 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i==10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesByPriceSeeMore.click()">
+                {{itemWiseSalesByPriceSeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <!-- no data -->
+          <img
+            *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
           <div
             class="modes"
             *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
           >
+            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesByQuantitySeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.all?.itemWiseSales?.byQuantity; let i = index"
             >
-              <div *ngIf="i < 10" class="channel">
+              <div *ngIf="i < 10 || itemWiseSalesByQuantitySeeMore.checked" class="channel">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.quantity }}</p>
@@ -1003,9 +1045,17 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i == 10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesByQuantitySeeMore.click()">
+                {{itemWiseSalesByQuantitySeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
         </div>
       </ng-template>
       <ng-template swiperSlide>
@@ -1039,10 +1089,11 @@
             class="modes"
             *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
           >
+            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesDineInByPriceSeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice; let i = index;"
             >
-              <div class="channel" *ngIf="i < 10">
+              <div class="channel" *ngIf="i < 10 || itemWiseSalesDineInByPriceSeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.price }}</p>
@@ -1056,17 +1107,26 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i == 10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesDineInByPriceSeeMore.click()">
+                {{itemWiseSalesDineInByPriceSeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
           <div
             class="modes"
             *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
           >
+            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesDineInByQuantitySeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byQuantity; let i = index"
             >
-              <div class="channel" *ngIf="i < 10">
+              <div class="channel" *ngIf="i < 10 || itemWiseSalesDineInByQuantitySeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.quantity }}</p>
@@ -1080,9 +1140,17 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i == 10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesDineInByQuantitySeeMore.click()">
+                {{itemWiseSalesDineInByQuantitySeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
         </div>
       </ng-template>
       <ng-template swiperSlide>
@@ -1116,10 +1184,11 @@
             class="modes"
             *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
           >
+            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesTakeawayByPriceSeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice; let i = index;"
             >
-              <div class="channel" *ngIf="i<10">
+              <div class="channel" *ngIf="i<10 || itemWiseSalesTakeawayByPriceSeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.price }}</p>
@@ -1133,17 +1202,26 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i==10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesTakeawayByPriceSeeMore.click()">
+                {{itemWiseSalesTakeawayByPriceSeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
           <div
             class="modes"
             *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
           >
+            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesTakeawayByQuantitySeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byQuantity; let i = index"
             >
-              <div class="channel" *ngIf="i<10">
+              <div class="channel" *ngIf="i<10 || itemWiseSalesTakeawayByQuantitySeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.quantity }}</p>
@@ -1157,9 +1235,17 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i==10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesTakeawayByQuantitySeeMore.click()">
+                {{itemWiseSalesTakeawayByQuantitySeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
         </div>
       </ng-template>
       <ng-template swiperSlide>
@@ -1193,10 +1279,11 @@
             class="modes"
             *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length && mostSellingToggle.value == 'byPrice'"
           >
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesOnlineByQuantitySeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice; let i = index;"
             >
-              <div class="channel" *ngIf="i<10">
+              <div class="channel" *ngIf="i<10 || itemWiseSalesOnlineByQuantitySeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.price }}</p>
@@ -1210,17 +1297,26 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i==10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesOnlineByQuantitySeeMore.click()">
+                {{itemWiseSalesOnlineByQuantitySeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
           <div
             class="modes"
             *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
           >
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #itemWiseSalesOnlineByQuantitySeeMore hidden>
             <ng-container
               *ngFor="let channel of analyticsData?.salesChannels?.online?.itemWiseSales?.byQuantity; let i = index"
             >
-              <div class="channel" *ngIf="i<10">
+              <div class="channel" *ngIf="i<10 || itemWiseSalesOnlineByQuantitySeeMore.checked">
                 <div class="title">
                   <p>{{ channel.name }}</p>
                   <p>{{ channel.quantity }}</p>
@@ -1234,9 +1330,17 @@
                   ></div>
                 </div>
               </div>
-              <p *ngIf="i==10">See More</p>
+              <p class="seeMore" *ngIf="i == 10" (click)="itemWiseSalesOnlineByQuantitySeeMore.click()">
+                {{itemWiseSalesOnlineByQuantitySeeMore.checked ? 'See Less' :  'See More'}}
+              </p>
             </ng-container>
           </div>
+          <img
+            *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
+            src="assets/notFound.jpg"
+            class="noData"
+            alt=""
+          />
         </div>
       </ng-template>
     </swiper>
@@ -1260,16 +1364,18 @@
     <swiper
       #swiperSuspiciousActivity
       [slidesPerView]="1"
+      [pagination]="true"
       [spaceBetween]="50"
       [config]="{autoHeight: true}"
       (slideChange)="slideChanged(suspiciousSelector,swiperSuspiciousActivity)"
     >
       <ng-template swiperSlide>
         <div class="suspiciousActivity">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #allSuspiciousActivitySeeMore hidden>
           <ng-container
             *ngFor="let item of analyticsData?.salesChannels?.all?.suspiciousActivities; let i = index"
           >
-            <div class="activity" *ngIf="i < 10">
+            <div class="activity" *ngIf="i < 10 || allSuspiciousActivitySeeMore.checked">
               <div class="title">
                 <!-- <p>{{item.activity.type}}</p> -->
                 <p *ngIf="item.activity.type == 'billDiscounted'">
@@ -1284,6 +1390,9 @@
                 <p *ngIf="item.activity.type == 'billCancelled'">
                   Bill Cancelled
                 </p>
+                <p *ngIf="item.activity.type == 'billSplit'">
+                  Bill Splitted
+                </p>
                 <p *ngIf="item.activity.type == 'billNC'">Bill NC</p>
                 <span
                   ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
@@ -1293,7 +1402,9 @@
               </div>
               <p>{{item.activity.message}}</p>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="allSuspiciousActivitySeeMore.click()">
+              {{allSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
         </div>
         <img
@@ -1305,10 +1416,11 @@
       </ng-template>
       <ng-template swiperSlide>
         <div class="suspiciousActivity">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #dineInSuspiciousActivitySeeMore hidden>
           <ng-container
             *ngFor="let item of analyticsData?.salesChannels?.dineIn?.suspiciousActivities; let i = index"
           >
-            <div class="activity" *ngIf="i < 10">
+            <div class="activity" *ngIf="i < 10 || dineInSuspiciousActivitySeeMore.checked">
               <div class="title">
                 <!-- <p>{{item.activity.type}}</p> -->
                 <p *ngIf="item.activity.type == 'billDiscounted'">
@@ -1332,7 +1444,9 @@
               </div>
               <p>{{item.activity.message}}</p>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="dineInSuspiciousActivitySeeMore.click()">
+              {{dineInSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
           <img
             *ngIf="!(analyticsData?.salesChannels?.dineIn?.suspiciousActivities)?.length"
@@ -1344,10 +1458,11 @@
       </ng-template>
       <ng-template swiperSlide>
         <div class="suspiciousActivity">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #takeawaySuspiciousActivitySeeMore hidden>
           <ng-container
             *ngFor="let item of analyticsData?.salesChannels?.takeaway?.suspiciousActivities; let i = index"
           >
-            <div class="activity" *ngIf="i < 10">
+            <div class="activity" *ngIf="i < 10 || takeawaySuspiciousActivitySeeMore.checked">
               <div class="title">
                 <!-- <p>{{item.activity.type}}</p> -->
                 <p *ngIf="item.activity.type == 'billDiscounted'">
@@ -1371,7 +1486,9 @@
               </div>
               <p>{{item.activity.message}}</p>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="takeawaySuspiciousActivitySeeMore.click()">
+              {{takeawaySuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
           <img
             *ngIf="!(analyticsData?.salesChannels?.takeaway?.suspiciousActivities)?.length"
@@ -1383,10 +1500,11 @@
       </ng-template>
       <ng-template swiperSlide>
         <div class="suspiciousActivity">
+          <input type="checkbox" name="" id="" (change)="updateAllSlides()" #onlineSuspiciousActivitySeeMore hidden>
           <ng-container
             *ngFor="let item of analyticsData?.salesChannels?.online?.suspiciousActivities; let i = index"
           >
-            <div class="activity" *ngIf="i < 10">
+            <div class="activity" *ngIf="i < 10 || onlineSuspiciousActivitySeeMore.checked">
               <div class="title">
                 <!-- <p>{{item.activity.type}}</p> -->
                 <p *ngIf="item.activity.type == 'billDiscounted'">
@@ -1410,7 +1528,9 @@
               </div>
               <p>{{item.activity.message}}</p>
             </div>
-            <p *ngIf="i == 10">See More</p>
+            <p class="seeMore" *ngIf="i == 10" (click)="onlineSuspiciousActivitySeeMore.click()">
+              {{onlineSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
+            </p>
           </ng-container>
           <img
             *ngIf="!(analyticsData?.salesChannels?.online?.suspiciousActivities)?.length"
@@ -1443,6 +1563,7 @@
     <swiper
       #userWiseActionSwiper
       [slidesPerView]="1"
+      [pagination]="true"
       [spaceBetween]="20"
       [config]="{autoHeight: true}"
       (slideChange)="slideChanged(actionSelector,userWiseActionSwiper)"
@@ -1471,30 +1592,36 @@
             </div>
             <div class="suspiciousActivity">
               <ng-container *ngIf="activityMode.value=='kots'">
-                <div class="activity" *ngFor="let item of user.actions?.kots">
-                  <div class="title">
-                    <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
-                    <p *ngIf="item.activity.type == 'newKot'">New Kot</p>
-                    <p *ngIf="item.activity.type == 'kotPrinted'">
-                      Kot Printed
-                    </p>
-                    <p *ngIf="item.activity.type == 'kotEdited'">Kot Edited</p>
-                    <p *ngIf="item.activity.type == 'kotCancelled'">
-                      Kot Cancelled
-                    </p>
-                    <p *ngIf="item.activity.type == 'lineCancelled'">
-                      Line Cancelled
-                    </p>
-                    <span
-                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
-                      date:'shortTime'}}</span
-                    >
-                    <span
-                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
-                    >
+                <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsKotsSeeMore hidden>
+                <ng-container *ngFor="let item of user.actions?.kots;let i = index;">
+                  <div class="activity" *ngIf="i < 5 || allUserWiseActionsKotsSeeMore.checked">
+                    <div class="title">
+                      <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
+                      <p *ngIf="item.activity.type == 'newKot'">New Kot</p>
+                      <p *ngIf="item.activity.type == 'kotPrinted'">
+                        Kot Printed
+                      </p>
+                      <p *ngIf="item.activity.type == 'kotEdited'">Kot Edited</p>
+                      <p *ngIf="item.activity.type == 'kotCancelled'">
+                        Kot Cancelled
+                      </p>
+                      <p *ngIf="item.activity.type == 'lineCancelled'">
+                        Line Cancelled
+                      </p>
+                      <span
+                        ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                        date:'shortTime'}}</span
+                      >
+                      <span
+                        ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                      >
+                    </div>
+                    <p>{{item.activity.message}}</p>
                   </div>
-                  <p>{{item.activity.message}}</p>
-                </div>
+                  <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsKotsSeeMore.click()">
+                    {{allUserWiseActionsKotsSeeMore.checked ? 'See Less' :  'See More'}}
+                  </p>
+                </ng-container>
                 <img
                   *ngIf="!(user.actions?.kots)?.length"
                   src="assets/notFound.jpg"
@@ -1503,74 +1630,85 @@
                 />
               </ng-container>
               <ng-container *ngIf="activityMode.value=='bills'">
-                <div class="activity" *ngFor="let item of user.actions?.bills">
-                  <div class="title">
-                    <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
-                    <p *ngIf="item.activity.type == 'billPrinted'">
-                      Bill Printed
-                    </p>
-                    <p *ngIf="item.activity.type == 'billEdited'">
-                      Bill Edited
-                    </p>
-                    <p *ngIf="item.activity.type == 'billCancelled'">
-                      Bill Cancelled
-                    </p>
-                    <p *ngIf="item.activity.type == 'billSplit'">Bill Split</p>
-                    <p *ngIf="item.activity.type == 'customerDetailEntered'">
-                      Customer Applied
-                    </p>
-                    <p *ngIf="item.activity.type == 'billNormal'">
-                      Bill to normal
-                    </p>
-                    <p *ngIf="item.activity.type == 'billFinalized'">
-                      Bill Finalized
-                    </p>
-                    <p *ngIf="item.activity.type == 'instructionSet'">
-                      Added Bill Note
-                    </p>
-                    <p *ngIf="item.activity.type == 'billReactivated'">
-                      Bill Reactivated
-                    </p>
-                    <span
-                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
-                      date:'shortTime'}}</span
-                    >
-                    <span
-                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
-                    >
+                <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsBillsSeeMore hidden>
+                <ng-container *ngFor="let item of user.actions?.bills;let i = index;">
+                  <div class="activity" *ngIf="i < 5 || allUserWiseActionsBillsSeeMore.checked">
+                    <div class="title">
+                      <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
+                      <p *ngIf="item.activity.type == 'billPrinted'">
+                        Bill Printed
+                      </p>
+                      <p *ngIf="item.activity.type == 'billEdited'">
+                        Bill Edited
+                      </p>
+                      <p *ngIf="item.activity.type == 'billCancelled'">
+                        Bill Cancelled
+                      </p>
+                      <p *ngIf="item.activity.type == 'billSplit'">Bill Split</p>
+                      <p *ngIf="item.activity.type == 'customerDetailEntered'">
+                        Customer Applied
+                      </p>
+                      <p *ngIf="item.activity.type == 'billNormal'">
+                        Bill to normal
+                      </p>
+                      <p *ngIf="item.activity.type == 'billFinalized'">
+                        Bill Finalized
+                      </p>
+                      <p *ngIf="item.activity.type == 'instructionSet'">
+                        Added Bill Note
+                      </p>
+                      <p *ngIf="item.activity.type == 'billReactivated'">
+                        Bill Reactivated
+                      </p>
+                      <span
+                        ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                        date:'shortTime'}}</span
+                      >
+                      <span
+                        ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                      >
+                    </div>
+                    <p>{{item.activity.message}}</p>
                   </div>
-                  <p>{{item.activity.message}}</p>
-                </div>
-                <img
-                  *ngIf="!(user.actions?.bills)?.length"
-                  src="assets/notFound.jpg"
-                  class="noData"
-                  alt=""
-                />
+                    <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsBillsSeeMore.click()">
+                      {{allUserWiseActionsBillsSeeMore.checked ? 'See Less' :  'See More'}}
+                    </p>
+                  <img
+                    *ngIf="!(user.actions?.bills)?.length"
+                    src="assets/notFound.jpg"
+                    class="noData"
+                    alt=""
+                  />
+                </ng-container>
               </ng-container>
               <ng-container *ngIf="activityMode.value=='discounts'">
-                <div
-                  class="activity"
-                  *ngFor="let item of user.actions?.discounts"
-                >
-                  <div class="title">
-                    <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
-                    <p *ngIf="item.activity.type == 'billDiscounted'">
-                      Bill Discounted
-                    </p>
-                    <p *ngIf="item.activity.type == 'lineDiscounted'">
-                      Item Discount
-                    </p>
-                    <span
-                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
-                      date:'shortTime'}}</span
-                    >
-                    <span
-                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
-                    >
+                <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsDiscountsSeeMore hidden>
+                <ng-container *ngFor="let item of user.actions?.discounts; let i = index">
+                  <div *ngIf="i < 5 || allUserWiseActionsDiscountsSeeMore.checked"
+                    class="activity"
+                  >
+                    <div class="title">
+                      <!-- 'newKot','kotPrinted','kotEdited','kotCancelled','lineCancelled' -->
+                      <p *ngIf="item.activity.type == 'billDiscounted'">
+                        Bill Discounted
+                      </p>
+                      <p *ngIf="item.activity.type == 'lineDiscounted'">
+                        Item Discount
+                      </p>
+                      <span
+                        ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                        date:'shortTime'}}</span
+                      >
+                      <span
+                        ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                      >
+                    </div>
+                    <p>{{item.activity.message}}</p>
                   </div>
-                  <p>{{item.activity.message}}</p>
-                </div>
+                  <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsDiscountsSeeMore.click()">
+                    {{allUserWiseActionsDiscountsSeeMore.checked ? 'See Less' :  'See More'}}
+                  </p>
+                </ng-container>
                 <img
                   *ngIf="!(user.actions?.discounts)?.length"
                   src="assets/notFound.jpg"
@@ -1579,24 +1717,30 @@
                 />
               </ng-container>
               <ng-container *ngIf="activityMode.value=='settlements'">
-                <div
-                  class="activity"
-                  *ngFor="let item of user.actions?.settlements"
-                >
-                  <div class="title">
-                    <p *ngIf="item.activity.type == 'billSettled'">
-                      Bill Settled
-                    </p>
-                    <span
-                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
-                      date:'shortTime'}}</span
-                    >
-                    <span
-                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
-                    >
+                <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsSettlementsSeeMore hidden>
+                <ng-container *ngFor="let item of user.actions?.settlements; let i = index">
+                  <div
+                    class="activity"
+                    *ngIf="i < 5 || allUserWiseActionsSettlementsSeeMore.checked"
+                  >
+                    <div class="title">
+                      <p *ngIf="item.activity.type == 'billSettled'">
+                        Bill Settled
+                      </p>
+                      <span
+                        ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                        date:'shortTime'}}</span
+                      >
+                      <span
+                        ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                      >
+                    </div>
+                    <p>{{item.activity.message}}</p>
                   </div>
-                  <p>{{item.activity.message}}</p>
-                </div>
+                  <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsSettlementsSeeMore.click()">
+                    {{allUserWiseActionsSettlementsSeeMore.checked ? 'See Less' :  'See More'}}
+                  </p>
+                </ng-container>
                 <img
                   *ngIf="!(user.actions?.settlements)?.length"
                   src="assets/notFound.jpg"
@@ -1605,19 +1749,25 @@
                 />
               </ng-container>
               <ng-container *ngIf="activityMode.value=='ncs'">
-                <div class="activity" *ngFor="let item of user.actions?.ncs">
-                  <div class="title">
-                    <p *ngIf="item.activity.type == 'billNC'">Bill To NC</p>
-                    <span
-                      ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
-                      date:'shortTime'}}</span
-                    >
-                    <span
-                      ><i class="ri-user-line"></i>{{item.activity.user}}</span
-                    >
+                <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsNcsSeeMore hidden>
+                <ng-container *ngFor="let item of user.actions?.ncs; let i = index">
+                  <div class="activity" *ngIf="i < 5 || allUserWiseActionsNcsSeeMore.checked">
+                    <div class="title">
+                      <p *ngIf="item.activity.type == 'billNC'">Bill To NC</p>
+                      <span
+                        ><i class="ri-time-line"></i>{{item.createdDate.toDate() |
+                        date:'shortTime'}}</span
+                      >
+                      <span
+                        ><i class="ri-user-line"></i>{{item.activity.user}}</span
+                      >
+                    </div>
+                    <p>{{item.activity.message}}</p>
                   </div>
-                  <p>{{item.activity.message}}</p>
-                </div>
+                  <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsNcsSeeMore.click()">
+                    {{allUserWiseActionsNcsSeeMore.checked ? 'See Less' :  'See More'}}
+                  </p>
+                </ng-container>
                 <img
                   *ngIf="!(user.actions?.ncs)?.length"
                   src="assets/notFound.jpg"

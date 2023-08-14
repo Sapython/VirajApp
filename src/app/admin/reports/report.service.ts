@@ -4,12 +4,15 @@ import { ReplaySubject, Subject } from 'rxjs';
 import {
   Firestore,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   where,
 } from '@angular/fire/firestore';
 import { BillConstructor } from 'src/app/core/types/bill.structure';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
+import { Tax } from 'src/app/core/types/tax.structure';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +22,7 @@ export class ReportService {
 
   loading: boolean = false;
   cachedData: CachedData[] = [];
-
+  consolidatedMaxAmount: number = 0;
   downloadPdf: Subject<void> = new Subject<void>();
   downloadExcel: Subject<void> = new Subject<void>();
 
@@ -28,6 +31,18 @@ export class ReportService {
     endDate: new FormControl('', [Validators.required]),
   });
   dataChanged: ReplaySubject<void> = new ReplaySubject<void>(1);
+  refetchConsolidated:Subject<void> = new Subject<void>();
+  consolidatedSummary:{
+    bills: BillConstructor[],
+    totalSubtotal: number,
+    totalGrandTotal: number,
+    totalTaxes: Tax[],
+  } = {
+    bills:[],
+    totalSubtotal: 0,
+    totalGrandTotal: 0,
+    totalTaxes: [],
+  };
   constructor(
     private firestore: Firestore,
     private dataProvider: DataProvider,
@@ -148,6 +163,21 @@ export class ReportService {
           '/billActivities',
       ),
     );
+  }
+
+  async getSplittedBill(billId:string,splittedBillId:string,businessId:string){
+    return await getDoc(doc(this.firestore,'business',businessId,'bills',billId,'splittedBills',splittedBillId));
+  }
+
+  getCustomers(startDate:Date,endDate:Date,businessId:string){
+    // set hours to 0
+    startDate.setHours(0,0,0,0);
+    // set hours to 23
+    endDate.setHours(23,59,59,999);
+    return getDocs(query(collection(this.firestore,'business',businessId,'customers'),
+      where('created','>=',startDate),
+      where('created','<=',endDate),
+    ));
   }
 }
 

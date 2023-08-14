@@ -6,6 +6,7 @@ import { ReportService } from '../../report.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-table-wise',
@@ -25,7 +26,7 @@ export class TableWiseComponent {
     return bill.map((res) => res.id).join(', ');
   }
 
-  constructor(private reportService: ReportService,private dataProvider: DataProvider,) {}
+  constructor(private reportService: ReportService,private dataProvider: DataProvider,private downloadService:DownloadService) {}
 
   ngOnInit(): void {
     this.dataProvider.currentBusiness.subscribe((business) => {
@@ -74,16 +75,12 @@ export class TableWiseComponent {
         },
       );
     });
-    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadPdf();
-      },
-    );
-    this.downloadExcelSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadExcel();
-      },
-    );
+    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(()=>{
+      this.downloadPdf();
+    });
+    this.downloadExcelSubscription = this.reportService.downloadExcel.subscribe(()=>{
+      this.downloadExcel();
+    });
   }
 
 
@@ -120,7 +117,8 @@ y = data.cursor.y;
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Table Wise Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Table wise report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -167,6 +165,10 @@ y = data.cursor.y;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Table Wise Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 
   ngOnDestroy(): void {

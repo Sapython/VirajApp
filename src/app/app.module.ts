@@ -22,6 +22,11 @@ import { providePerformance, getPerformance } from '@angular/fire/performance';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DataProvider } from './core/services/data-provider/data-provider.service';
+import { DownloadService } from './core/services/download.service';
+import { AlertsAndNotificationsService } from './core/services/alerts-and-notification/alerts-and-notifications.service';
+import { DatabaseService } from './core/services/database/database.service';
+import { AuthService } from './core/services/auth/auth.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -47,6 +52,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ScreenTrackingService,
     UserTrackingService,
+    DownloadService,DataProvider,AlertsAndNotificationsService,DatabaseService,AuthService
   ],
   bootstrap: [AppComponent],
 })

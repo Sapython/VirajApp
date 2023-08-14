@@ -81,6 +81,7 @@
   --Vrajera-shadow-light: 4px 1px 16px rgba(22, 22, 22, 0.1);
   --Vrajera-shadow-medium: 0px 4px 8px rgba(0, 0, 0, 0.25);
   --Vrajera-shadow-heavy: 0px 8px 16px rgba(0, 0, 0, 0.25);
+  --swiper-theme-color: var(--Vrajera-primary);
   font-family: "MergeOne-Regular", sans-serif;
 }
 html{
@@ -96,11 +97,13 @@ ion-app {
   // background-position: center;
 }
 main#content {
-  background-image: url("assets/background.svg");
+  background-image: url("./assets/background.svg");
   background-repeat: repeat;
   background-size: 300px;
   background-position: center;
+  background-attachment: fixed;
   height: 100%;
+  overflow: scroll;
 }
 app-header{
 	position: sticky;
@@ -122,4 +125,47 @@ app-header{
 		transform: translateY(0px);
 		opacity: 1;
 	}
+}
+.virajInput{
+  label{
+    position: absolute;
+    transform: translate(-180%,10px);
+    font-size: var(--Vrajera-font-medium);
+    color: var(--Vrajera-primary);
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  input{
+    border: 2px solid var(--Vrajera-primary);
+    border-radius: 4px;
+    height: 35px;
+    padding: 0px 10px;
+    color: var(--Vrajera-primary);
+    font-size: var(--Vrajera-font-medium);
+    transition: all 0.3s ease-in-out;
+    input::placeholder{
+      opacity:0;
+    }
+    &:focus{
+      outline:none;
+      border-bottom: 4px solid var(--Vrajera-primary);
+      & + label,
+      &:not(:placeholder-shown) + label{
+        transform:translate(-180%,-20px);
+      }
+    }
+  }
+  &:focus-within,&.active{
+    input{
+      border-bottom: 4px solid var(--Vrajera-primary);
+      & + label,
+      &:not(:placeholder-shown) + label{
+        transform:translate(-180%,-20px);
+      }
+    }
+  }
+}
+
+.swiper-pagination-fraction, .swiper-pagination-custom, .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal{
+  bottom: 8px;
 }

@@ -1,0 +1,57 @@
+ion-content{
+	.currentUser{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 20px;
+		// copied from sales.page.scss part of .summaryCard
+		border-radius: 16px;
+		border: 1px solid #D8D8D8;
+		background: rgba(255, 255, 255, 0.80);
+		box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.10);
+		// copy end
+		img{
+			width: 40px;
+			height: 40px;
+			border-radius: 20px;
+		}
+		h2{
+			margin:0px;
+		}
+	}
+
+	form{
+		display: flex;
+		flex-direction: column;
+		gap:20px;
+		ion-item::part(native) {
+			border-radius: 20px;
+			height: 52px;
+			font-size: var(--Vrajera-font-large);
+			border-radius: 16px;
+			border: 1px solid #D8D8D8;
+			background: rgba(255, 255, 255, 0.80);
+			box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.10);
+		}
+		.actions{
+			display: flex;
+			gap:15px;
+			button{
+			  padding: 10px 15px;
+			  width: 100%;
+			  font-size: var(--Vrajera-font-xlarge);
+			}
+			button[type="button"]{
+			  border-radius: 12px;
+			  background: white;
+			  border:2px solid #FF5E35;
+			  color:#FF5E35;
+			}
+			button[type="submit"]{
+			  border-radius: 12px;
+			  background: #FF5E35;
+			  color:white;
+			}
+		}
+	}
+}

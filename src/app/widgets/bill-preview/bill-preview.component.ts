@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PrintableBill } from 'src/app/core/types/bill.structure';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-bill-preview',
@@ -10,7 +11,7 @@ import autoTable from 'jspdf-autotable';
 })
 export class BillPreviewComponent  implements OnInit {
   @Input() printableBillData: PrintableBill|undefined;
-  constructor() { }
+  constructor(private downloadService:DownloadService) { }
 
   ngOnInit() {}
 
@@ -415,6 +416,8 @@ export class BillPreviewComponent  implements OnInit {
     });
 
     doc.save('a4.pdf');
+    console.log(doc.output('datauristring'));
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'), 'bill.pdf', 'pdf', 'application/pdf');
   }
 
 

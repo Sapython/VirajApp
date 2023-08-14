@@ -2,3 +2,30 @@ ion-avatar{
 	margin:0 auto;
 	display: block;
 }
+main{
+	display: flex;
+	flex-direction: column;
+	gap:15px;
+	padding: 0px 20px;
+	.item{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 20px;
+		border:1px solid var(--Vrajera-primary);
+		border-radius: 7px;
+		background: white;
+		p{
+			margin:0px;
+		}
+		p:nth-child(1){
+			font-weight: 600;
+			text-align: start;
+			color: var(--Vrajera-primary-tint);
+		}
+		p:nth-child(2){
+			font-weight: 400;
+			text-align: end;
+		}
+	}
+}

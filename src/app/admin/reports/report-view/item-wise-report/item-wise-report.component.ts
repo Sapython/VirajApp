@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
 import { Product } from 'src/app/core/types/product.structure';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-item-wise-report',
@@ -25,7 +26,7 @@ export class ItemWiseReportComponent {
     return bill.map((res) => res.id).join(', ');
   }
 
-  constructor(private reportService: ReportService,private dataProvider: DataProvider,) {}
+  constructor(private reportService: ReportService,private dataProvider: DataProvider,private downloadService:DownloadService) {}
 
   ngOnInit(): void {
     this.dataProvider.currentBusiness.subscribe((business) => {
@@ -78,22 +79,18 @@ export class ItemWiseReportComponent {
         },
       );
     });
-    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadPdf();
-      },
-    );
-    this.downloadExcelSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadExcel();
-      },
-    );
+    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(()=>{
+      this.downloadPdf();
+    });
+    this.downloadExcelSubscription = this.reportService.downloadExcel.subscribe(()=>{
+      this.downloadExcel();
+    });
   }
 
 
   async downloadPdf() {
     const doc = new jsPDF();
-    let title = 'Bill Wise';
+    let title = 'Item Wise';
     let logo = new Image();
     logo.src = 'assets/images/Vrajera.png';
     doc.addImage(logo, 'JPEG', 10, 10, 30.5, 17.5);
@@ -124,7 +121,8 @@ export class ItemWiseReportComponent {
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Item Wise Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Item Wise Report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -171,6 +169,9 @@ export class ItemWiseReportComponent {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(base64Data,
+      'Item Wise Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 
   ngOnDestroy(): void {

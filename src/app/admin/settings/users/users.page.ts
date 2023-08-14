@@ -15,6 +15,7 @@ export class UsersPage implements OnInit {
     this.dataProvider.currentBusiness.subscribe((loadedBusiness)=>{
       this.databaseService.getCurrentBusiness(loadedBusiness.businessId).subscribe((business)=>{
         this.users = business['users'];
+        console.log("Updated business",this.users);
       });
     })
   }

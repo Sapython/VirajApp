@@ -18,6 +18,10 @@ div.header{
 		background: transparent;
 		width: 30px;
 		height: 30px;
+		i{
+			font-size: 30px;
+			color: var(--Vrajera-primary);
+		}
 	}
 	img{
 		width:60px;
@@ -32,10 +36,20 @@ div.header{
 		background: #FFF;
 		padding: 4px 8px;
 		color: #FF5E35;
-		width: 100px;
+		width: 110px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		font-size: 14px;
+		display: flex;
+		align-items: center;
+		gap:5px;
+		height: 40px;
+		p{
+			margin:0px;
+			width: 70px;
+			word-wrap: initial;
+			font-size: var(--Vrajera-font-medium);
+		}
 	}
 	button.profile{
 		width: 40px;

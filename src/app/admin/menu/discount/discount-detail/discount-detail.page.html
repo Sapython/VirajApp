@@ -4,8 +4,8 @@
 </div>
 <ion-list *ngIf="currentDiscount || !editMode">
   <ion-breadcrumbs>
-    <ion-breadcrumb routerLink="../../../discount">{{editMode ? 'Add Discount' : 'Discounts'}}</ion-breadcrumb>
-    <ion-breadcrumb routerLink=".">Add Discount</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink="../../../discount">{{editMode ? 'Add Discount' : 'Discounts'}}</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink=".">Add Discount</ion-breadcrumb>
   </ion-breadcrumbs>
   <ion-item>
     <ion-label>

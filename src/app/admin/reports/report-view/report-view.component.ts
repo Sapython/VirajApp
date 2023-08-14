@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ActivatedRoute } from '@angular/router';
+import { BillConstructor } from 'src/app/core/types/bill.structure';
 
 @Component({
   selector: 'app-report-view',
@@ -15,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ReportViewComponent implements AfterViewInit {
   loading: boolean = false;
-  stage:'billWise'| 'kotWise'| 'itemWise'| 'discounted'| 'ncBills'| 'takeawayBills'| 'onlineBills'| 'daySummary'| 'consolidated'| 'takeawayTokenWise'| 'onlineTokenWise'| 'tableWise'| 'billEdits'| 'customerWiseReport'| 'dineInBills'| 'hourlyItemSales'| 'kotEdits'| 'paymentWise'| 'waiterWiseItems'| 'tableWiseSales'| 'tableWiseActivity'|undefined;
+  stage:'billWise'| 'kotWise'| 'billSplits' | 'itemWise'| 'discounted'| 'ncBills'| 'takeawayBills'| 'onlineBills'| 'daySummary'| 'consolidated'| 'takeawayTokenWise'| 'onlineTokenWise'| 'tableWise'| 'billEdits'| 'customerWiseReport'| 'dineInBills'| 'hourlyItemSales'| 'kotEdits'| 'paymentWise'| 'waiterWiseItems'| 'tableWiseSales'| 'tableWiseActivity'|undefined;
   constructor(
     private activatedRoute:ActivatedRoute,
     public reportService: ReportService,
@@ -36,4 +37,9 @@ export class ReportViewComponent implements AfterViewInit {
       document.getElementById('reportTable'),
     );
   }
+}
+
+export interface timedBillConstructor extends BillConstructor {
+  totalBillTime: string;
+  mergedProducts: any[];
 }

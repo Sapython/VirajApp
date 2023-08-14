@@ -7,6 +7,7 @@ import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
 import { Product } from 'src/app/core/types/product.structure';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-waiter-wise-items',
@@ -25,7 +26,7 @@ export class WaiterWiseItemsComponent {
     return bill.map((res) => res.id).join(', ');
   }
 
-  constructor(private reportService: ReportService,private dataProvider: DataProvider,) {}
+  constructor(private reportService: ReportService,private dataProvider: DataProvider,private downloadService:DownloadService) {}
 
   ngOnInit(): void {
     this.dataProvider.currentBusiness.subscribe((business) => {
@@ -104,16 +105,12 @@ export class WaiterWiseItemsComponent {
         },
       );
     });
-    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadPdf();
-      },
-    );
-    this.downloadExcelSubscription = this.reportService.downloadPdf.subscribe(
-      () => {
-        this.downloadExcel();
-      },
-    );
+    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(()=>{
+      this.downloadPdf();
+    });
+    this.downloadExcelSubscription = this.reportService.downloadExcel.subscribe(()=>{
+      this.downloadExcel();
+    });
   }
 
 
@@ -146,11 +143,12 @@ export class WaiterWiseItemsComponent {
       startY: 40,
       didDrawPage: function (data) {
         if (y = data.cursor) 
-y = data.cursor.y;
+        y = data.cursor.y;
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Waiter Wise Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Waiter wise report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -197,6 +195,10 @@ y = data.cursor.y;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Waiter Wise Items Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 
   ngOnDestroy(): void {

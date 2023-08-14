@@ -7,10 +7,10 @@ import { debounceTime } from 'rxjs';
 import { AnalyticsService } from 'src/app/core/analytics.service';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
 import { UserBusiness } from 'src/app/core/types/user.structure';
-import Swiper from 'swiper';
+import Swiper, { Navigation, Pagination } from 'swiper';
 import SwiperCore, { SwiperOptions, Autoplay } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
-SwiperCore.use([Autoplay]);
+SwiperCore.use([Autoplay,Pagination,Navigation]);
 @Component({
   selector: 'app-sales',
   templateUrl: './sales.page.html',

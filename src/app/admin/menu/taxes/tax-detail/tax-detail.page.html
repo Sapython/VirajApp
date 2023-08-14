@@ -4,8 +4,8 @@
 </div>
 <ion-list *ngIf="currentTax || !editMode">
   <ion-breadcrumbs>
-    <ion-breadcrumb routerLink="../../../taxes">{{editMode ? 'Add Tax' : 'Taxes'}}</ion-breadcrumb>
-    <ion-breadcrumb routerLink=".">Add Tax</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink="../../../taxes">{{editMode ? 'Add Tax' : 'Taxes'}}</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink=".">Add Tax</ion-breadcrumb>
   </ion-breadcrumbs>
   <ion-item>
     <ion-label>

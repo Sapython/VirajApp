@@ -6,10 +6,10 @@
   </div>
   <ion-list *ngIf="currentPaymentMethod || !editMode">
     <ion-breadcrumbs>
-      <ion-breadcrumb routerLink="../../../../settings">Settings</ion-breadcrumb>
-      <ion-breadcrumb routerLink="../../../payment">Payment Methods</ion-breadcrumb>
-      <ion-breadcrumb routerLink="." *ngIf="!editMode">Add Tax</ion-breadcrumb>
-      <ion-breadcrumb routerLink="." *ngIf="editMode">Edit Tax</ion-breadcrumb>
+      <ion-breadcrumb routerDirection="back" routerLink="../../../../settings">Settings</ion-breadcrumb>
+      <ion-breadcrumb routerDirection="back" routerLink="../../../payment">Payment Methods</ion-breadcrumb>
+      <ion-breadcrumb routerDirection="back" routerLink="." *ngIf="!editMode">Add Payment</ion-breadcrumb>
+      <ion-breadcrumb routerDirection="back" routerLink="." *ngIf="editMode">Edit Payment</ion-breadcrumb>
     </ion-breadcrumbs>
     <ion-item>
       <ion-label>
@@ -18,7 +18,19 @@
       </ion-label>
     </ion-item>
     <form [formGroup]="paymentMethodForm" (ngSubmit)="save()">
-      <ion-list>
+      <input placeholder="Hotel Name" formControlName="name" type="text">
+      <div class="checkbox">
+        <label for="detail">Details Required</label>
+        <!-- <input type="checkbox" #detailRequired formControlName="detail" id="detail" hidden>
+        <i *ngIf="!detailRequired.checked" class="ri-checkbox-blank-circle-line"></i>
+        <i *ngIf="detailRequired.checked" class="ri-checkbox-circle-fill"></i> -->
+        <ion-toggle #detailRequired formControlName="detail"></ion-toggle>
+      </div>
+      <div class="actions">
+        <button type="button" routerLink="../../">Cancel</button>
+        <button type="submit">Submit</button>
+      </div>
+      <!-- <ion-list>
         <ion-item>
           <ion-label position="floating">Method Name <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="name" required></ion-input>
@@ -37,7 +49,7 @@
             Save
           </ion-button>
         </ion-row>
-      </ion-list>
+      </ion-list> -->
     </form>
   </ion-list>
 </ion-content>

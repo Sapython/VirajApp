@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
 import { ReportService } from '../../report.service';
 import { kotReport } from 'src/app/core/types/kot.structure';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-kot-edits',
@@ -16,7 +17,7 @@ export class KotEditsComponent {
   downloadExcelSubscription: Subscription = Subscription.EMPTY;
   @Input() kots: kotReport[] = [];
   @Input() loading: boolean = false;
-  constructor(private dataProvider: DataProvider,private reportService:ReportService) {}
+  constructor(private dataProvider: DataProvider,private reportService:ReportService,private downloadService:DownloadService) {}
   async downloadPdf() {
     const doc = new jsPDF();
     let title = 'Bill Wise';
@@ -50,7 +51,8 @@ y = data.cursor.y;
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Kot Edits Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Kot Edits Report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -97,5 +99,9 @@ y = data.cursor.y;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Kot Edits Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 }

@@ -4,9 +4,9 @@
 </div>
 <ion-list *ngIf="currentCombo || !editMode">
   <ion-breadcrumbs>
-    <ion-breadcrumb routerLink="../../../combos">Categories</ion-breadcrumb>
-    <ion-breadcrumb routerLink="." *ngIf="currentCombo">{{currentCombo.name}}</ion-breadcrumb>
-    <ion-breadcrumb routerLink=".">New Combo</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink="../../../combos">Categories</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink="." *ngIf="currentCombo">{{currentCombo.name}}</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back" routerLink=".">New Combo</ion-breadcrumb>
   </ion-breadcrumbs>
   <ion-item>
     <ion-label>

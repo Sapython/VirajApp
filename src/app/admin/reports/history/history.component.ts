@@ -13,6 +13,7 @@ import { DatabaseService } from 'src/app/core/services/database/database.service
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { KotPreviewComponent } from 'src/app/widgets/kot-preview/kot-preview.component';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-history',
@@ -55,7 +56,7 @@ export class HistoryComponent  implements OnInit {
   filteredBills: ExtendedBillConstructor[] = [];
   fuseSearchInstance = new Fuse(this.bills, { keys: ['billNo', 'orderNo'] });
   numberSearchSubject: Subject<string> = new Subject<string>();
-  constructor(private reportService:ReportService,private modalController:ModalController,private dataProvider:DataProvider,private databaseService:DatabaseService) {
+  constructor(private reportService:ReportService,private modalController:ModalController,private dataProvider:DataProvider,private databaseService:DatabaseService,public changeDetectorRef:ChangeDetectorRef) {
     this.numberSearchSubject.pipe(debounceTime(600)).subscribe((searchTerm) => {
       if (searchTerm.length > 0) {
         this.filteredBills = this.fuseSearchInstance

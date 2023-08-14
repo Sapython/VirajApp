@@ -4,9 +4,9 @@
 </div>
 <ion-list *ngIf="currentProduct">
   <ion-breadcrumbs>
-    <ion-breadcrumb routerLink="../../../../../../categories">Categories</ion-breadcrumb>
-    <ion-breadcrumb routerLink="../../../{{categoryId}}">{{currentCategory?.name}}</ion-breadcrumb>
-    <ion-breadcrumb routerLink=".">{{currentProduct?.name}}</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back"routerLink="../../../../../../categories">Categories</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back"routerLink="../../../{{categoryId}}">{{currentCategory?.name}}</ion-breadcrumb>
+    <ion-breadcrumb routerDirection="back"routerLink=".">{{currentProduct?.name}}</ion-breadcrumb>
   </ion-breadcrumbs>
 </ion-list>
 <ion-item>

@@ -7,10 +7,10 @@
       Select Report
     </ion-button> -->
     <button class="select" id="open-modal">
-      Select Mode
+      Mode <ion-icon name="chevron-down-outline"></ion-icon>
     </button>
     <button class="select" id="report-modal">
-      Select Report
+      Group By <ion-icon name="chevron-down-outline"></ion-icon>
     </button>
     <ion-button fill="clear" (click)="picker.open()">
       <ion-icon slot="icon-only" name="calendar"></ion-icon>
@@ -222,18 +222,21 @@
 <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25]">
   <ng-template>
     <ion-content>
-      <ion-list>
+      <ion-list class="iconChecker">
         <ion-item (click)="currentMode = 'dineIn'">
           <ion-label>Dine In</ion-label>
-          <ion-checkbox mode="ios" slot="start" [checked]="currentMode == 'dineIn'"></ion-checkbox>
+          <ion-icon color="primary" slot="start" *ngIf="currentMode == 'dineIn'" name="checkmark-circle"></ion-icon>
+          <ion-icon color="primary" slot="start" *ngIf="currentMode != 'dineIn'" name="ellipse-outline"></ion-icon>
         </ion-item>
         <ion-item (click)="currentMode = 'takeaway'">
           <ion-label>Takeaway</ion-label>
-          <ion-checkbox mode="ios" slot="start" [checked]="currentMode == 'takeaway'"></ion-checkbox>
+          <ion-icon color="primary" slot="start" *ngIf="currentMode == 'takeaway'" name="checkmark-circle"></ion-icon>
+          <ion-icon color="primary" slot="start" *ngIf="currentMode != 'takeaway'" name="ellipse-outline"></ion-icon>
         </ion-item>
         <ion-item (click)="currentMode = 'online'">
           <ion-label>Online</ion-label>
-          <ion-checkbox mode="ios" slot="start" [checked]="currentMode == 'online'"></ion-checkbox>
+          <ion-icon color="primary" slot="start" *ngIf="currentMode == 'online'" name="checkmark-circle"></ion-icon>
+          <ion-icon color="primary" slot="start" *ngIf="currentMode != 'online'" name="ellipse-outline"></ion-icon>
         </ion-item>
       </ion-list>
     </ion-content>

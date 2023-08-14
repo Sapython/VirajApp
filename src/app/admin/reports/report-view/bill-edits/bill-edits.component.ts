@@ -9,6 +9,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { BillActivity } from 'src/app/core/types/activity.structure';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-bill-edits',
@@ -26,7 +27,7 @@ export class BillEditsComponent {
     return bill.map((res) => res.id).join(', ');
   }
 
-  constructor(private reportService: ReportService,private dataProvider: DataProvider) {}
+  constructor(private reportService: ReportService,private dataProvider: DataProvider,private downloadService:DownloadService) {}
 
   ngOnInit(): void {
     this.dataProvider.currentBusiness.subscribe((business) => {
@@ -70,7 +71,13 @@ export class BillEditsComponent {
             });
         },
       );
-    })
+    });
+    this.downloadPDfSubscription = this.reportService.downloadPdf.subscribe(()=>{
+      this.downloadPdf();
+    });
+    this.downloadExcelSubscription = this.reportService.downloadExcel.subscribe(()=>{
+      this.downloadExcel();
+    });
   }
 
   ngOnDestroy(): void {
@@ -81,7 +88,7 @@ export class BillEditsComponent {
 
   async downloadPdf() {
     const doc = new jsPDF();
-    let title = 'Bill Wise';
+    let title = 'Bill Edits';
     let logo = new Image();
     logo.src = 'assets/images/Vrajera.png';
     doc.addImage(logo, 'JPEG', 10, 10, 30.5, 17.5);
@@ -112,7 +119,8 @@ y = data.cursor.y;
       },
     });
     autoTable(doc, { html: '#reportTable' });
-    doc.save('Bill Wise Report' + new Date().toLocaleString() + '.pdf');
+    doc.save('Bill Edits Report' + new Date().toLocaleString() + '.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'),'Bill Edits Report' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   downloadExcel() {
@@ -159,6 +167,10 @@ y = data.cursor.y;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    let base64Data = btoa(csv_string);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Bill Edits Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 }
 
