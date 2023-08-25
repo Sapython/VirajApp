@@ -42,7 +42,7 @@ export class TableWiseComponent implements OnInit, OnDestroy {
       this.reportChangedSubscription = this.reportService.dataChanged.subscribe(
         () => {
           this.loading = true;
-          let tableWiseSales: { table: string; orders: number[] }[] = [];
+          let tableWiseSales: { table: any; orders: number[] }[] = [];
           this.reportService
             .getBills(
               this.reportService.dateRangeFormGroup.value.startDate,
@@ -51,10 +51,10 @@ export class TableWiseComponent implements OnInit, OnDestroy {
             )
             .then((bills) => {
               console.log('Bills ', bills);
-              bills.forEach((bill:any) => {
+              bills.forEach((bill) => {
                 if (
                   tableWiseSales.findIndex(
-                    (res:any) => {
+                    (res) => {
                       console.log('res.table ', res.table,bill.table);
                       return (res.table.id ? res.table.id : res.table) == (bill.table.id ? bill.table.id : bill.table)
                     },
@@ -67,7 +67,7 @@ export class TableWiseComponent implements OnInit, OnDestroy {
                 } else {
                   tableWiseSales[
                     tableWiseSales.findIndex(
-                      (res:any) => {
+                      (res) => {
                         console.log('res.table ', res.table,bill.table);
                         return (res.table.id ? res.table.id : res.table) == (bill.table.id ? bill.table.id : bill.table)
                       }
@@ -85,7 +85,11 @@ export class TableWiseComponent implements OnInit, OnDestroy {
                   this.roundOff(res.orders.reduce((a, b) => a + b) / res.orders.length),
                 });
               });
+              this.tableWiseTotals.sales = 0;
+              this.tableWiseTotals.numberOfOrders = 0;
+              this.tableWiseTotals.averageSales = 0;
               tableWiseSalesArray.forEach((res)=>{
+                console.log('res ',res,res.sales);
                 this.tableWiseTotals.sales += res.sales;
                 this.tableWiseTotals.numberOfOrders += res.numberOfOrders;
                 this.tableWiseTotals.averageSales += res.averageSales;

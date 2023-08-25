@@ -22,6 +22,7 @@ export class ReportService {
   noData: boolean = false;
   loading: boolean = false;
   cachedData: CachedData[] = [];
+  cachedTables:{[key:string]:any} = {};
   consolidatedMaxAmount: number = 0;
   downloadPdf: Subject<void> = new Subject<void>();
   downloadExcel: Subject<void> = new Subject<void>();
@@ -88,10 +89,18 @@ export class ReportService {
     let newBills = await Promise.all(
       bills.docs.map(async (bill) => {
         let billData = bill.data() as ActivityBillConstructor;
-        let activities = await this.getActivity(bill.id,businessId);
-        billData.activities = activities.docs.map((activity) => {
-          return activity.data();
-        });
+        if(bill.data()['mode'] == 'dineIn'){
+          let reqs = await Promise.all([await this.getActivity(bill.id,businessId),await this.getTable(bill.data()['table'],businessId)]);
+          billData.activities = reqs[0].docs.map((activity:any) => {
+            return activity.data();
+          });
+          billData.table = reqs[1];
+        } else {
+          let activities = await this.getActivity(bill.id,businessId);
+          billData.activities = activities.docs.map((activity) => {
+            return activity.data();
+          });
+        }
         return billData;
       }),
     );
@@ -108,6 +117,23 @@ export class ReportService {
       this.noData = false;
     }
     return newBills;
+  }
+
+  async getTable(tableId:string,businessId:string){
+    // find in cached data 
+    if (this.cachedTables[businessId] && this.cachedTables[businessId][tableId]) {
+      let table = this.cachedTables[businessId][tableId];
+      if (table) {
+        return table;
+      }
+    }
+    let table = await getDoc(doc(this.firestore,'business',businessId,'tables',tableId));
+    // add to cachedTables
+    if(!this.cachedTables[businessId]){
+      this.cachedTables[businessId] = {};
+    }
+    this.cachedTables[businessId][tableId] = table.data();
+    return table.data();
   }
 
   async getTableActivity(businessId:string) {
