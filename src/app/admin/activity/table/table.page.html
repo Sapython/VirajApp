@@ -116,7 +116,7 @@
           *ngIf="!table.completed"
         >
           <p>{{table.name}}</p>
-          <p *ngIf="table.bill?.bilPrice">{{table.bill?.bilPrice | currency:'INR'}}</p>
+          <p>{{table.billPrice | currency:'INR'}}</p>
           <p>{{table.timeSpent}}</p>
         </div>
       </ng-container>
@@ -161,7 +161,7 @@
           *ngIf="!table.completed"
         >
           <p>{{table.name}}</p>
-          <p *ngIf="table.bill?.bilPrice">{{table.bill?.bilPrice | currency:'INR'}}</p>
+          <p>{{table.billPrice | currency:'INR'}}</p>
           <p>{{table.timeSpent}}</p>
         </div>
       </ng-container>
