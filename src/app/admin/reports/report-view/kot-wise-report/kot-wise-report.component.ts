@@ -67,6 +67,15 @@ export class KotWiseReportComponent {
                   kots.push(kotData);
                 });
               });
+              let users = kots.map((kot:any) => kot.user);
+              users = [...new Set(users)];
+              this.kotTotals={
+                bills: bills.length,
+                numberOfKot: kots.length,
+                totalKotAmount: kots.reduce((acc:any, cur:any) => acc + cur.grandTotal, 0),
+                totalProducts: kots.reduce((acc:any, cur:any) => acc + cur.products.length, 0),
+                users: users.length
+              }
               this.kots.next(kots);
               this.loading = false;
             });

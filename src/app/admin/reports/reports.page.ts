@@ -117,6 +117,11 @@ export class ReportsPage implements OnInit {
       code: 'cancelledBills',
       description: 'List of bills that are cancelled.',
     },
+    {
+      title: 'Combo Report',
+      code: 'comboSales',
+      description: 'List of tables with merge, exchange, split actions.',
+    },
   ];
   fuseSearchInstance:Fuse<ReportFormat> = new Fuse(this.reportFormats,{keys:['title','description']});
   filteredReportFormats:ReportFormat[] = [];
@@ -180,6 +185,7 @@ interface ReportFormat {
   | 'tableWiseSales'
   | 'billSplits'
   | 'cancelledBills'
+  | 'comboSales'
   | 'tableWiseActivity';
   description: string;
 }

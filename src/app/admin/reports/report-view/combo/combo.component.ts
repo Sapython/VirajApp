@@ -65,6 +65,7 @@ export class ComboComponent {
             )
             .then((bills) => {
               console.log('Bills ', bills);
+              // this.bills.next(bills);
               let comboReports:comboReport[] = [];
               bills.forEach((bill) => {
                 // check if bill has combo in any kot and add it to the list
@@ -82,15 +83,15 @@ export class ComboComponent {
                           selectedProducts:combo.combo.selectedCategories.map((category:any)=>{
                             return category.selectedProducts
                           }).flat(),
-                          bills: [bill.billNo as any],
-                          kots: [kot.id as any],
+                          bills: [bill.billNo || ''],
+                          kots: [kot.id || ''],
                           billTotal: bill.billing.grandTotal,
                         });
                       } else {
                         comboReports[comboReportIndex].quantity += combo.quantity;
                         comboReports[comboReportIndex].total += combo.price * combo.quantity;
-                        comboReports[comboReportIndex].bills.push(bill.billNo as any);
-                        comboReports[comboReportIndex].kots.push(kot.id as any);
+                        comboReports[comboReportIndex].bills.push(bill.billNo || '');
+                        comboReports[comboReportIndex].kots.push(kot.id || '');
                       }
                     }
                   });
