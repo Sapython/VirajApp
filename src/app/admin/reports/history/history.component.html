@@ -1,31 +1,36 @@
 <main class="ion-padding">
   <div class="summary selectors">
-    <!-- <ion-button id="open-modal" expand="block" fill="outline" shape="round">
-      Select Mode
-    </ion-button>
-    <ion-button id="report-modal" expand="block" fill="outline" shape="round">
-      Select Report
-    </ion-button> -->
-    <button class="select" id="open-modal">
-      Mode <ion-icon name="chevron-down-outline"></ion-icon>
-    </button>
-    <button class="select" id="report-modal">
-      Group By <ion-icon name="chevron-down-outline"></ion-icon>
-    </button>
-    <ion-button fill="clear" (click)="picker.open()">
-      <ion-icon slot="icon-only" name="calendar"></ion-icon>
-    </ion-button>
-    <mat-date-range-picker hidden touchUi #picker></mat-date-range-picker>
-    <mat-date-range-input
-      tabindex="-1"
-      hidden
-      [formGroup]="dateRangeFormGroup"
-      [rangePicker]="picker"
-    >
-      <input matStartDate formControlName="startDate" placeholder="Start date" />
-      <input matEndDate formControlName="endDate" placeholder="End date" />
-    </mat-date-range-input>
+    <div class="row">
+      <button class="select" id="open-modal">
+        Mode <ion-icon name="chevron-down-outline"></ion-icon>
+      </button>
+      <button class="select" id="report-modal">
+        Group By <ion-icon name="chevron-down-outline"></ion-icon>
+      </button>
+      <ion-button fill="clear" (click)="picker.open()">
+        <ion-icon slot="icon-only" name="calendar"></ion-icon>
+      </ion-button>
+      <mat-date-range-picker hidden touchUi #picker></mat-date-range-picker>
+      <mat-date-range-input
+        tabindex="-1"
+        hidden
+        [formGroup]="dateRangeFormGroup"
+        [rangePicker]="picker"
+      >
+        <input matStartDate formControlName="startDate" placeholder="Start date" />
+        <input matEndDate formControlName="endDate" placeholder="End date" />
+      </mat-date-range-input>
+    </div>
+    <p>From: {{dateRangeFormGroup.value.startDate | date}}, 
+      <ng-container *ngIf="dateRangeFormGroup.value.endDate">
+        To: {{dateRangeFormGroup.value.endDate | date}}
+      </ng-container>
+    </p>
   </div>
+  <ion-button (click)="reloadReport()" expand="block" fill="solid" shape="round">
+    Data loaded at {{reportLoadTime | date:'short'}}  
+    <ion-icon slot="icon-only" name="refresh"></ion-icon>
+  </ion-button>
   <div class="summary"> 
     <div class="heading">
       <p>History Summary</p>
@@ -54,10 +59,10 @@
     </div>
   </div>
   <div class="downloadOptions">
-    <ion-button (click)="exportToPdf()" expand="block" fill="outline">
+    <ion-button (click)="exportToPdf()" expand="block" fill="outline" shape="round">
       Download PDF
     </ion-button>
-    <ion-button (click)="exportToExcel()" expand="block" fill="outline">
+    <ion-button (click)="exportToExcel()" expand="block" fill="outline" shape="round">
       Download Excel
     </ion-button>
   </div>
@@ -83,6 +88,7 @@
         </ion-button>
       </div>
     </div>
+    <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
   </div>
   <ion-accordion-group *ngIf="groupByTable && !groupByDate">
     <ion-accordion [value]="table.table" *ngFor="
@@ -115,6 +121,7 @@
             </ion-button>
           </div>
         </div>
+        <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -149,6 +156,7 @@
             </ion-button>
           </div>
         </div>
+        <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -190,6 +198,7 @@
                 </ion-button>
               </div>
             </div>
+            <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
           </div>
         </ion-accordion>
       </ion-accordion-group>
@@ -215,9 +224,11 @@
             </ion-button>
           </div>
         </div>
+        <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
       </div>
     </ion-accordion>
   </ion-accordion-group>
+  <div class="spacer"></div>
 </main>
 <ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25]">
   <ng-template>

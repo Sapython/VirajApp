@@ -20,6 +20,19 @@ export class KotWiseReportComponent {
   reportChangedSubscription: Subscription = Subscription.EMPTY;
   kots: ReplaySubject<SalesKot[]> = new ReplaySubject<SalesKot[]>();
   loading: boolean = true;
+  kotTotals:{
+    numberOfKot:number,
+    totalKotAmount:number,
+    totalProducts:number,
+    bills:number,
+    users:number
+  }={
+    numberOfKot:0,
+    totalKotAmount:0,
+    totalProducts:0,
+    bills:0,
+    users:0
+  }
   joinArray(bill: KotConstructor[]) {
     // join to form a string of ids with comma
     return bill.map((res) => res.id).join(', ');
@@ -90,6 +103,11 @@ export class KotWiseReportComponent {
           {
             content:
               this.reportService.dateRangeFormGroup.value.startDate.toLocaleString(),
+            styles: { halign: 'right', fontSize: 17 },
+          },
+          {
+            content:this.reportService.dateRangeFormGroup.value.endDate ? 
+              this.reportService.dateRangeFormGroup.value.endDate.toLocaleString() : '',
             styles: { halign: 'right', fontSize: 17 },
           },
         ],

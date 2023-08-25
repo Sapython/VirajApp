@@ -1,0 +1,323 @@
+<section>
+  <div class="header">
+    <h2 *ngIf="activity?.type == 'newKot'">New Kot</h2>
+    <h2 *ngIf="activity?.type == 'kotPrinted'">Kot Printed</h2>
+    <h2 *ngIf="activity?.type == 'kotEdited'">Kot Edited</h2>
+    <h2 *ngIf="activity?.type == 'kotCancelled'">Kot Cancelled</h2>
+    <h2 *ngIf="activity?.type == 'billPrinted'">Bill Printed</h2>
+    <h2 *ngIf="activity?.type == 'billEdited'">Bill Edited</h2>
+    <h2 *ngIf="activity?.type == 'billCancelled'">Bill Cancelled</h2>
+    <h2 *ngIf="activity?.type == 'billSettled'">Bill Settled</h2>
+    <h2 *ngIf="activity?.type == 'billSplit'">Bill Split</h2>
+    <h2 *ngIf="activity?.type == 'billDiscounted'">Bill Discounted</h2>
+    <h2 *ngIf="activity?.type == 'billNC'">Bill NC</h2>
+    <h2 *ngIf="activity?.type == 'customerDetailEntered'">
+      Customer Detail Entered
+    </h2>
+    <h2 *ngIf="activity?.type == 'billNormal'">Bill Normal</h2>
+    <h2 *ngIf="activity?.type == 'billFinalized'">Bill Finalized</h2>
+    <h2 *ngIf="activity?.type == 'instructionSet'">Instruction Set</h2>
+    <h2 *ngIf="activity?.type == 'lineCancelled'">Line Cancelled</h2>
+    <h2 *ngIf="activity?.type == 'lineDiscounted'">Line Discounted</h2>
+    <h2 *ngIf="activity?.type == 'billReactivated'">Bill Reactivated</h2>
+    <ion-button fill="clear" (click)="close()">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
+  </div>
+  <div class="details">
+    <ng-container *ngIf="activity?.type == 'newKot'">
+      <div class="item">
+        <p>Kot Number</p>
+        <p>{{ activity?.data?.kotNumber }}</p>
+      </div>
+      <div class="item">
+        <p>Order Number</p>
+        <p>{{ activity?.data?.kotNumber }}</p>
+      </div>
+      <div class="item">
+        <p>Date</p>
+        <p>{{ activity?.data?.date }}</p>
+      </div>
+      <div class="item">
+        <p>Channel</p>
+        <p>{{ activity?.data?.billingMode }}</p>
+      </div>
+      <div class="item">
+        <p>Kot Type</p>
+        <p>{{ activity?.data?.mode }}</p>
+      </div>
+      <div class="item">
+        <p>Table</p>
+        <p>{{ activity?.data?.table }}</p>
+      </div>
+      <div class="item">
+        <p>User</p>
+        <p>{{ activity?.data?.user }}</p>
+      </div>
+      <hr>
+      <div class="item divider">
+        Products
+      </div>
+      <table class="products">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Note</th>
+            <th>Qty</th>
+            <th>Printer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of activity?.data.products">
+            <td>{{item.name}}</td>
+            <td>{{item.instruction}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.specificPrinter}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'kotPrinted'">
+      <div class="item">
+        <p>Kot Number</p>
+        <p>{{ activity?.data?.kotNumber }}</p>
+      </div>
+      <div class="item">
+        <p>Order Number</p>
+        <p>{{ activity?.data?.kotNumber }}</p>
+      </div>
+      <div class="item">
+        <p>Date</p>
+        <p>{{ activity?.data?.date }}</p>
+      </div>
+      <div class="item">
+        <p>Channel</p>
+        <p>{{ activity?.data?.billingMode }}</p>
+      </div>
+      <div class="item">
+        <p>Kot Type</p>
+        <p>{{ activity?.data?.mode }}</p>
+      </div>
+      <div class="item">
+        <p>Table</p>
+        <p>{{ activity?.data?.table }}</p>
+      </div>
+      <div class="item">
+        <p>User</p>
+        <p>{{ activity?.data?.user }}</p>
+      </div>
+      <hr>
+      <div class="item divider">
+        Products
+      </div>
+      <table class="products">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Note</th>
+            <th>Qty</th>
+            <th>Printer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of activity?.data.products">
+            <td>{{item.name}}</td>
+            <td>{{item.instruction}}</td>
+            <td>{{item.quantity}}</td>
+            <td>{{item.specificPrinter}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'billNC'">
+      <div class="item">
+        <p>Customer Name</p>
+        <p>{{ activity?.data?.name }}</p>
+      </div>
+      <div class="item">
+        <p>Customer Phone</p>
+        <p>{{ activity?.data?.phone }}</p>
+      </div>
+      <div class="item">
+        <p>Reason</p>
+        <p>{{ activity?.data?.reason }}</p>
+      </div>
+      <div class="item">
+        <p>Time</p>
+        <p>{{ activity?.data?.time.toDate() | date:'short' }}</p>
+      </div>
+      <div class="item">
+        <p>User Access</p>
+        <p>{{ activity?.data?.user.access }}</p>
+      </div>
+      <div class="item">
+        <p>Username</p>
+        <p>{{ activity?.data?.user.username }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'billDiscounted'">
+      <div class="item">
+        <p>Customer Name</p>
+        <p>{{ activity?.data?.name }}</p>
+      </div>
+      <div class="item">
+        <p>Customer Phone</p>
+        <p>{{ activity?.data?.phone }}</p>
+      </div>
+      <div class="item">
+        <p>Reason</p>
+        <p>{{ activity?.data?.reason }}</p>
+      </div>
+      <div class="item">
+        <p>Time</p>
+        <p>{{ activity?.data?.time }}</p>
+      </div>
+      <div class="item">
+        <p>User Access</p>
+        <p>{{ activity?.data?.user.access }}</p>
+      </div>
+      <div class="item">
+        <p>Username</p>
+        <p>{{ activity?.data?.user.username }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'billSplit'">
+      <div class="item">
+        <p>User</p>
+        <p>{{ activity?.user }}</p>
+      </div>
+      <div class="item">
+        <p>Message</p>
+        <p>{{ activity?.message }}</p>
+      </div>
+      <div class="item">
+        <p>Original Bill</p>
+        <p><app-quick-bill [billId]="activity?.data?.originalBillId"></app-quick-bill></p>
+      </div>
+      <hr>
+      <h3>Splitted Bills</h3>
+      <div class="item" *ngFor="let bill of activity?.data?.splittedBillIds">
+        <p>Bill</p>
+        <app-quick-bill [splittedBillId]="bill" [billId]="activity?.data?.originalBillId"></app-quick-bill>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'billCancelled'">
+      <div class="item">
+        <p>User</p>
+        <p>{{ activity?.user }}</p>
+      </div>
+      <div class="item">
+        <p>Message</p>
+        <p>{{ activity?.message }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'billEdited'">
+      <div class="item">
+        <p>Customer Name</p>
+        <p>{{ activity?.data?.name }}</p>
+      </div>
+      <div class="item">
+        <p>Customer Phone</p>
+        <p>{{ activity?.data?.phone }}</p>
+      </div>
+      <div class="item">
+        <p>Reason</p>
+        <p>{{ activity?.data?.reason }}</p>
+      </div>
+      <div class="item">
+        <p>Time</p>
+        <p>{{ activity?.data?.time }}</p>
+      </div>
+      <div class="item">
+        <p>User Access</p>
+        <p>{{ activity?.data?.user.access }}</p>
+      </div>
+      <div class="item">
+        <p>Username</p>
+        <p>{{ activity?.data?.user.username }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'kotCancelled'">
+      <div class="item">
+        <p>Customer Name</p>
+        <p>{{ activity?.data?.name }}</p>
+      </div>
+      <div class="item">
+        <p>Customer Phone</p>
+        <p>{{ activity?.data?.phone }}</p>
+      </div>
+      <div class="item">
+        <p>Reason</p>
+        <p>{{ activity?.data?.reason }}</p>
+      </div>
+      <div class="item">
+        <p>Time</p>
+        <p>{{ activity?.data?.time }}</p>
+      </div>
+      <div class="item">
+        <p>User Access</p>
+        <p>{{ activity?.data?.user.access }}</p>
+      </div>
+      <div class="item">
+        <p>Username</p>
+        <p>{{ activity?.data?.user.username }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'lineCancelled'">
+      <div class="item">
+        <p>User</p>
+        <p>{{ activity?.user }}</p>
+      </div>
+      <div class="item">
+        <p>Message</p>
+        <p>{{ activity?.message }}</p>
+      </div>
+      <div class="item">
+        <p>KOT No</p>
+        <p>{{ activity?.data?.kot.id }}</p>
+      </div>
+      <div class="item">
+        <p>KOT Time</p>
+        <p>{{ activity?.data?.kot?.createdDate.toDate() | date:'short' }}</p>
+      </div>
+      <div class="item">
+        <p>Item Name</p>
+        <p>{{ activity?.data?.item?.name }}</p>
+      </div>
+      <div class="item">
+        <p>Item Price</p>
+        <p>{{ activity?.data?.item?.price }}</p>
+      </div>
+      <div class="item">
+        <p>Item Category</p>
+        <p>{{ activity?.data?.item?.category?.name }}</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="activity?.type == 'lineDiscounted'">
+      <div class="item">
+        <p>Customer Name</p>
+        <p>{{ activity?.data?.name }}</p>
+      </div>
+      <div class="item">
+        <p>Customer Phone</p>
+        <p>{{ activity?.data?.phone }}</p>
+      </div>
+      <div class="item">
+        <p>Reason</p>
+        <p>{{ activity?.data?.reason }}</p>
+      </div>
+      <div class="item">
+        <p>Time</p>
+        <p>{{ activity?.data?.time }}</p>
+      </div>
+      <div class="item">
+        <p>User Access</p>
+        <p>{{ activity?.data?.user.access }}</p>
+      </div>
+      <div class="item">
+        <p>Username</p>
+        <p>{{ activity?.data?.user.username }}</p>
+      </div>
+    </ng-container>
+  </div>
+</section>

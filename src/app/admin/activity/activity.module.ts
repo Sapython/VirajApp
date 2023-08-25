@@ -15,6 +15,7 @@ import { WidgetsModule } from 'src/app/widgets/widgets.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import {MatTabsModule} from '@angular/material/tabs'; 
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatDatepickerModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTabsModule
   ],
   declarations: [ActivityPage,CustomerPage,SalesPage,TablePage]
 })

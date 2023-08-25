@@ -4,10 +4,17 @@ main {
   gap: 20px;
   .selectors {
     display: flex;
+    flex-direction: column;
     gap: 10px;
 	  justify-content: space-between;
     align-items: center;
     padding: 0px 0px 0px 10px;
+    .row{
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
     .select {
       border-radius: 12px;
       border: 2px solid #ff5e35;
@@ -120,6 +127,7 @@ main {
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    font-size: 12px;
   }
   .bills {
     display: flex;
@@ -167,6 +175,24 @@ main {
           width: 100%;
         }
       }
+    }
+    .notFound{
+      margin:0 auto;
+      max-width: 200px;
+      filter: saturate(0);
+      display: block;
+    }
+  }
+  .spacer{
+    height: 100px;
+  }
+  .reloadReport{
+    background: var(--Vrajera-primary);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 20px;
+    ion-icon{
+      color:white;
     }
   }
 }

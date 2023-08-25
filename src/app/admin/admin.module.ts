@@ -7,13 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { AdminPageRoutingModule } from './admin-routing.module';
 
 import { AdminPage } from './admin.page';
+import { WidgetsModule } from '../widgets/widgets.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AdminPageRoutingModule
+    WidgetsModule,
+    AdminPageRoutingModule,
   ],
   declarations: [AdminPage]
 })

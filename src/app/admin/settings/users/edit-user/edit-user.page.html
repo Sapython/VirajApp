@@ -1,4 +1,4 @@
-<app-header [showOutletSelector]="false" [pageTitle]="editMode ? 'Edit': 'Add'" backRoute="../../"></app-header>
+<app-header customBackProfileRoute="../../../../profile" [showOutletSelector]="false" [pageTitle]="editMode ? 'Edit': 'Add'" backRoute="../../"></app-header>
 
 <ion-content [fullscreen]="true" *ngIf="currentUser || !editMode" class="ion-padding">
   <div class="currentUser" *ngIf="currentUser">
@@ -98,6 +98,7 @@
     </ion-item>
     <ion-item button detail (click)="accessPropsModal.present()" *ngIf="accessType.value == 'custom'">
       <ion-label>Select Access</ion-label>
+      <ion-label>{{filteredAccessCodesAsString}}</ion-label>
     </ion-item>
     <div class="actions">
       <button type="button" routerLink="../../">Cancel</button>

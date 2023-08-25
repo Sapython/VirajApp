@@ -5,6 +5,7 @@ import { Functions, httpsCallable } from '@angular/fire/functions';
 import { DataProvider } from '../data-provider/data-provider.service';
 import { UserRecord } from '../../types/user.structure';
 import { Router } from '@angular/router';
+import { AlertsAndNotificationsService } from '../alerts-and-notification/alerts-and-notifications.service';
 const debug:boolean = false;
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class AuthService {
   private authenticateActionFunction = httpsCallable(this.functions, 'authenticateAction');
   private addExistingUserFunction = httpsCallable(this.functions, 'addExistingUser');
   private verifyOtpExistingUserFunction = httpsCallable(this.functions, 'verifyOtpExistingUser');
-  constructor(private functions: Functions,private auth:Auth,private dataProvider:DataProvider,private firestore:Firestore,private router:Router) {
+  constructor(private functions: Functions,private auth:Auth,private dataProvider:DataProvider,private firestore:Firestore,private router:Router,private alertify:AlertsAndNotificationsService) {
     this.dataProvider.loading = true;
     onAuthStateChanged(this.auth, async (user) => {
       console.log("USER changed",user);
@@ -45,8 +46,19 @@ export class AuthService {
             username: tempUser['username']
           };
           if (userDocData.business.length > 0) {
-            this.dataProvider.allBusiness = userDocData.business;
-            this.dataProvider.currentBusiness.next(userDocData.business[0]);
+            this.dataProvider.allBusiness = this.filteredBusiness(userDocData.business);
+            if (this.dataProvider.allBusiness.length == 0){
+              alert("No business found under this user.")
+              this.dataProvider.currentUser = undefined;
+              this.dataProvider.loading = false;
+              this.dataProvider.loggedIn = false;
+              this.dataProvider.loggedInSubject.next(false);
+              this.logOut();
+              this.router.navigate(['/login']);
+              return;
+            } else {
+              this.dataProvider.currentBusiness.next(this.dataProvider.allBusiness[0]);
+            }
           } else {
             alert("No business found under this user.")
           }
@@ -185,7 +197,23 @@ export class AuthService {
     if (typeof(password) !='string' || !password || password.length < 4 || password.length > 20) {
         throw new Error('Password must be between 8 and 20 characters');
     }
-    let signInRequest:any = await this.signInWithUserAndPasswordFunction({username, password})
+    // get user document
+    let userDoc = await getDoc(doc(this.firestore,'users',username));
+    if (!userDoc.exists()){
+      this.alertify.presentToast("User not found. Please sign up first.")
+      throw new Error("User not found. Please sign up first.")
+    }
+    let signInRequest:any = await this.signInWithUserAndPasswordFunction({username, password});
+    if (!userDoc.data()['business'] || userDoc.data()['business'].length == 0){
+      this.alertify.presentToast("No business found under this user with admin access. Please contact support.")
+      throw new Error("No business found under this user with admin access. Please contact support.")
+    }
+    let validBusinesses = this.filteredBusiness(userDoc.data()['business']);
+    if(validBusinesses.length == 0){
+      this.alertify.presentToast("No business found under this user with admin access. Please contact support.")
+      throw new Error("No business found under this user with admin access. Please contact support.")
+    }
+    this.dataProvider.allBusiness = validBusinesses;
     return this.loginWithCustomToken(signInRequest.data['token'])
   }
 
@@ -227,5 +255,15 @@ export class AuthService {
 
   async verifyOtpExistingUser(username:string,otp:string,authId:string){
     return this.verifyOtpExistingUserFunction({username,otp:otp.toString(),authId})
+  }
+
+  private filteredBusiness(business:any[]){
+    return business.filter((business:any)=>{
+      if(business.access.accessLevel == 'admin' || (business.access.accessType == 'role' && business.access.role == 'admin')){
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }

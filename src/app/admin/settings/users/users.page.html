@@ -1,19 +1,24 @@
 <app-header [showOutletSelector]="false" pageTitle="Users" backRoute="../"></app-header>
 <ion-content [fullscreen]="true">
-  <div class="heading">
-    <h3>Users</h3>
-    <button routerLink="edit-user/new">
-      Add
-      <ion-icon slot="start" name="add"></ion-icon>
-    </button>
-  </div>
-  <div class="usersContainer">  
-    <div class="userItem" *ngFor="let user of users" detail button routerLink="edit-user/{{user.username}}">
-      <span>
-        <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.username}}" />
-        <p>{{user.username}}</p>
-      </span>
-      <ion-icon name="chevron-forward-outline"></ion-icon>
+  <main id="content">
+    <div class="heading">
+      <h3>Users</h3>
+      <button routerLink="edit-user/new">
+        Add
+        <ion-icon slot="start" name="add"></ion-icon>
+      </button>
     </div>
-  </div>
+    <div class="usersContainer">  
+      <div class="userItem" *ngFor="let user of users" detail button routerLink="edit-user/{{user.username}}">
+        <span>
+          <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.username}}" />
+          <p>{{user.username}}</p>
+        </span>
+        <span>
+          <p>{{user.accessType == 'role' ? user.role : user.propertiesAllowed.length}}</p>
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </span>
+      </div>
+    </div>
+  </main>
 </ion-content>

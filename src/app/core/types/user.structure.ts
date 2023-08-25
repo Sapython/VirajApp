@@ -1,5 +1,6 @@
 import { Timestamp } from '@angular/fire/firestore';
 
+
 export interface CustomerInfo {
   id?: string;
   name?: string;

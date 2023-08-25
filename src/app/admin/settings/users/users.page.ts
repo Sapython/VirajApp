@@ -15,6 +15,7 @@ export class UsersPage implements OnInit {
     this.dataProvider.currentBusiness.subscribe((loadedBusiness)=>{
       this.databaseService.getCurrentBusiness(loadedBusiness.businessId).subscribe((business)=>{
         this.users = business['users'];
+        this.users = this.users.filter((user)=>user.username != this.dataProvider.currentUser?.uid);
         console.log("Updated business",this.users);
       });
     })

@@ -3,6 +3,7 @@ import { BillConstructor } from 'src/app/core/types/bill.structure';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { KotConstructor } from 'src/app/core/types/kot.structure';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-kot-preview',
@@ -11,7 +12,7 @@ import { KotConstructor } from 'src/app/core/types/kot.structure';
 })
 export class KotPreviewComponent  implements OnInit {
   @Input() bill:BillConstructor|undefined;
-  constructor() { }
+  constructor(private downloadService:DownloadService) { }
 
   ngOnInit() {
     console.log("Received bill for kot preview",this.bill);
@@ -230,6 +231,7 @@ export class KotPreviewComponent  implements OnInit {
         }
       },
     });
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'), 'Kot' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
     doc.save('a4.pdf');
   }
 

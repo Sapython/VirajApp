@@ -58,7 +58,19 @@
         <ion-icon slot="icon-only" name="calendar"></ion-icon>
       </ion-button>
     </div>
+    <div class="actions">
+      <p>From: {{reportService.dateRangeFormGroup.value.startDate | date}}, 
+        <ng-container *ngIf="reportService.dateRangeFormGroup.value.endDate">
+          To: {{reportService.dateRangeFormGroup.value.endDate | date}}
+        </ng-container>
+      </p>
+    </div>
   </div>
+  <ion-button (click)="reportService.dataChanged.next()" expand="block" fill="clear" shape="round">
+    <p>Data loaded at {{reportService.reportLoadTime | date:'short'}}  
+      <ion-icon slot="icon-only" name="refresh"></ion-icon>
+    </p>
+  </ion-button>
   <div class="summaryCard" *ngIf="stage == 'consolidated'">
     <ion-item class="consolidated" lines="none">
       <ion-label position="floating">Maximum Amount</ion-label>
@@ -125,6 +137,7 @@
       <app-split-bills *ngIf="stage == 'billSplits'"></app-split-bills>
       <div class="loader"></div>
       <div class="spacer"></div>
+      <img src="assets/notFound.jpg" alt="" *ngIf="reportService.noData">
     </div>
   </div>
   <br />

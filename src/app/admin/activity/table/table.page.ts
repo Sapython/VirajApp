@@ -21,6 +21,7 @@ export class TablePage implements OnInit {
   dineInLayout:'four'|'two' = 'four';
   takeawayLayout:'four'|'two' = 'four';
   onlineLayout:'four'|'two' = 'four';
+  tableGroups:{name:string,tables:TableConstructor[]}[] = [];
   constructor(
     private dataProvider: DataProvider,
     private databaseService: DatabaseService
@@ -30,23 +31,44 @@ export class TablePage implements OnInit {
       this.lateRunningTables = 0;
       this.finalizedTables = 0;
       this.activeTables = 0;
-      this.tables.forEach((table) => {
-        if (table.status == 'occupied') {
-          let timeSpent =
-            new Date().getTime() - table.occupiedStart.toDate().getTime();
-          table.timeSpent = this.formatTime(timeSpent);
-          table.minutes = Math.floor(timeSpent / 1000 / 60);
-          if (table.minutes > 30) {
-            this.lateRunningTables++;
+      this.tableGroups.forEach((group) => {
+        group.tables.forEach((table) => {
+          if (table.status == 'occupied') {
+            let timeSpent =
+              new Date().getTime() - table.occupiedStart.toDate().getTime();
+            table.timeSpent = this.formatTime(timeSpent);
+            table.minutes = Math.floor(timeSpent / 1000 / 60);
+            if (table.minutes > 30) {
+              this.lateRunningTables++;
+            }
+            this.activeTables++;
+          } else if (table.bill?.stage == 'finalized') {
+            this.finalizedTables++;
+          } else {
+            this.emptyTables++;
           }
-          this.activeTables++;
-        } else if (table.bill?.stage == 'finalized') {
-          this.finalizedTables++;
-        } else {
-          this.emptyTables++;
-        }
-      });
+        });
+      })
+      // this.tables.forEach((table) => {
+      //   if (table.status == 'occupied') {
+      //     let timeSpent =
+      //       new Date().getTime() - table.occupiedStart.toDate().getTime();
+      //     table.timeSpent = this.formatTime(timeSpent);
+      //     table.minutes = Math.floor(timeSpent / 1000 / 60);
+      //     if (table.minutes > 30) {
+      //       this.lateRunningTables++;
+      //     }
+      //     this.activeTables++;
+      //   } else if (table.bill?.stage == 'finalized') {
+      //     this.finalizedTables++;
+      //   } else {
+      //     this.emptyTables++;
+      //   }
+      // });
       this.takeawayTokens.forEach((table) => {
+        if (table.completed){
+          return
+        }
         if (table.status == 'occupied') {
           let timeSpent =
             new Date().getTime() - table.occupiedStart.toDate().getTime();
@@ -63,6 +85,9 @@ export class TablePage implements OnInit {
         }
       });
       this.onlineTokens.forEach((table) => {
+        if (table.completed){
+          return
+        }
         if (table.status == 'occupied') {
           let timeSpent =
             new Date().getTime() - table.occupiedStart.toDate().getTime();
@@ -79,11 +104,8 @@ export class TablePage implements OnInit {
         }
       });
     }, 1000);
-    this.dataProvider.currentBusiness.subscribe((data) => {
-      this.databaseService.getRootSettings(data.businessId).then((settings) => {
-        console.log('Settings', settings);
-        this.settings = settings || {};
-      });
+    this.dataProvider.currentBusiness.subscribe(async (data) => {
+      this.settings = await this.databaseService.getRootSettings(data.businessId);
       this.databaseService
         .getTables(data.businessId)
         .subscribe((tables: any[]) => {
@@ -111,6 +133,8 @@ export class TablePage implements OnInit {
             }
             return table;
           });
+          this.tableGroups = this.reOrderTable(this.tables,this.settings);
+          console.log("this.tableGroups",this.tableGroups);
         });
       this.databaseService
         .getTakeawayTokens(data.businessId)
@@ -187,5 +211,42 @@ export class TablePage implements OnInit {
     return `${hours > 0 ? hours + 'h ' : ''}${
       minutes > 0 ? minutes + 'm ' : ''
     }${seconds > 0 ? seconds + 's' : ''}`;
+  }
+
+  reOrderTable(tables:TableConstructor[],settings:any) {
+    let groupedTables:{name:string,tables:TableConstructor[]}[] = [];
+    tables.forEach((r) => {
+      let tableGroup = groupedTables.find((group) => group.name == r.group);
+      if (tableGroup) {
+        tableGroup.tables.push(r);
+      } else {
+        groupedTables.push({
+          name: r.group,
+          tables: [r],
+        });
+      }
+    });
+    groupedTables.forEach((group) => {
+      // sort tables by order or by name
+      group.tables.sort((a, b) => {
+        if (a.order != undefined && b.order != undefined) {
+          return a.order - b.order;
+        } else {
+          return a.name.localeCompare(b.name);
+        }
+      });
+    });
+    // there exists a table settings groupOrders with the order of groups like ["od","indoor"]
+    if (settings?.groupOrders) {
+      // reorder the groupedTables using the array using that group orders
+      console.log("Grouped orders",settings?.groupOrders);
+      groupedTables.sort((a, b) => {
+        return (
+          settings?.groupOrders.indexOf(a.name) -
+          settings?.groupOrders.indexOf(b.name)
+        );
+      });
+    }
+    return groupedTables;
   }
 }

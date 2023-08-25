@@ -1,4 +1,4 @@
-<h1>Tables</h1>
+<!-- <h1>Tables</h1> -->
 <div class="summaryCard fadeUp">
   <div class="heading">
     <p>Tables Summary</p>
@@ -60,17 +60,23 @@
         </div>
       </div>
     </div>
-    <div class="tablesGroup" [ngClass]="{'two':dineInLayout == 'two'}">
-      <div
-        class="table gm"
-        [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
-        *ngFor="let table of tables;let i =index"
-      >
-        <p>{{table.name}}</p>
-        <p>{{table.billPrice | currency:'INR'}}</p>
-        <p>{{table.timeSpent}}</p>
+    <ng-container *ngFor="let group of tableGroups">
+      <div class="group">
+        <div class="heading smaller">{{group.name}}</div>
       </div>
-    </div>
+      <div class="tablesGroup" [ngClass]="{'two':dineInLayout == 'two',notFound: tables.length == 0}">
+        <div
+          class="table gm"
+          [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
+          *ngFor="let table of group.tables;let i =index"
+        >
+          <p>{{table.name}}</p>
+          <p>{{table.billPrice | currency:'INR'}}</p>
+          <p>{{table.timeSpent}}</p>
+        </div>
+        <img src="assets/notFound.jpg" *ngIf="tables.length == 0" alt="">
+      </div>
+    </ng-container>
   </div>
 </div>
 <div class="summaryCard" #takeawayTableSection>
@@ -101,17 +107,20 @@
         </div>
       </div>
     </div>
-    <div class="tablesGroup" [ngClass]="{'two':takeawayLayout == 'two'}">
-      <div
-        class="table gm fadeUp"
-        [style]="'animation-delay:'+i*50+'ms'"
-        [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
-        *ngFor="let table of takeawayTokens; let i =index"
-      >
-        <p>{{table.name}}</p>
-        <p>{{table.billPrice | currency:'INR'}}</p>
-        <p>{{table.timeSpent}}</p>
-      </div>
+    <div class="tablesGroup" [ngClass]="{'two':takeawayLayout == 'two',notFound: takeawayTokens.length == 0}">
+      <ng-container *ngFor="let table of takeawayTokens; let i =index">
+        <div
+          class="table gm fadeUp"
+          [style]="'animation-delay:'+i*50+'ms'"
+          [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
+          *ngIf="!table.completed"
+        >
+          <p>{{table.name}}</p>
+          <p *ngIf="table.bill?.bilPrice">{{table.bill?.bilPrice | currency:'INR'}}</p>
+          <p>{{table.timeSpent}}</p>
+        </div>
+      </ng-container>
+      <img src="assets/notFound.jpg" *ngIf="takeawayTokens.length == 0" alt="">
     </div>
   </div>
 </div>
@@ -143,26 +152,22 @@
         </div>
       </div>
     </div>
-    <div class="tablesGroup" [ngClass]="{'two':onlineLayout == 'two'}">
-      <div
-        class="table gm fadeUp"
-        [style]="'animation-delay:'+i*50+'ms'"
-        [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
-        *ngFor="let table of onlineTokens; let i =index"
-      >
-        <p>{{table.name}}</p>
-        <p>{{table.billPrice | currency:'INR'}}</p>
-        <p>{{table.timeSpent}}</p>
-      </div>
+    <div class="tablesGroup" [ngClass]="{'two':onlineLayout == 'two',notFound: onlineTokens.length == 0}">
+      <ng-container *ngFor="let table of onlineTokens; let i =index">
+        <div
+          class="table gm fadeUp"
+          [style]="'animation-delay:'+i*50+'ms'"
+          [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
+          *ngIf="!table.completed"
+        >
+          <p>{{table.name}}</p>
+          <p *ngIf="table.bill?.bilPrice">{{table.bill?.bilPrice | currency:'INR'}}</p>
+          <p>{{table.timeSpent}}</p>
+        </div>
+      </ng-container>
+      <img src="assets/notFound.jpg" *ngIf="onlineTokens.length == 0" alt="">
     </div>
   </div>
 </div>
 
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
+<div class="bottomSpacer"></div>

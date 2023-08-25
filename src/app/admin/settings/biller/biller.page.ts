@@ -10,11 +10,16 @@ import { DatabaseService } from 'src/app/core/services/database/database.service
 })
 export class BillerPage implements OnInit {
   businessId:string|null = null;
+  editMode:boolean = false;
+  settings:any;
   constructor(private databaseService:DatabaseService,private dataProvider:DataProvider, private alertify:AlertsAndNotificationsService) {
     this.dataProvider.currentBusiness.subscribe((business)=>{
       if (business){
         this.businessId = business.businessId;
       }
+    });
+    this.dataProvider.currentSettings.subscribe((data)=>{
+      this.settings = data;
     })
   }
 
@@ -22,16 +27,15 @@ export class BillerPage implements OnInit {
   }
 
 
-  updateSettings(data: any) {
+  async updateSettings(data: any) {
     if(this.businessId){
-      this.databaseService
-        .updateRootSettings(data, this.businessId)
-        .then(() => {
-          this.alertify.presentToast('Settings updated successfully');
-        })
-        .catch((err) => {
-          this.alertify.presentToast('Error while updating settings');
-        });
+      try {
+        await this.databaseService.updateRootSettings(data, this.businessId)
+        await this.databaseService.getRootSettings(this.businessId);
+        this.alertify.presentToast('Settings updated successfully');
+      } catch(e){
+        this.alertify.presentToast('Settings updated failed');
+      }
     }
   }
 

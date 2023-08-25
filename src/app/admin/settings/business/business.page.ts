@@ -14,6 +14,7 @@ import { UserBusiness } from 'src/app/core/types/user.structure';
 })
 export class BusinessPage implements OnInit {
   currentBusiness:UserBusiness|undefined;
+  editMode:boolean = false;
   settingsForm: FormGroup = new FormGroup({
     hotelName: new FormControl('', [
       Validators.required,

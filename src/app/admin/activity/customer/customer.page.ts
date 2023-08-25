@@ -31,10 +31,10 @@ export class CustomerPage implements OnInit {
           return customer.updated?.toDate().toDateString() == new Date().toDateString();
         });
         this.stats.totalCustomers = customers.length;
-        this.stats.averageBills = customers.reduce((acc, customer)=>{
+        this.stats.averageBills = this.roundOff(customers.reduce((acc, customer)=>{
           return acc + (customer.totalSales || 0);
         }
-        ,0)/customers.length;
+        ,0)/customers.length);
         this.stats.newCustomers = this.recentlyAddedCustomers.length;
         this.stats.existingCustomers = this.stats.totalCustomers - this.stats.newCustomers;
       });
@@ -62,6 +62,10 @@ export class CustomerPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  roundOff(value:number){
+    return Math.round((value + Number.EPSILON) * 100) / 100;
   }
 
 }

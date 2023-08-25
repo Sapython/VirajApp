@@ -25,6 +25,13 @@ export class HourlyItemSalesComponent {
   items: ReplaySubject<ProductHourlySales[]> = new ReplaySubject<
     ProductHourlySales[]
   >();
+  totals = {
+    totalNumberOfProducts: 0,
+    totalQuantity: 0,
+    totalPrice: 0,
+    totalAmount: 0,
+    hourlyTotal: Array(24).fill(0),
+  };
   loading: boolean = true;
   joinArray(bill: KotConstructor[]) {
     // join to form a string of ids with comma
@@ -115,6 +122,11 @@ export class HourlyItemSalesComponent {
           {
             content:
               this.reportService.dateRangeFormGroup.value.startDate.toLocaleString(),
+            styles: { halign: 'right', fontSize: 17 },
+          },
+          {
+            content:this.reportService.dateRangeFormGroup.value.endDate ? 
+              this.reportService.dateRangeFormGroup.value.endDate.toLocaleString() : '',
             styles: { halign: 'right', fontSize: 17 },
           },
         ],

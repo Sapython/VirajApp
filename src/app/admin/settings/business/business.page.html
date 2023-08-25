@@ -5,46 +5,46 @@
 ></app-header>
 <ion-content [fullscreen]="true">
   <main id="content">
-    <ion-breadcrumbs>
-      <ion-breadcrumb routerDirection="back" routerLink="../../settings">Settings</ion-breadcrumb>
-      <ion-breadcrumb routerDirection="back" routerLink=".">Biller</ion-breadcrumb>
-    </ion-breadcrumbs>
-    <form [formGroup]="settingsForm" (ngSubmit)="submit()">
+    <form [formGroup]="settingsForm" (ngSubmit)="submit()" *ngIf="editMode">
       <input placeholder="Hotel Name" formControlName="hotelName" type="text">
       <input placeholder="Phone" formControlName="phone" type="text">
       <textarea placeholder="Address" formControlName="address" type="text"></textarea>
       <input placeholder="GST Number" formControlName="gst" type="text">
       <input placeholder="FSSAI Number" formControlName="fssai" type="text">
       <div class="actions">
-        <button type="button" routerLink="../">Cancel</button>
+        <button type="button" (click)="this.editMode = false" routerLink="../">Cancel</button>
         <button type="submit">Submit</button>
       </div>
-      <!-- <ion-item>
-        <ion-label position="floating">Business Name</ion-label>
-        <ion-input formControlName="hotelName" placeholder="Business Name"></ion-input>
-      </ion-item> -->
-      <!-- <ion-item>
-        <ion-label position="floating">Phone Number</ion-label>
-        <ion-input formControlName="phone" placeholder="Phone Number"></ion-input>
-      </ion-item> -->
-      <!-- <ion-item>
-        <ion-label position="floating">Address</ion-label>
-        <ion-textarea formControlName="address" placeholder="Address"></ion-textarea>
-      </ion-item> -->
-      <!-- <ion-item>
-        <ion-label position="floating">GST Number</ion-label>
-        <ion-input formControlName="gst" placeholder="GST Number"></ion-input>
-      </ion-item> -->
-      <!-- <ion-item>
-        <ion-label position="floating">FSSAI Number</ion-label>
-        <ion-input formControlName="fssai" placeholder="FSSAI Number"></ion-input>
-      </ion-item> -->
-      <!-- <br />
-      <br /> -->
-      <!-- <ion-row class="ion-justify-content-around">
-        <ion-button color="light" type="button" routerLink="../"> Cancel </ion-button>
-        <ion-button type="submit"> Submit </ion-button>
-      </ion-row> -->
+    </form>
+    <form [formGroup]="settingsForm" (ngSubmit)="editMode=true" *ngIf="!editMode">
+      <!-- <input [disabled]="true" placeholder="Hotel Name" formControlName="hotelName" type="text">
+      <input [disabled]="true" placeholder="Phone" formControlName="phone" type="text">
+      <textarea [disabled]="true" placeholder="Address" formControlName="address" type="text"></textarea>
+      <input [disabled]="true" placeholder="GST Number" formControlName="gst" type="text">
+      <input [disabled]="true" placeholder="FSSAI Number" formControlName="fssai" type="text"> -->
+      <div class="label">
+        <p>Hotel Name</p>
+        <p>{{settingsForm.value.hotelName}}</p>
+      </div>
+      <div class="label">
+        <p>Phone</p>
+        <p>{{settingsForm.value.phone}}</p>
+      </div>
+      <div class="label address">
+        <p>Address</p>
+        <p>{{settingsForm.value.address}}</p>
+      </div>
+      <div class="label">
+        <p>GST Number</p>
+        <p>{{settingsForm.value.gst}}</p>
+      </div>
+      <div class="label">
+        <p>FSSAI Number</p>
+        <p>{{settingsForm.value.fssai}}</p>
+      </div>
+      <div class="actions">
+        <button type="submit">Edit Business Details</button>
+      </div>
     </form>
   </main>
 </ion-content>

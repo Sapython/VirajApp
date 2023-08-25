@@ -84,6 +84,9 @@
   --swiper-theme-color: var(--Vrajera-primary);
   font-family: "MergeOne-Regular", sans-serif;
 }
+*{
+  font-family: var(--Vrajera-font);
+}
 html{
   scroll-behavior: smooth;
 }
@@ -104,6 +107,7 @@ main#content {
   background-attachment: fixed;
   height: 100%;
   overflow: scroll;
+  padding-top: 20px;
 }
 app-header{
 	position: sticky;
@@ -169,3 +173,24 @@ app-header{
 .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal{
   bottom: 8px;
 }
+
+mat-tab-group.noHeader{
+	mat-tab-header{
+		display: none;
+	}
+}
+
+mat-tab-group.padded{
+  padding-top: 20px;
+	// div.mat-mdc-tab-body-wrapper{
+  // }
+}
+
+.bottomSpacer{
+  height: 100px;
+
+}
+.activity-detail{
+  --width:90vw;
+  .popover-content{ width: 90vw; }
+} 

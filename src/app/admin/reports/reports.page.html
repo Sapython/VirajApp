@@ -16,11 +16,18 @@
       </div>
       <div class="grid">
         <div class="reportCard" data-aos="fade-up" *ngFor="let format of filteredReportFormats">
-          <h4>{{format.title}}</h4>
-          <p>{{format.description}}</p>
-          <ion-button color="primary" routerLink="view/{{format.code}}">
+          <!-- <div class="detail">
+            <div class="icon">
+              <i class="ri-file-text-line"></i>
+            </div>
+          </div> -->
+          <span>
+            <h4>{{format.title}}</h4>
+            <p>{{format.description}}</p>
+          </span>
+          <button routerLink="view/{{format.code}}">
             View Report <i class="ri-file-chart-line"></i>
-          </ion-button>
+          </button>
         </div>
       </div>
     </ng-container>

@@ -1,21 +1,25 @@
 <ion-router-outlet></ion-router-outlet>
-<ion-tabs>
-  <ion-tab-bar slot="bottom,top">
-    <ion-tab-button tab="activity">
-      <ion-icon name="analytics"></ion-icon>
-      <ion-label>Activity</ion-label>
-    </ion-tab-button>
-    <!-- <ion-tab-button tab="menu">
-      <ion-icon name="fast-food"></ion-icon>
-      <ion-label>Menu</ion-label>
-    </ion-tab-button> -->
-    <ion-tab-button tab="reports">
-      <ion-icon name="document-text"></ion-icon>
-      <ion-label>Reports</ion-label>
-    </ion-tab-button>
-    <ion-tab-button tab="settings">
-      <ion-icon name="settings"></ion-icon>
-      <ion-label>Settings</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
-</ion-tabs>
+<!-- <div class="bottomSticky">
+  <button routerLink="activity">Activity</button>
+  <button routerLink="reports">Reports</button>
+  <button routerLink="settings">Settings</button>
+</div> -->
+<div class="tabs">
+  <div class="activeBar">
+    <span
+      [style]="'width: calc(100% / '+tabs.length+' - '+ paddingOffset +'px); left: calc(100% / '+tabs.length+' * '+currentTabIndex+' +  ' + (paddingOffset / 2)+'px);'"
+    ></span>
+  </div>
+  <div class="tabBar">
+    <ng-container *ngFor="let tab of tabs; let i = index;">
+      <button
+        [ngClass]="{active:currentTabIndex == i}"
+        (click)="switchTabByIndex(i)"
+        class="tab"
+      >
+        <i [class]="tab.icon"></i>
+        <p *ngIf="currentTabIndex != i">{{tab.title}}</p>
+      </button>
+    </ng-container>
+  </div>
+</div>

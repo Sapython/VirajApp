@@ -19,12 +19,13 @@ import { Tax } from 'src/app/core/types/tax.structure';
 })
 export class ReportService {
   // bills: ActivityBillConstructor[] = [];
-
+  noData: boolean = false;
   loading: boolean = false;
   cachedData: CachedData[] = [];
   consolidatedMaxAmount: number = 0;
   downloadPdf: Subject<void> = new Subject<void>();
   downloadExcel: Subject<void> = new Subject<void>();
+  reportLoadTime:Date = new Date();
 
   dateRangeFormGroup: FormGroup = new FormGroup({
     startDate: new FormControl('', [Validators.required]),
@@ -60,6 +61,7 @@ export class ReportService {
 
   async getBills(startDate: Date, endDate: Date,businessId:string) {
     this.loading = true;
+    this.reportLoadTime = new Date();
     // don't fetch if already cached or even if it is cached, fetch if it is more than 20 minutes old
     if (this.cachedData.length > 0) {
       let cachedData = this.cachedData.find((data) => {
@@ -76,7 +78,7 @@ export class ReportService {
       if (cachedData) {
         let now = new Date();
         let diff = now.getTime() - cachedData.endDate.getTime();
-        if (diff < 20 * 60 * 1000) {
+        if (diff < 3 * 1000) {
           this.loading = false;
           return cachedData.bills;
         }
@@ -100,6 +102,11 @@ export class ReportService {
     });
     console.log('CACHED BILLS', this.cachedData);
     this.loading = false;
+    if (newBills.length == 0) {
+      this.noData = true;
+    } else {
+      this.noData = false;
+    }
     return newBills;
   }
 
@@ -107,6 +114,7 @@ export class ReportService {
     let date: Date = this.dateRangeFormGroup.value.startDate;
     let endDate: Date = this.dateRangeFormGroup.value.endDate;
     let minTime = new Date(date);
+    this.reportLoadTime = new Date();
     minTime.setHours(0, 0, 0, 0);
     if (endDate) {
       var maxTime = new Date(endDate);
@@ -171,6 +179,7 @@ export class ReportService {
 
   getCustomers(startDate:Date,endDate:Date,businessId:string){
     // set hours to 0
+    this.reportLoadTime = new Date();
     startDate.setHours(0,0,0,0);
     // set hours to 23
     endDate.setHours(23,59,59,999);

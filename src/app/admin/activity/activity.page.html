@@ -9,11 +9,12 @@
 <ion-content>
   <app-header pageTitle="Vrajera"></app-header>
   <main id="content">
-    <app-tabs [tabs]="['sales','tables','customer']" #tab></app-tabs>
-    <div class="ion-padding">
-      <app-sales *ngIf="tab.currentTab=='sales'"></app-sales>
-      <app-table *ngIf="tab.currentTab=='tables'"></app-table>
-      <app-customer *ngIf="tab.currentTab=='customer'"></app-customer>
-    </div>
+    <app-tabs (tabSwitched)="switchTab($event,tabSwitcher)" [tabs]="['sales','tables','customer']" #tab></app-tabs>
+    <!-- <router-outlet></router-outlet> -->
+    <mat-tab-group class="noHeader padded" (animationDone)="refetchTab(tabSwitcher)" #tabSwitcher>
+      <mat-tab label="Sales"><app-sales></app-sales></mat-tab>
+      <mat-tab label="Table"><app-table></app-table></mat-tab>
+      <mat-tab label="Customer"><app-customer></app-customer></mat-tab>
+    </mat-tab-group>
   </main>
 </ion-content>

@@ -39,7 +39,7 @@
 				</li>
 			</ol>
 		</td>
-		<td *ngIf="bill.settlement">{{bill.settlement.time.toDate() | date:'short'}}</td>
+		<td>{{bill.settlement?.time?.toDate() | date:'short'}}</td>
 	  </tr>
 	</tbody>
   </table>

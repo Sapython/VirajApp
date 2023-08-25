@@ -5,10 +5,6 @@
       <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.uid}}" />
     </ion-avatar>
     <div class="item">
-      <p>Name</p>
-      <p color="primary">{{user.displayName}}</p>
-    </div>
-    <div class="item">
       <p>Username</p>
       <p color="primary">{{user.uid}}</p>
     </div>
@@ -32,5 +28,17 @@
       <p>Verified</p>
       <p color="primary">{{user.emailVerified ? "Verified" : 'Not-Verified'}}</p>
     </div>
+    <div class="settingItem item" id="open-logout-sheet">
+      <ion-icon slot="start" name="log-out"></ion-icon>
+      <p>Logout</p>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+  <ion-action-sheet
+    mode="ios"
+    (didDismiss)="logout($event)"
+    trigger="open-logout-sheet"
+    header="Actions"
+    [buttons]="logOutActionsSheetButtons"
+  ></ion-action-sheet>
   </main>
 </ion-content>

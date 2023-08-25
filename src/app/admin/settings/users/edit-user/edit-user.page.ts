@@ -18,6 +18,7 @@ import { UserBusiness } from 'src/app/core/types/user.structure';
 })
 export class EditUserPage implements OnInit {
   authId: string | undefined;
+  filteredAccessCodesAsString: string = '';
   currentUser: any;
   editMode: boolean = false;
   enterOtpVisible: boolean = false;
@@ -426,6 +427,16 @@ export class EditUserPage implements OnInit {
                       code.allowed = true;
                     }
                   });
+                  // merge the name of the this.currentUser.propertiesAllowed with comma separated
+                  this.filteredAccessCodesAsString = this.currentUser.propertiesAllowed.map((prop:any)=>{
+                    let code = this.accessCodes.find(
+                      (accessCode) => accessCode.type == 'access' && prop == accessCode.accessCode
+                    );
+                    if (code && code.type =='access') {
+                      return code.name;
+                    }
+                    return '';
+                  }).join(', ');
                 } else if(this.currentUser.accessType == 'role'){
                   this.accessForm.get('role')?.setValue(this.currentUser.role);
                 }
@@ -474,7 +485,8 @@ export class EditUserPage implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   search(event: any) {}
 

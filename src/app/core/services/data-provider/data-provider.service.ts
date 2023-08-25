@@ -9,15 +9,27 @@ import { Menu } from '../../types/menu.structure';
 })
 export class DataProvider {
 
-  constructor() { }
+  constructor() {
+    this.routeChanged.subscribe((route)=>{
+      if (route != 'sales'){
+        this.selectMainOutlet();
+      }
+    })
+  }
   loggedIn:boolean = false;
   loggedInSubject:Subject<boolean> = new Subject<boolean>();;
   currentBusiness:ReplaySubject<UserBusiness> = new ReplaySubject<UserBusiness>();
   menuLoadedSubject:ReplaySubject<Menu> = new ReplaySubject<Menu>();
+  currentSettings:ReplaySubject<any> = new ReplaySubject<any>();
+  routeChanged:ReplaySubject<string> = new ReplaySubject<string>();
   loading:boolean = false;
   currentUser:User|undefined;
   allBusiness:UserBusiness[] = [];
   selectedMenu:Menu|undefined;
+
+  selectMainOutlet(){
+    this.currentBusiness.next(this.allBusiness[0]);
+  }
 
   public businessData:any;
 }

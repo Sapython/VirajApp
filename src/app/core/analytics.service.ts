@@ -9,16 +9,18 @@ export class AnalyticsService {
   cachedData:{date:Date,data:AnalyticsData,business:string}[] = [];
   constructor(private firestore:Firestore) { }
 
-  async getAnalytics(date:Date,businessId:string,endDate?:Date){
+  async getAnalytics(date:Date,businessId:string,endDate?:Date,forcedNew?:boolean){
     // console.log("Analytics date",'business',businessId,'analytics',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString());
     // return docData(docRef);
     let docRefs = [];
+    // console.log("main doc ref for ",date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString());
     let docRef = doc(this.firestore,'business',businessId,'analyticsData',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString())
+    console.log("Fethcing for ",docRef.path);
     docRefs.push({
       ref:docRef,
       date:date
     });
-    if (endDate) {
+    if (endDate && this.matchDay(date,endDate) === false) {
       // get list of dates between start and end date
       let dates:Date[] =[];
       let currentDate = new Date(date);
@@ -35,14 +37,15 @@ export class AnalyticsService {
           }
         )
       });
-
+      // console.log("Doc refs",docRefs);
       // get all docRefs
       let data = await Promise.all(docRefs.map(async (docRef)=>{
         // first find it in cached data if the date exists
         let cachedData = this.cachedData.find((cachedData)=>{
           return cachedData.date.getFullYear() === docRef.date.getFullYear() && cachedData.date.getMonth() === docRef.date.getMonth() && cachedData.date.getDate() === docRef.date.getDate() && cachedData.business === businessId;
         });
-        if (cachedData){
+        if (cachedData && cachedData.data && !forcedNew){
+          // console.log("Cloning",cachedData);
           return cachedData;
         } else {
           let data = await getDoc(docRef.ref);
@@ -57,7 +60,7 @@ export class AnalyticsService {
           }
         }
       }));
-      // console.log("Data",data);
+      // console.log("Multiple Datas",data);
       return this.mergeAnalyticsData(data.map((data)=>{
         return data.data;
       }).filter((data)=>data));
@@ -66,8 +69,9 @@ export class AnalyticsService {
       let cachedData = this.cachedData.find((cachedData)=>{
         return cachedData.date.getFullYear() === date.getFullYear() && cachedData.date.getMonth() === date.getMonth() && cachedData.date.getDate() === date.getDate() && cachedData.business === businessId;
       });
-      if (cachedData){
-        return cachedData.data;
+      if (cachedData && cachedData.data && !forcedNew){
+        // console.log("Returning",cachedData.data);
+        return cachedData.data as AnalyticsData;
       } else {
         let data = await getDoc(docRef);
         this.cachedData.push({
@@ -75,13 +79,14 @@ export class AnalyticsService {
           data:data.data() as AnalyticsData,
           business:businessId
         })
+        // console.log("Returning doc data ",data.data() as AnalyticsData);
         return data.data() as AnalyticsData;
       }
     }
   }
 
   mergeAnalyticsData(multipleAnalyticsData:AnalyticsData[]){
-    console.log("Analytics data",multipleAnalyticsData);
+    console.log("Analytics data received: ",multipleAnalyticsData.length);
     let analyticsData: AnalyticsData = {
       createdAt: Timestamp.fromDate(new Date()),
       createdAtUTC: new Date().toUTCString(),
@@ -340,7 +345,7 @@ export class AnalyticsService {
       });
       analyticsData.salesChannels.all.paymentReceived = this.mergePaymentReceived(
         analyticsData.salesChannels.all.paymentReceived,
-        analytics.salesChannels.all.paymentReceived,
+        analytics.salesChannels.all.paymentReceived
       );
       analyticsData.salesChannels.all.billWiseSales = this.mergeBillWiseSales(
         analyticsData.salesChannels.all.billWiseSales,
@@ -373,7 +378,7 @@ export class AnalyticsService {
       );
       analyticsData.salesChannels.dineIn.paymentReceived = this.mergePaymentReceived(
         analyticsData.salesChannels.dineIn.paymentReceived,
-        analytics.salesChannels.dineIn.paymentReceived,
+        analytics.salesChannels.dineIn.paymentReceived
       );
       analyticsData.salesChannels.dineIn.billWiseSales = this.mergeBillWiseSales(
         analyticsData.salesChannels.dineIn.billWiseSales,
@@ -406,7 +411,7 @@ export class AnalyticsService {
       );
       analyticsData.salesChannels.takeaway.paymentReceived = this.mergePaymentReceived(
         analyticsData.salesChannels.takeaway.paymentReceived,
-        analytics.salesChannels.takeaway.paymentReceived,
+        analytics.salesChannels.takeaway.paymentReceived
       );
       analyticsData.salesChannels.takeaway.billWiseSales = this.mergeBillWiseSales(
         analyticsData.salesChannels.takeaway.billWiseSales,
@@ -439,7 +444,7 @@ export class AnalyticsService {
       );
       analyticsData.salesChannels.online.paymentReceived = this.mergePaymentReceived(
         analyticsData.salesChannels.online.paymentReceived,
-        analytics.salesChannels.online.paymentReceived,
+        analytics.salesChannels.online.paymentReceived
       );
       analyticsData.salesChannels.online.billWiseSales = this.mergeBillWiseSales(
         analyticsData.salesChannels.online.billWiseSales,
@@ -494,11 +499,13 @@ export class AnalyticsService {
     return analyticsData;
   }
 
-  mergePaymentReceived(paymentReceived1: any, paymentReceived2: any) {
+  mergePaymentReceived(paymentReceived2: any, paymentReceived1: any) {
+    // console.log("Merging",paymentReceived2,paymentReceived1);
     let paymentReceived:any = {};
-    Object.keys(paymentReceived1).forEach((key:any) => {
-      paymentReceived[key] = paymentReceived1[key] + paymentReceived2[key];
-    });
+    let keys = new Set([...Object.keys(paymentReceived1),...Object.keys(paymentReceived2)]);
+    keys.forEach((key) => {
+      paymentReceived[key] = (paymentReceived1[key]||0) + (paymentReceived2[key]||0);
+    })
     return paymentReceived;
   }
 
@@ -564,6 +571,11 @@ export class AnalyticsService {
       ...userWiseActions2,
     ];
     return userWiseActions;
+  }
+
+  matchDay(dayOne:Date,dayTwo:Date){
+    // check month year and day
+    return dayOne.getFullYear() === dayTwo.getFullYear() && dayOne.getMonth() === dayTwo.getMonth() && dayOne.getDate() === dayTwo.getDate();
   }
 
 

@@ -7,17 +7,18 @@ import { IonicModule } from '@ionic/angular';
 import { BillPreviewComponent } from './bill-preview/bill-preview.component';
 import { KotPreviewComponent } from './kot-preview/kot-preview.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BottomTabsComponent } from './bottom-tabs/bottom-tabs.component';
 
 
 
 @NgModule({
-  declarations: [HeaderComponent,TabsComponent,BillPreviewComponent,KotPreviewComponent],
+  declarations: [HeaderComponent,TabsComponent,BillPreviewComponent,KotPreviewComponent,BottomTabsComponent],
   imports: [
     CommonModule,
     RouterModule,
     IonicModule,
     ReactiveFormsModule
   ],
-  exports:[HeaderComponent,TabsComponent,BillPreviewComponent,KotPreviewComponent]
+  exports:[HeaderComponent,TabsComponent,BillPreviewComponent,KotPreviewComponent,BottomTabsComponent]
 })
 export class WidgetsModule { }

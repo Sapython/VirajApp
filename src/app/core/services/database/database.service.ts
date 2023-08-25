@@ -1,20 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Firestore, getDocs, collection, DocumentData, getDoc, doc, addDoc, updateDoc, setDoc, collectionData, docData } from '@angular/fire/firestore';
+import { Firestore, getDocs, collection, DocumentData, getDoc, doc, addDoc, updateDoc, setDoc, collectionData, docData, deleteDoc } from '@angular/fire/firestore';
 import { DataProvider } from '../data-provider/data-provider.service';
 import { Menu } from '../../types/menu.structure';
 import { Category } from '../../types/category.structure';
 import { Tax } from '../../types/tax.structure';
 import { CustomerInfo, UserBusiness } from '../../types/user.structure';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { PaymentMethod } from '../../types/payment.structure';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
   cachedData:any = {};
+  settingsSub:Subscription = Subscription.EMPTY;
   users:Subject<UserBusiness[]> = new Subject<UserBusiness[]>();
   constructor(private dataProvider:DataProvider,private firestore:Firestore) {
-    
+    this.dataProvider.currentBusiness.subscribe((data)=>{
+      this.settingsSub.unsubscribe();
+      this.settingsSub = docData(doc(this.firestore,'business/' + data.businessId + '/settings/settings')).subscribe((settings:any)=>{
+        this.dataProvider.currentSettings.next(settings);
+      });
+    })
   }
 
   // // helpers
@@ -802,19 +809,16 @@ export class DatabaseService {
 
   async getPaymentMethods(businessId:string){
     // /business/uqd9dm0its2v9xx6fey2q/paymentMethods
-    var paymentMethods:any[] = [];
-    if (!(this.cachedData && this.cachedData[businessId] && this.cachedData[businessId]['paymentMethods'])){
-      paymentMethods = (await getDocs(collection(this.firestore,'business/' + businessId + '/paymentMethods'))).docs.map(doc => {return {id:doc.id,...doc.data()}});
-    } else {
-      return this.cachedData[businessId]['paymentMethods'];
-    }
-    if (this.cachedData[businessId]){
-      this.cachedData[businessId]['paymentMethods'] = paymentMethods;
-    }
+    let paymentMethods = (await getDocs(collection(this.firestore,'business/' + businessId + '/paymentMethods'))).docs.map(doc => {return {id:doc.id,...doc.data()}}) as PaymentMethod[];
     return paymentMethods;
   }
 
   async addPaymentMethod(businessId:string,paymentMethod:any){
+    paymentMethod = {
+      ...paymentMethod,
+      addDate:new Date(),
+      updateDate:new Date()
+    }
     await addDoc(collection(this.firestore,'business/' + businessId + '/paymentMethods'),paymentMethod);
     if (this.cachedData[businessId]){
       this.cachedData[businessId]['paymentMethods'].push(paymentMethod);
@@ -825,6 +829,7 @@ export class DatabaseService {
     }
   }
 
+
   async updatePaymentMethod(businessId:string,paymentMethod:any){
     await updateDoc(doc(this.firestore,'business/' + businessId + '/paymentMethods/' + paymentMethod.id),{...paymentMethod});
     if (this.cachedData[businessId]){
@@ -834,6 +839,14 @@ export class DatabaseService {
       this.cachedData[businessId] = {
         paymentMethods: [paymentMethod]
       }
+    }
+  }
+
+  deletePaymentMethod(businessId:string,paymentMethodId:string){
+    deleteDoc(doc(this.firestore,'business/' + businessId + '/paymentMethods/' + paymentMethodId));
+    if (this.cachedData[businessId]){
+      let index = this.cachedData[businessId]['paymentMethods'].findIndex((p:any)=>{return p.id == paymentMethodId});
+      this.cachedData[businessId]['paymentMethods'].splice(index,1);
     }
   }
 
@@ -892,6 +905,10 @@ export class DatabaseService {
     return docData(doc(this.firestore,'business/' + businessId + '/bills/' + billId));
   }
 
+  getBillPromise(businessId:string,billId:string){
+    return getDoc(doc(this.firestore,'business/' + businessId + '/bills/' + billId));
+  }
+
   async getCustomers(businessId:string){
     let customers = getDocs(collection(this.firestore,'business/' + businessId + '/customers'));
     return (await customers).docs.map((doc) => {
@@ -929,5 +946,12 @@ export class DatabaseService {
 
   getCurrentBusiness(businessId:string){
     return docData(doc(this.firestore,'business/' + businessId));
+  }
+
+  getSplittedBill(billId:string,splitBillId:string,business:string){
+    console.log("Getting splitted bill",billId,splitBillId,business);
+    
+    // /business/uqd9dm0its2v9xx6fey2q/bills/iqxulix4zfco25bczkmj1z759vl/splittedBills
+    return getDoc(doc(this.firestore,`business/${business}/bills/${billId}/splittedBills/${splitBillId}`));
   }
 }

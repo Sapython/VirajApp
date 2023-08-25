@@ -1,4 +1,5 @@
-<div class="summaryCard">
+<!-- <h1>Customers</h1> -->
+<div class="summaryCard fadeUp">
 	<div class="card">
 		<strong>{{stats.totalCustomers}}</strong>
 		<p>Total Customers</p>
@@ -17,13 +18,13 @@
 	</div>
 </div>
 
-<div class="search gm">
+<div class="search gm fadeUp">
 	<input type="search" (input)="searchSubject.next(searchBar.value)" #searchBar placeholder="Search Customer">
 	<i class="ri-search-2-line"></i>
 </div>
 
 <h2>Recently Added</h2>
-<div class="tableContainer">
+<div class="tableContainer fadeUp">
 	<table class="gm" [cellSpacing]="0" *ngIf="recentlyAddedCustomers.length > 0">
 		<thead>
 			<tr>
@@ -42,17 +43,26 @@
 		</thead>
 		<tbody>
 			<tr *ngFor="let customer of filteredRecentlyAddedCustomers.length ? filteredRecentlyAddedCustomers : recentlyAddedCustomers">
-				<td>{{customer.name}}</td>
-				<td>{{customer.address}}</td>
-				<td>{{customer.phone}}</td>
-				<td>{{customer.loyaltyPoints}}</td>
-				<td>{{customer.gst}}</td>
-				<td>{{customer.averageBillValue}}</td>
+				<td>{{customer.name || 'N/A'}}</td>
+				<td>{{customer.address || 'N/A'}}</td>
+				<td>{{customer.phone || 'N/A'}}</td>
+				<td>{{customer.loyaltyPoints || 'N/A'}}</td>
+				<td>{{customer.gst || 'N/A'}}</td>
+				<td>{{customer.averageBillValue || 'N/A'}}</td>
 				<td>{{customer.lastBillAmount | currency:'INR'}}</td>
-				<td>{{customer.lastBillDate?.toDate() | date}}</td>
-				<td>{{customer.totalBills}}</td>
-				<td>{{customer.totalSales}}</td>
-				<td>{{customer.updated?.toDate() | date}}</td>
+				<td>{{(customer.lastBillDate?.toDate() | date)  || 'N/A'}}</td>
+				<td>{{customer.totalBills || 'N/A'}}</td>
+				<td>{{customer.totalSales || 'N/A'}}</td>
+				<td>{{(customer.updated?.toDate() | date) || 'N/A'}}</td>
+			</tr>
+			<tr>
+				<td
+					[colSpan]="11"
+					*ngIf="filteredRecentlyAddedCustomers.length ? filteredRecentlyAddedCustomers.length == 0 : recentlyAddedCustomers.length == 0"
+				>
+					No Customers Found
+					<img src="assets/notFound.jpg" class="noData" alt="">
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -67,7 +77,7 @@
 </div>
 
 <h2>All Customers</h2>
-<div class="tableContainer">
+<div class="tableContainer fadeUp">
 	<table class="gm" [cellSpacing]="0" *ngIf="customers.length>0">
 		<thead>
 			<tr>
@@ -86,17 +96,26 @@
 		</thead>
 		<tbody>
 			<tr *ngFor="let customer of filteredCustomers.length ?  filteredCustomers : customers">
-				<td>{{customer.name}}</td>
-				<td>{{customer.address}}</td>
-				<td>{{customer.phone}}</td>
-				<td>{{customer.loyaltyPoints}}</td>
-				<td>{{customer.gst}}</td>
-				<td>{{customer.averageBillValue | currency:'INR'}}</td>
-				<td>{{customer.lastBillAmount | currency:'INR'}}</td>
-				<td>{{customer.lastBillDate?.toDate() | date}}</td>
-				<td>{{customer.totalBills}}</td>
-				<td>{{customer.totalSales | currency:'INR'}}</td>
-				<td>{{customer.updated?.toDate() | date}}</td>
+				<td>{{customer.name || 'N/A'}}</td>
+				<td>{{customer.address || 'N/A'}}</td>
+				<td>{{customer.phone || 'N/A'}}</td>
+				<td>{{customer.loyaltyPoints || 'N/A'}}</td>
+				<td>{{customer.gst || 'N/A'}}</td>
+				<td>{{customer.averageBillValue | currency:'INR' || 'N/A'}}</td>
+				<td>{{customer.lastBillAmount | currency:'INR' || 'N/A'}}</td>
+				<td>{{(customer.lastBillDate?.toDate() | date) || 'N/A'}}</td>
+				<td>{{customer.totalBills || 'N/A'}}</td>
+				<td>{{customer.totalSales | currency:'INR' || 'N/A'}}</td>
+				<td>{{(customer.updated?.toDate() | date) || 'N/A'}}</td>
+			</tr>
+			<tr>
+				<td
+					[colSpan]="11"
+					*ngIf="filteredCustomers.length ? filteredCustomers.length == 0 : customers.length == 0"
+				>
+					No Customers Found
+					<img src="assets/notFound.jpg" class="noData" alt="">
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -109,3 +128,4 @@
         />
 	</div>
 </div>
+<div class="bottomSpacer"></div>

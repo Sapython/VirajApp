@@ -27,8 +27,10 @@ import { DownloadService } from './core/services/download.service';
 import { AlertsAndNotificationsService } from './core/services/alerts-and-notification/alerts-and-notifications.service';
 import { DatabaseService } from './core/services/database/database.service';
 import { AuthService } from './core/services/auth/auth.service';
+import { ActivityDetailComponent } from './core/services/activityDetail/activity-detail/activity-detail.component';
+import { QuickBillComponent } from './core/services/activityDetail/quick-bill/quick-bill.component';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent,ActivityDetailComponent,QuickBillComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

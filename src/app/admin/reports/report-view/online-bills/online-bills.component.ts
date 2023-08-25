@@ -22,6 +22,27 @@ export class OnlineBillsComponent {
     timedBillConstructor[]
   >();
   loading: boolean = true;
+  billTotals:{
+    numberOfBills:number,
+    numberOfOrders:number,
+    total:number,
+    numberOfKots:number,
+    numberOfUsers:number,
+    totalBillTime:string,
+    totalAmount:number,
+    totalDiscount:number,
+    totalTax:number,
+  }={
+    numberOfBills:0,
+    numberOfOrders:0,
+    total:0,
+    numberOfKots:0,
+    numberOfUsers:0,
+    totalBillTime:"",
+    totalAmount:0,
+    totalDiscount:0,
+    totalTax:0,
+  }
   joinArray(bill: KotConstructor[]) {
     // join to form a string of ids with comma
     return bill.map((res) => res.id).join(', ');
@@ -69,6 +90,37 @@ export class OnlineBillsComponent {
                 mergedProducts
               };
             });
+            this.billTotals ={
+              numberOfBills:bills.reduce((acc, curr) => curr.billNo ? acc + 1 : acc, 0),
+              numberOfOrders:bills.reduce((acc, curr) => curr.orderNo ? acc + 1 : acc, 0),
+              total:bills.reduce((acc, curr) => acc + curr.billing.grandTotal, 0),
+              numberOfKots:bills.reduce((acc, curr) => acc + curr.kots.length, 0),
+              numberOfUsers:bills.reduce((acc, curr) => acc + curr.kots.length, 0),
+              totalBillTime:timedBills.filter((bill)=>bill.totalBillTime).reduce((acc, curr) => {
+                let timeArray = curr.totalBillTime.split(':');
+                let hours = parseInt(timeArray[0]);
+                let minutes = parseInt(timeArray[1]);
+                let seconds = parseInt(timeArray[2]);
+                acc[0] += hours;
+                acc[1] += minutes;
+                acc[2] += seconds;
+                if (acc[2] > 60) {
+                  acc[1] += Math.floor(acc[2] / 60);
+                  acc[2] = acc[2] % 60;
+                }
+                if (acc[1] > 60) {
+                  acc[0] += Math.floor(acc[1] / 60);
+                  acc[1] = acc[1] % 60;
+                }
+                console.log("Time formatted",acc);
+                return acc;
+              }, [0, 0, 0]).join(':'),
+              totalAmount:bills.reduce((acc, curr) => acc + curr.billing.grandTotal, 0),
+              totalDiscount:bills.reduce((acc, curr) => acc + 
+                curr.billing.discount.reduce((acc, curr) => acc + curr.totalAppliedDiscount, 0)
+              , 0),
+              totalTax:bills.reduce((acc, curr) => acc + curr.billing.taxes.reduce((acc, curr) => acc + curr.amount, 0), 0),
+            };
             this.bills.next(timedBills);
             this.loading = false;
           });
@@ -105,6 +157,11 @@ export class OnlineBillsComponent {
           {
             content:
               this.reportService.dateRangeFormGroup.value.startDate.toLocaleString(),
+            styles: { halign: 'right', fontSize: 17 },
+          },
+          {
+            content:this.reportService.dateRangeFormGroup.value.endDate ? 
+              this.reportService.dateRangeFormGroup.value.endDate.toLocaleString() : '',
             styles: { halign: 'right', fontSize: 17 },
           },
         ],

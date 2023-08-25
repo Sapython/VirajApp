@@ -1,11 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { LoadingController } from '@ionic/angular';
 import Chart from 'chart.js/auto';
-import { debounceTime } from 'rxjs';
+import { Subject, Subscription, debounceTime, firstValueFrom } from 'rxjs';
 import { AnalyticsService } from 'src/app/core/analytics.service';
+import { ActivityDetailService } from 'src/app/core/services/activityDetail/activity-detail.service';
+import { AlertsAndNotificationsService } from 'src/app/core/services/alerts-and-notification/alerts-and-notifications.service';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
+import { DatabaseService } from 'src/app/core/services/database/database.service';
 import { UserBusiness } from 'src/app/core/types/user.structure';
 import Swiper, { Navigation, Pagination } from 'swiper';
 import SwiperCore, { SwiperOptions, Autoplay } from 'swiper';
@@ -18,34 +22,128 @@ SwiperCore.use([Autoplay,Pagination,Navigation]);
 })
 export class SalesPage implements OnInit {
   analyticsData:AnalyticsData | undefined;
+  multipleOutletAnalyticsData:AnalyticsData[] = [];
+  multipleOutletAnalyticsDataModified:Subject<void> = new Subject<void>();
+  allOutletAnalyticsData:AnalyticsData|undefined;
   salesChartJS: Chart | undefined;
   dateRangeFormGroup: FormGroup = new FormGroup({
     startDate: new FormControl(new Date(), [Validators.required]),
     endDate: new FormControl(new Date(), [Validators.required]),
   });
+  analyticsSubscription:Subscription = Subscription.EMPTY;
+  refreshing:boolean = false;
   @ViewChild('swiperAnalytics', { static: false }) swiperAnalytics?: SwiperComponent;
   @ViewChild('swiperPaymentModes', { static: false }) swiperPaymentModes?: SwiperComponent;
   @ViewChild('billWiseSwiperContainer', { static: false }) billWiseSwiperContainer?: SwiperComponent;
   @ViewChild('swiperItemSales', { static: false }) swiperItemSales?: SwiperComponent;
   @ViewChild('swiperSuspiciousActivity', { static: false }) swiperSuspiciousActivity?: SwiperComponent;
   @ViewChild('userWiseActionSwiper', { static: false }) userWiseActionSwiper?: SwiperComponent;
-
-  constructor(private dataProvider:DataProvider,private analyticsService:AnalyticsService,private loadingCtrl:LoadingController) {
-    this.dataProvider.currentBusiness.subscribe(async (business)=>{
-      console.log("business",business);
-      this.loadData(new Date(),business);
-      this.dateRangeFormGroup.valueChanges.pipe(debounceTime(700)).subscribe(async (value)=>{
-        this.loadData(value.startDate,business,value.endDate);
+  private analyzeAnalyticsForBusiness = httpsCallable(
+    this.functions,
+    'analyzeAnalyticsForBusiness'
+  );
+  constructor(public dataProvider:DataProvider,private analyticsService:AnalyticsService,private loadingCtrl:LoadingController,private functions:Functions,private alertify:AlertsAndNotificationsService,public activityDetail:ActivityDetailService,private databaseService:DatabaseService) {
+    this.dataProvider.currentBusiness.pipe(debounceTime(100)).subscribe(async (business)=>{
+      this.databaseService.getCurrentSettings(business.businessId).then((settings)=>{
+        console.log("settings",settings);
+        if(settings){
+          this.dataProvider.businessData = settings;
+        }
       })
+      if (this.salesChartJS){
+        this.salesChartJS.destroy();
+      }
+      this.salesChartJS = new Chart(document.getElementById('salesData') as HTMLCanvasElement, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [],
+        },
+        options: {
+          plugins: {
+            legend:{
+              display:false
+            },
+          },
+        },
+      });
+      console.log("Created chart instance",this.salesChartJS);
+      if (business.businessId == 'all'){
+        let loader =await this.loadingCtrl.create({
+          message:'Loading all outlets data'
+        });
+        await loader.present();
+        await this.loadMultipleOutletData(this.dateRangeFormGroup.value.startDate,this.dataProvider.allBusiness,this.dateRangeFormGroup.value.endDate)
+        loader.dismiss();
+        // this.dateRangeFormGroup.valueChanges.pipe(debounceTime(700)).subscribe(async (value)=>{
+        //   await loader.present();
+        //   await this.loadMultipleOutletData(value.startDate,this.dataProvider.allBusiness,value.endDate)
+        //   loader.dismiss();
+        // });
+      } else {
+        console.log("business",business);
+        this.loadData(new Date(),business);
+        this.dateRangeFormGroup.valueChanges.pipe(debounceTime(700)).subscribe(async (value)=>{
+          this.loadData(value.startDate,business,value.endDate);
+        });
+      }
+    });
+
+    // this.multipleOutletAnalyticsDataModified.subscribe(()=>{
+    //   console.log("Merging");
+    //   this.allOutletAnalyticsData = this.analyticsService.mergeAnalyticsData(this.multipleOutletAnalyticsData);
+    //   this.attachData(this.allOutletAnalyticsData);
+    //   console.log("this.multipleOutletAnalyticsData",this.multipleOutletAnalyticsData,this.allOutletAnalyticsData);
+    // });
+  }
+
+
+  async loadMultipleOutletData(startDate:Date,outlets:UserBusiness[],endDate?:Date){
+    // subscribe to all of them for data and then next the multipleOutletAnalyticsDataModified subject
+    this.multipleOutletAnalyticsData = [];
+    let receivedOutletCounter = 0;
+    for (let i = 0; i < outlets.length; i++) {
+      const outlet = outlets[i];
+      let data = await this.analyticsService.getAnalytics(startDate,outlet.businessId,endDate);
+      console.log("Getting data for ",data,this.multipleOutletAnalyticsData,i);
+      receivedOutletCounter++;
+      if (data){
+        this.multipleOutletAnalyticsData.push(data);
+      }
+      if (receivedOutletCounter == outlets.length){
+        this.allOutletAnalyticsData = this.analyticsService.mergeAnalyticsData(this.multipleOutletAnalyticsData);
+        console.log("ALL DONE: this.multipleOutletAnalyticsData",this.multipleOutletAnalyticsData,this.multipleOutletAnalyticsData.length,this.allOutletAnalyticsData);
+        this.attachData(this.allOutletAnalyticsData);
+      }
+    }
+  }
+
+  async refreshData(){
+    let business = await firstValueFrom(this.dataProvider.currentBusiness);
+    let loader =await this.loadingCtrl.create({
+      message:'Refreshing data please wait...'
+    });
+    await loader.present();
+    console.log({businessId:business.businessId});
+    this.analyzeAnalyticsForBusiness({businessId:business.businessId}).then((result:any)=>{
+      console.log("Result",result);
+      this.alertify.presentToast("Data refreshed successfully");
+      this.dataProvider.currentBusiness.next(business);
+      this.loadData(new Date(),business);
+    }).catch((e)=>{
+      this.alertify.presentToast("Error refreshing data");
+    }).finally(()=>{
+      loader.dismiss();
     });
   }
 
+
   async loadData(startDate:Date,business:UserBusiness,endDate?:Date){
-    let loader =await this.loadingCtrl.create({
+    let loader = await this.loadingCtrl.create({
       message: 'Please wait...',
     });
     await loader.present();
-    this.analyticsService.getAnalytics(startDate,business.businessId,endDate).then((analytics)=>{
+    this.analyticsService.getAnalytics(startDate,business.businessId,endDate,true).then((analytics)=>{
       this.analyticsData = analytics;
       console.log("Analytics data",this.analyticsData);
       this.attachData(this.analyticsData);
@@ -57,6 +155,7 @@ export class SalesPage implements OnInit {
       loader.dismiss();
     });
   }
+
   config: SwiperOptions = {
     slidesPerView: 3,
     spaceBetween: 50,
@@ -190,42 +289,6 @@ export class SalesPage implements OnInit {
   };
 
   ngOnInit(): void {
-    this.salesChartJS = new Chart(document.getElementById('salesData') as HTMLCanvasElement, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [],
-      },
-      options: {
-        plugins: {
-          legend:{
-            display:false
-          },
-        },
-      },
-    });
-
-    const swiper = new Swiper('.swiper', {
-      // Optional parameters
-      direction: 'horizontal',
-      loop: true,
-
-      // If we need pagination
-      pagination: {
-        el: '.swiper-pagination',
-      },
-
-      // Navigation arrows
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-
-      // And if we need scrollbar
-      scrollbar: {
-        el: '.swiper-scrollbar',
-      },
-    });
   }
 
   switchPaymentChannel(channel: string) {
@@ -235,7 +298,7 @@ export class SalesPage implements OnInit {
   attachData(data:AnalyticsData){
     if (data){
       if(this.salesChartJS){
-        console.log("data.salesChannels.all.hourlySales",data.salesChannels.all.hourlySales);
+        console.log("data.salesChannels.all.hourlySales",data.salesChannels.all.hourlySales,this.salesChartJS.ctx);
         // update the chart
         let labels = [];
         // generate labels for 24 hour format like 1:00 AM, 2:00 AM, 3:00 AM
@@ -293,7 +356,6 @@ export class SalesPage implements OnInit {
 
   }
 
-
   updateAllSlides(){
     this.swiperAnalytics?.swiperRef.update();
     this.swiperPaymentModes?.swiperRef.update();
@@ -302,6 +364,8 @@ export class SalesPage implements OnInit {
     this.swiperSuspiciousActivity?.swiperRef.update();
     this.userWiseActionSwiper?.swiperRef.update();
   }
+
+  
 
 }
 

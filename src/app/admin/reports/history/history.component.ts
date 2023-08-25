@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Fuse from 'fuse.js';
-import { Subject, debounceTime } from 'rxjs';
+import { Subject, debounceTime, first, firstValueFrom } from 'rxjs';
 import { BillConstructor, PrintableBill } from 'src/app/core/types/bill.structure';
 import { ReportService } from '../report.service';
 import { KotConstructor } from 'src/app/core/types/kot.structure';
@@ -14,6 +14,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { KotPreviewComponent } from 'src/app/widgets/kot-preview/kot-preview.component';
 import { ChangeDetectorRef } from '@angular/core';
+import { DownloadService } from 'src/app/core/services/download.service';
 
 @Component({
   selector: 'app-history',
@@ -21,6 +22,7 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./history.component.scss'],
 })
 export class HistoryComponent  implements OnInit {
+  reportLoadTime:Date = new Date();
   selectedModes = [
     {
       name: 'Dine In',
@@ -56,7 +58,7 @@ export class HistoryComponent  implements OnInit {
   filteredBills: ExtendedBillConstructor[] = [];
   fuseSearchInstance = new Fuse(this.bills, { keys: ['billNo', 'orderNo'] });
   numberSearchSubject: Subject<string> = new Subject<string>();
-  constructor(private reportService:ReportService,private modalController:ModalController,private dataProvider:DataProvider,private databaseService:DatabaseService,public changeDetectorRef:ChangeDetectorRef) {
+  constructor(private reportService:ReportService,private modalController:ModalController,private dataProvider:DataProvider,private databaseService:DatabaseService,public changeDetectorRef:ChangeDetectorRef,private downloadService:DownloadService) {
     this.numberSearchSubject.pipe(debounceTime(600)).subscribe((searchTerm) => {
       if (searchTerm.length > 0) {
         this.filteredBills = this.fuseSearchInstance
@@ -131,10 +133,12 @@ export class HistoryComponent  implements OnInit {
       this.totalSales += bill.billing.grandTotal;
       this.totalKots += bill.kots.length;
       this.totalBills++;
-      if (this.startingKotNumber == '') {
-        this.startingKotNumber = bill.kots[0].id;
+      if (bill.kots.length > 0){
+        if (this.startingKotNumber == '') {
+          this.startingKotNumber = bill.kots[0].id;
+        }
+        this.endingKotNumber = bill.kots[bill.kots.length - 1].id;
       }
-      this.endingKotNumber = bill.kots[bill.kots.length - 1].id;
     });
   }
 
@@ -147,6 +151,7 @@ export class HistoryComponent  implements OnInit {
       )
       .then((bills:any) => {
          console.log("bills",bills.docs);
+         this.reportLoadTime = new Date();
         this.bills = bills.docs.map((doc:any) => {
           let allProducts = doc.data().kots.reduce((acc:any, kot:any) => {
             acc.push(...kot.products);
@@ -264,6 +269,7 @@ export class HistoryComponent  implements OnInit {
       ],
     });
     doc.save('Bills Report.pdf');
+    this.downloadService.saveAndOpenFile(doc.output('datauristring'), 'Bill History' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
   }
 
   exportToExcel() {
@@ -306,6 +312,10 @@ export class HistoryComponent  implements OnInit {
     link.setAttribute('download', 'Bills Report.csv');
     document.body.appendChild(link); // Required for FF
     link.click();
+    let base64Data = btoa(csvContent);
+    this.downloadService.saveAndOpenFile(
+      base64Data,
+      'Bill Edits Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
   }
 
   async viewBill(billConstructor:BillConstructor){
@@ -439,6 +449,11 @@ export class HistoryComponent  implements OnInit {
     };
   }
   
+
+  async reloadReport(){
+    let business = await firstValueFrom(this.dataProvider.currentBusiness);
+    this.getReport(business.businessId);
+  }
 }
 export interface ExtendedBillConstructor extends BillConstructor {
   kotVisible: boolean;

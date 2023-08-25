@@ -5,22 +5,10 @@
     <p>The method you are looking for is not available.</p>
   </div>
   <ion-list *ngIf="currentPaymentMethod || !editMode">
-    <ion-breadcrumbs>
-      <ion-breadcrumb routerDirection="back" routerLink="../../../../settings">Settings</ion-breadcrumb>
-      <ion-breadcrumb routerDirection="back" routerLink="../../../payment">Payment Methods</ion-breadcrumb>
-      <ion-breadcrumb routerDirection="back" routerLink="." *ngIf="!editMode">Add Payment</ion-breadcrumb>
-      <ion-breadcrumb routerDirection="back" routerLink="." *ngIf="editMode">Edit Payment</ion-breadcrumb>
-    </ion-breadcrumbs>
-    <ion-item>
-      <ion-label>
-        <h1 *ngIf="!editMode">New Method</h1>
-        <h1 *ngIf="editMode">Edit Method</h1>
-      </ion-label>
-    </ion-item>
     <form [formGroup]="paymentMethodForm" (ngSubmit)="save()">
-      <input placeholder="Hotel Name" formControlName="name" type="text">
+      <input placeholder="Method name" formControlName="name" type="text">
       <div class="checkbox">
-        <label for="detail">Details Required</label>
+        <label for="detail">Phone Number Required</label>
         <!-- <input type="checkbox" #detailRequired formControlName="detail" id="detail" hidden>
         <i *ngIf="!detailRequired.checked" class="ri-checkbox-blank-circle-line"></i>
         <i *ngIf="detailRequired.checked" class="ri-checkbox-circle-fill"></i> -->
@@ -30,6 +18,7 @@
         <button type="button" routerLink="../../">Cancel</button>
         <button type="submit">Submit</button>
       </div>
+      <ion-button color="primary" shape="rounded" *ngIf="currentPaymentMethod" (click)="deleteMethod()" type="button">Delete</ion-button>
       <!-- <ion-list>
         <ion-item>
           <ion-label position="floating">Method Name <ion-text color="danger">*</ion-text></ion-label>

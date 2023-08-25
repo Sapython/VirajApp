@@ -4,6 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	gap:20px;
+	padding: 0px 20px;
 }
 h1{
 	font-size: 25px;
@@ -23,13 +24,13 @@ h1,h2,h3,h4,h5,h6{
 	align-items: center;
 }
 .dates{
-	display: grid;
-	grid-template-columns: 40% 1fr;
+	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	span{
-		padding:5px;
-		border-radius: 5px;
-		box-shadow: 0px 0px 10px rgba(138, 138, 138, 0.33) inset;
+		// padding:5px;
+		// border-radius: 5px;
+		// box-shadow: 0px 0px 10px rgba(138, 138, 138, 0.33) inset;
 	}
 }
 .summaryCard{
@@ -238,12 +239,12 @@ h1,h2,h3,h4,h5,h6{
 }
 .suspiciousActivity{
 	padding: 0px;
-	padding-bottom: 40px;
 	display: flex;
 	flex-direction: column;
 	padding: 10px;
 	font-size: 13px;
 	gap:10px;
+	padding-bottom: 40px;
 	.activity{
 		border-radius: 12px;
 		border: 1px solid #D8D8D8;
@@ -272,7 +273,7 @@ h1,h2,h3,h4,h5,h6{
 }
 .userWiseActions{
 	padding: 0px 10px;
-	padding-bottom: 10px;
+	padding-bottom: 40px;
 	.userActions{
 		border-radius: 12px;
 		border: 1px solid #D8D8D8;
@@ -335,4 +336,8 @@ h1,h2,h3,h4,h5,h6{
 	border-radius: 10px;
 	color:white;
 	order: 2;
+}
+.refresher{
+	display: flex;
+	align-items: center;
 }

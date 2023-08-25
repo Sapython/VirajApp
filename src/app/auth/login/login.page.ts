@@ -34,6 +34,7 @@ export class LoginPage implements OnInit {
       loader.present();
       try{
         let result = await this.auth.signInWithUserAndPassword(this.loginForm.value.username,this.loginForm.value.password)
+        
         console.log(result);
         if (result){
           this.alertify.presentToast('Logged in successfully')

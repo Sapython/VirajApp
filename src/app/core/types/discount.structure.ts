@@ -14,6 +14,10 @@ export interface CodeBaseDiscount {
   menus?: string[];
   accessLevels: string[];
   reason: string;
+  appliedBy?:{
+    user:string;
+    elevatedUser:string;
+  }
 }
 export interface DirectPercentDiscount {
   mode: 'directPercent';
@@ -21,6 +25,10 @@ export interface DirectPercentDiscount {
   totalAppliedDiscount: number;
   creationDate: Timestamp;
   reason: string;
+  appliedBy?:{
+    user:string;
+    elevatedUser:string;
+  }
 }
 
 export interface DirectFlatDiscount {
@@ -29,4 +37,8 @@ export interface DirectFlatDiscount {
   totalAppliedDiscount: number;
   creationDate: Timestamp;
   reason: string;
+  appliedBy?:{
+    user:string;
+    elevatedUser:string;
+  }
 }

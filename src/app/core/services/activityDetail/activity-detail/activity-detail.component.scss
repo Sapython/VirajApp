@@ -1,0 +1,47 @@
+section{
+	height: min-content;
+	.header{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0px 20px;
+	}
+	.item{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 20px;
+		border-bottom: 1px solid #eee;
+		p{
+			margin: 0px;
+		}
+		p:nth-child(1){
+			font-weight: 600;
+		}
+		p:last-child{
+			color: #777;
+		}
+	}
+	table.products {
+		border-collapse: collapse;
+		width: 100%;
+		tr {
+		  border-bottom: 1px solid #eee;
+		}
+		td:nth-child(1) {
+		  color: var(--Vrajera-primary);
+		}
+		td:nth-child(2) {
+		  color: var(--Vrajera-success);
+		}
+		td:nth-child(3) {
+		  color: var(--Vrajera-success);
+		}
+		td:nth-child(4) {
+		  color: var(--Vrajera-success);
+		}
+	  }
+}
+h3{
+	padding: 0px 20px;
+}
