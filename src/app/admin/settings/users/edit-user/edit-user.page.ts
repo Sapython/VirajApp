@@ -488,6 +488,22 @@ export class EditUserPage implements OnInit {
   ngOnInit() {
   }
 
+  async deleteUser(){
+    if (confirm("Are you sure you want to delete this user ?")){
+      let loader = await this.loader.create({message:'Deleting user'});
+      loader.present();
+      this.databaseService.deleteUser(this.currentUser.id,this.currentBusiness!.businessId).then((result)=>{
+        this.alertify.presentToast('User deleted successfully');
+        this.router.navigate(['admin','settings','users']);
+      }).catch((error)=>{
+        console.log('Error',error);
+        this.alertify.presentToast('Error deleting user');
+      }).finally(()=>{
+        loader.dismiss();
+      })
+    }
+  }
+
   search(event: any) {}
 
   async submit() {

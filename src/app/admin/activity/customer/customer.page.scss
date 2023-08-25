@@ -141,3 +141,24 @@ h1,h2,h3,h4,h5,h6{
 		filter: saturate(0);
 	}
 }
+.refresh{
+	display: flex;
+	padding: 15px 20px;
+	border-radius: 10px;
+	box-shadow: 2px 4px 20px rgba(0,0,0,0.2);
+	background: var(--Vrajera-primary);
+	color:white;
+	align-items: center;
+	gap: 10px;
+	justify-content: space-between;
+	ion-icon{
+		font-size: 20px;
+	}
+	&:active{
+		cursor: pointer;
+		background: #F5F5F5;
+		color:var(--Vrajera-primary);
+		border: 2px solid var(--Vrajera-primary);
+		box-shadow: none;
+	}
+}

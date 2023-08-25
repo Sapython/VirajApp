@@ -3,7 +3,9 @@ import { DataProvider } from 'src/app/core/services/data-provider/data-provider.
 import { DatabaseService } from 'src/app/core/services/database/database.service';
 import { CustomerInfo } from 'src/app/core/types/user.structure';
 import Fuse from 'fuse.js';
-import { Subject, debounce, debounceTime } from 'rxjs';
+import { Subject, debounce, debounceTime, firstValueFrom } from 'rxjs';
+import { Functions, httpsCallable } from '@angular/fire/functions';
+import { LoadingController } from '@ionic/angular';
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.page.html',
@@ -15,20 +17,25 @@ export class CustomerPage implements OnInit {
   recentlyAddedCustomers:CustomerInfo[] = [];
   filteredRecentlyAddedCustomers:CustomerInfo[] = [];
   searchSubject:Subject<string> = new Subject<string>();
+  lastCheckedAt:Date = new Date();
   stats = {
     totalCustomers:0,
     averageBills:0,
     newCustomers:0,
     existingCustomers:0,
   };
-  constructor(private dataProvider:DataProvider, private databaseService:DatabaseService) {
+  private calculateLoyaltyPointForBusiness = httpsCallable(
+    this.functions,
+    'calculateLoyaltyPointForBusiness'
+  );
+  constructor(private dataProvider:DataProvider, private databaseService:DatabaseService,private functions:Functions, private loadingCtrl:LoadingController) {
     this.dataProvider.currentBusiness.subscribe((data)=>{
       this.databaseService.getCustomers(data.businessId).then((customers)=>{
         console.log("customers",customers);
         this.customers = customers;
         this.recentlyAddedCustomers = customers.filter((customer)=>{
           // filter today's customer
-          return customer.updated?.toDate().toDateString() == new Date().toDateString();
+          return customer.created?.toDate().toDateString() == new Date().toDateString();
         });
         this.stats.totalCustomers = customers.length;
         this.stats.averageBills = this.roundOff(customers.reduce((acc, customer)=>{
@@ -59,6 +66,21 @@ export class CustomerPage implements OnInit {
         this.filteredRecentlyAddedCustomers = [];
       }
     })
+  }
+
+  async refresh(){
+    let currentBusiness = await firstValueFrom(this.dataProvider.currentBusiness);
+    let loader = await this.loadingCtrl.create({
+      message:"Refreshing...",
+    });
+    await loader.present();
+    this.calculateLoyaltyPointForBusiness({businessId:currentBusiness.businessId})
+    .then(()=>{
+      console.log("Loyalty points calculated");
+    })
+    .finally(async ()=>{
+      await loader.dismiss();
+    });
   }
 
   ngOnInit() {

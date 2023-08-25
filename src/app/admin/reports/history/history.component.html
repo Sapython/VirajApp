@@ -60,10 +60,10 @@
   </div>
   <div class="downloadOptions">
     <ion-button (click)="exportToPdf()" expand="block" fill="outline" shape="round">
-      Download PDF
+      <ion-icon name="download"></ion-icon> PDF
     </ion-button>
     <ion-button (click)="exportToExcel()" expand="block" fill="outline" shape="round">
-      Download Excel
+      <ion-icon name="download"></ion-icon> Excel
     </ion-button>
   </div>
   <div class="bills" *ngIf="!groupByTable && !groupByDate">

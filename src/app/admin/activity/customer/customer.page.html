@@ -22,7 +22,9 @@
 	<input type="search" (input)="searchSubject.next(searchBar.value)" #searchBar placeholder="Search Customer">
 	<i class="ri-search-2-line"></i>
 </div>
-
+<button class="refresh" (click)="refresh()">
+	Last checked at: {{lastCheckedAt | date:'short'}} <ion-icon name="refresh"></ion-icon>
+</button>
 <h2>Recently Added</h2>
 <div class="tableContainer fadeUp">
 	<table class="gm" [cellSpacing]="0" *ngIf="recentlyAddedCustomers.length > 0">

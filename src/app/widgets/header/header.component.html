@@ -1,7 +1,7 @@
 <div class="header">
   <span>
-    <button class="back" routerDirection="back" [routerLink]="backRoute" *ngIf="backRoute"><i class="ri-arrow-left-s-line"></i></button>
-    <img *ngIf="!backRoute" src="assets/Vrajera.png" alt="">
+    <button class="back" (click)="handleBack()" *ngIf="allowBack"><i class="ri-arrow-left-s-line"></i></button>
+    <img *ngIf="!allowBack" src="assets/Vrajera.png" alt="">
     <p class="virajFont">{{pageTitle}}</p>
   </span>
   <span>

@@ -50,9 +50,6 @@ export class AdminPage implements OnInit {
   }
 
   switchTabByIndex(index:number){
-    if(index == this.currentTabIndex){
-      return;
-    }
     if (index == 0){
       this.dataProvider.routeChanged.next('sales');
     } else {

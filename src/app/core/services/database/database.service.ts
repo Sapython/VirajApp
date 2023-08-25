@@ -820,7 +820,7 @@ export class DatabaseService {
       updateDate:new Date()
     }
     await addDoc(collection(this.firestore,'business/' + businessId + '/paymentMethods'),paymentMethod);
-    if (this.cachedData[businessId]){
+    if (this.cachedData[businessId] && this.cachedData[businessId]['paymentMethods']){
       this.cachedData[businessId]['paymentMethods'].push(paymentMethod);
     } else {
       this.cachedData[businessId] = {
@@ -832,7 +832,7 @@ export class DatabaseService {
 
   async updatePaymentMethod(businessId:string,paymentMethod:any){
     await updateDoc(doc(this.firestore,'business/' + businessId + '/paymentMethods/' + paymentMethod.id),{...paymentMethod});
-    if (this.cachedData[businessId]){
+    if (this.cachedData[businessId] && this.cachedData[businessId]['paymentMethods']){
       let index = this.cachedData[businessId]['paymentMethods'].findIndex((p:any)=>{return p.id == paymentMethod.id});
       this.cachedData[businessId]['paymentMethods'][index] = paymentMethod;
     } else {
@@ -844,7 +844,7 @@ export class DatabaseService {
 
   deletePaymentMethod(businessId:string,paymentMethodId:string){
     deleteDoc(doc(this.firestore,'business/' + businessId + '/paymentMethods/' + paymentMethodId));
-    if (this.cachedData[businessId]){
+    if (this.cachedData[businessId] && this.cachedData[businessId]['paymentMethods']){
       let index = this.cachedData[businessId]['paymentMethods'].findIndex((p:any)=>{return p.id == paymentMethodId});
       this.cachedData[businessId]['paymentMethods'].splice(index,1);
     }
@@ -939,6 +939,46 @@ export class DatabaseService {
     if (businessData){
       // add user
       businessData['users'].push(user);
+      // update business
+      await updateDoc(doc(this.firestore,'business/' + businessId),{...businessData});
+      // get current user
+      let currentUser = await getDoc(doc(this.firestore,'users/' + user.username));
+      if (currentUser.exists()){
+        // add business
+        currentUser.data()['business'].push({
+          businessId: businessId,
+          access: user.access,
+          address: businessData['address'],
+          city: businessData['city'],
+          joiningDate:new Date(),
+          name: businessData['hotelName'],
+          state: businessData['state']['state'],
+        });
+        // update user
+        await updateDoc(doc(this.firestore,'users/' + user.username),{
+          businesses: currentUser.data()['business']
+        })
+      } else {
+        alert("Failed to create new user. Please try again.");
+      }
+    }
+  }
+
+  async deleteUser(username:string,businessId:string){
+    let user = await getDoc(doc(this.firestore,'users/' + username));
+    if (user.exists()){
+      user.data()['business'].splice(user.data()['business'].findIndex((b:{businessId:string})=>{return b.businessId == businessId}),1);
+      await updateDoc(doc(this.firestore,'users/' + username),{
+        businesses: user.data()['business']
+      })
+    }
+    // get current business
+    let business = await getDoc(doc(this.firestore,'business/' + businessId));
+    let businessData = business.data();
+    console.log("businessData",businessData);
+    if (businessData){
+      // delete user
+      businessData['users'].splice(businessData['users'].findIndex((u:any)=>{return u.username == username}),1);
       // update business
       await updateDoc(doc(this.firestore,'business/' + businessId),{...businessData});
     }

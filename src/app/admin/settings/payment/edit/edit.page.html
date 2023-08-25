@@ -1,4 +1,4 @@
-<app-header [showOutletSelector]="false" [pageTitle]="editMode ? 'Edit': 'Add'" backRoute="../../"></app-header>
+<app-header [showOutletSelector]="false" [allowBack]="true" [pageTitle]="editMode ? 'Edit': 'Add'" ></app-header>
 <ion-content>
   <div class="notFound" *ngIf="!currentPaymentMethod && editMode">
     <h3>Not Found</h3>
@@ -9,16 +9,13 @@
       <input placeholder="Method name" formControlName="name" type="text">
       <div class="checkbox">
         <label for="detail">Phone Number Required</label>
-        <!-- <input type="checkbox" #detailRequired formControlName="detail" id="detail" hidden>
-        <i *ngIf="!detailRequired.checked" class="ri-checkbox-blank-circle-line"></i>
-        <i *ngIf="detailRequired.checked" class="ri-checkbox-circle-fill"></i> -->
         <ion-toggle #detailRequired formControlName="detail"></ion-toggle>
       </div>
       <div class="actions">
         <button type="button" routerLink="../../">Cancel</button>
         <button type="submit">Submit</button>
       </div>
-      <ion-button color="primary" shape="rounded" *ngIf="currentPaymentMethod" (click)="deleteMethod()" type="button">Delete</ion-button>
+      <ion-button color="primary" shape="rounded" *ngIf="currentPaymentMethod" (click)="deleteMethod()" type="button">Delete <ion-icon name="trash"></ion-icon></ion-button>
       <!-- <ion-list>
         <ion-item>
           <ion-label position="floating">Method Name <ion-text color="danger">*</ion-text></ion-label>

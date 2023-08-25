@@ -50,9 +50,9 @@ export class ItemWiseReportComponent {
             .then((bills) => {
               console.log('Bills ', bills);
               let products:any[] = [];
-              bills.forEach((bill:any) => {
-                bill.kots.forEach((kot:any) => {
-                  kot.products.forEach((product:any) => {
+              bills.forEach((bill) => {
+                bill.kots.forEach((kot) => {
+                  kot.products.forEach((product) => {
                     let findIndex = products.findIndex(
                       (res) => res.id == product.id,
                     );
@@ -81,6 +81,25 @@ export class ItemWiseReportComponent {
                   });
                 });
               });
+              this.totals.totalNumberOfProducts = products.length;
+              this.totals.totalNumberOfBills = bills.length;
+              this.totals.totalNumberOfKots = bills.reduce(
+                (acc, cur) => acc + cur.kots.length,
+                0,
+              );
+              this.totals.totalQuantity = products.reduce(
+                (acc, cur) => acc + cur.quantity,
+                0,
+              );
+              this.totals.totalPrice = products.reduce(
+                (acc, cur) => acc + cur.price,
+                0,
+              );
+              this.totals.totalAmount = products.reduce(
+                (acc, cur) => acc + (cur.price * cur.quantity),
+                0,
+              );
+              // total amount is the total price of all the products
               this.products.next(products);
               this.loading = false;
             });

@@ -1,4 +1,4 @@
-<app-header [showOutletSelector]="false" pageTitle="Users" backRoute="../"></app-header>
+<app-header [showOutletSelector]="false" [allowBack]="true" customBackProfileRoute="../../profile" pageTitle="Users"></app-header>
 <ion-content [fullscreen]="true">
   <main id="content">
     <div class="heading">
@@ -19,6 +19,7 @@
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </span>
       </div>
+      <div class="spacer"></div>
     </div>
   </main>
 </ion-content>

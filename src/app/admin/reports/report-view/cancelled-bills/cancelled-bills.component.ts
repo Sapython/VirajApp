@@ -1,23 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Subscription, ReplaySubject } from 'rxjs';
-import { ReportService } from '../../report.service';
-import { KotConstructor } from 'src/app/core/types/kot.structure';
 import { DataProvider } from 'src/app/core/services/data-provider/data-provider.service';
+import { KotConstructor } from 'src/app/core/types/kot.structure';
+import { ReportService } from '../../report.service';
 import { DownloadService } from 'src/app/core/services/download.service';
+import { timedBillConstructor } from '../report-view.component';
 
 @Component({
-  selector: 'app-combo',
-  templateUrl: './combo.component.html',
-  styleUrls: ['./combo.component.scss'],
+  selector: 'app-cancelled-bills',
+  templateUrl: './cancelled-bills.component.html',
+  styleUrls: ['./cancelled-bills.component.scss'],
 })
-export class ComboComponent {
+export class CancelledBillsComponent implements OnInit {
   downloadPDfSubscription: Subscription = Subscription.EMPTY;
   downloadExcelSubscription: Subscription = Subscription.EMPTY;
   reportChangedSubscription: Subscription = Subscription.EMPTY;
-  combos: ReplaySubject<comboReport[]> = new ReplaySubject<
-    comboReport[]
+  bills: ReplaySubject<timedBillConstructor[]> = new ReplaySubject<
+    timedBillConstructor[]
   >();
   billTotals:{
     numberOfBills:number,
@@ -51,7 +52,6 @@ export class ComboComponent {
     private dataProvider: DataProvider,
     private downloadService:DownloadService
   ) {}
-
   ngOnInit(): void {
     this.dataProvider.currentBusiness.subscribe((business) => {
       this.reportChangedSubscription = this.reportService.dataChanged.subscribe(
@@ -65,38 +65,71 @@ export class ComboComponent {
             )
             .then((bills) => {
               console.log('Bills ', bills);
-              let comboReports:comboReport[] = [];
-              bills.forEach((bill) => {
-                // check if bill has combo in any kot and add it to the list
-                bill.kots.forEach((kot) => {
-                  kot.products.forEach((combo) => {
-                    if(combo.itemType == 'combo'){
-                      let comboReportIndex = comboReports.findIndex((res)=>res.comboId == combo.id);
-                      if(comboReportIndex == -1){
-                        comboReports.push({
-                          comboName: combo.name,
-                          comboId:combo.id,
-                          quantity: combo.quantity,
-                          price: combo.price,
-                          total: combo.price * combo.quantity,
-                          selectedProducts:combo.combo.selectedCategories.map((category:any)=>{
-                            return category.selectedProducts
-                          }).flat(),
-                          bills: [bill.billNo as any],
-                          kots: [kot.id as any],
-                          billTotal: bill.billing.grandTotal,
-                        });
+              let productBaseSales: timedBillConstructor[] = bills.map((bill) => {
+                let totalBillTime = '';
+                if (bill?.createdDate?.toDate() && bill.settlement?.time?.toDate()) {
+                  let billTime = new Date(bill.createdDate?.toDate());
+                  // time difference between bill.createdDate time and bill.settlement.time
+                  let settlementTime = new Date(bill.settlement?.time.toDate());
+                  let timeDifference = settlementTime.getTime() - billTime.getTime();
+                  billTime = new Date(timeDifference);
+                  let hours = billTime.getHours();
+                  let minutes = billTime.getMinutes();
+                  let seconds = billTime.getSeconds();
+                  totalBillTime = `${hours}:${minutes}:${seconds}`;
+                };
+                let mergedProducts:any[] = [];
+                bill.kots.forEach((kot) =>{
+                  if (kot.products) {
+                    kot.products.forEach((product) => {
+                      let index = mergedProducts.findIndex((res) => res.id === product.id);
+                      if (index === -1) {
+                        mergedProducts.push(product);
                       } else {
-                        comboReports[comboReportIndex].quantity += combo.quantity;
-                        comboReports[comboReportIndex].total += combo.price * combo.quantity;
-                        comboReports[comboReportIndex].bills.push(bill.billNo as any);
-                        comboReports[comboReportIndex].kots.push(kot.id as any);
+                        mergedProducts[index].quantity += product.quantity;
                       }
-                    }
-                  });
+                    })
+                  }
                 });
+                return {
+                  ...bill,
+                  totalBillTime,
+                  mergedProducts
+                };
               });
-              this.combos.next(comboReports);
+              this.billTotals ={
+                numberOfBills:bills.reduce((acc, curr) => curr.billNo ? acc + 1 : acc, 0),
+                numberOfOrders:bills.reduce((acc, curr) => curr.orderNo ? acc + 1 : acc, 0),
+                total:bills.reduce((acc, curr) => acc + curr.billing.grandTotal, 0),
+                numberOfKots:bills.reduce((acc, curr) => acc + curr.kots.length, 0),
+                numberOfUsers:bills.reduce((acc, curr) => acc + curr.kots.length, 0),
+                totalBillTime:productBaseSales.filter((bill)=>bill.totalBillTime).reduce((acc, curr) => {
+                  let timeArray = curr.totalBillTime.split(':');
+                  let hours = parseInt(timeArray[0]);
+                  let minutes = parseInt(timeArray[1]);
+                  let seconds = parseInt(timeArray[2]);
+                  acc[0] += hours;
+                  acc[1] += minutes;
+                  acc[2] += seconds;
+                  if (acc[2] > 60) {
+                    acc[1] += Math.floor(acc[2] / 60);
+                    acc[2] = acc[2] % 60;
+                  }
+                  if (acc[1] > 60) {
+                    acc[0] += Math.floor(acc[1] / 60);
+                    acc[1] = acc[1] % 60;
+                  }
+                  console.log("Time formatted",acc);
+                  return acc;
+                }, [0, 0, 0]).join(':'),
+                totalAmount:bills.reduce((acc, curr) => acc + curr.billing.grandTotal, 0),
+                totalDiscount:bills.reduce((acc, curr) => acc + 
+                  curr.billing.discount.reduce((acc, curr) => acc + curr.totalAppliedDiscount, 0)
+                , 0),
+                totalTax:bills.reduce((acc, curr) => acc + curr.billing.taxes.reduce((acc, curr) => acc + curr.amount, 0), 0),
+              };
+              this.bills.next(productBaseSales);
+              this.loading = false;
             });
         },
       );
@@ -206,18 +239,4 @@ export class ComboComponent {
     this.downloadPDfSubscription.unsubscribe();
     this.downloadExcelSubscription.unsubscribe();
   }
-}
-
-
-
-interface comboReport {
-  comboName: string;
-  comboId:string;
-  quantity: number;
-  price: number;
-  total: number;
-  selectedProducts:any[];
-  bills: string[];
-  kots: string[];
-  billTotal: number;
 }

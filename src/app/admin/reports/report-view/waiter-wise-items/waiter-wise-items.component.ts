@@ -15,6 +15,8 @@ import { DownloadService } from 'src/app/core/services/download.service';
   styleUrls: ['./waiter-wise-items.component.scss'],
 })
 export class WaiterWiseItemsComponent {
+  totalProducts: number = 0;
+  userTotals:{user:string,numberOfOrders:number,sales:number,averageSales:number}[]=[];
   downloadPDfSubscription: Subscription = Subscription.EMPTY;
   downloadExcelSubscription: Subscription = Subscription.EMPTY;
   reportChangedSubscription: Subscription = Subscription.EMPTY;
@@ -95,6 +97,30 @@ export class WaiterWiseItemsComponent {
               });
               // we have to create a array of users
               console.log('users wise sales', products);
+              this.totalProducts = products.length;
+              this.userTotals = [];
+              products.forEach((res)=>{
+                let totalSales = 0;
+                let findIndex = this.userTotals.findIndex((user)=>user.user == res.users[0].user);
+                if(findIndex == -1){
+                  res.users.forEach((user)=>{
+                    totalSales += user.sales;
+                  });
+                  this.userTotals.push({
+                    user:res.users[0].user,
+                    numberOfOrders:res.users.length,
+                    sales:totalSales,
+                    averageSales:roundOffPipe(totalSales/res.users.length)
+                  });
+                } else {
+                  res.users.forEach((user)=>{
+                    totalSales += user.sales;
+                  });
+                  this.userTotals[findIndex].numberOfOrders += res.users.length;
+                  this.userTotals[findIndex].sales += totalSales;
+                  this.userTotals[findIndex].averageSales = roundOffPipe(this.userTotals[findIndex].sales/this.userTotals[findIndex].numberOfOrders);
+                }
+              });
               this.waiterWiseSales.next({
                 users: users,
                 productSales: products,
@@ -228,3 +254,7 @@ interface WaiterWiseSales {
   }[];
 }
 [];
+
+function roundOffPipe(num: number) {
+  return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+}

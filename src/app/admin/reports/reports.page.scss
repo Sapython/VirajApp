@@ -64,6 +64,7 @@
     span{
       display: flex;
       flex-direction: column;
+      width: 100%;
     }
     button{
       padding: 10px 20px;
@@ -73,4 +74,8 @@
       background: var(--Vrajera-primary);
     }
   }
+}
+
+.spacer{
+	height: 70px;
 }

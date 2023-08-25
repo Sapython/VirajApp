@@ -232,6 +232,16 @@ mat-date-range-input {
       white-space: nowrap;
     }
   }
+  table#reportTable tbody tr.totals{
+    background-color: var(--Vrajera-primary-shade);
+    color: var(--Vrajera-primary-text);
+    font-weight: bold;
+    font-size: var(--Vrajera-font-large);
+    white-space: nowrap;
+    td{
+      white-space: nowrap;
+    }
+  }
   .spacer {
     height: 200px;
   }

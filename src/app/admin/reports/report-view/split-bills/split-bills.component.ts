@@ -14,6 +14,17 @@ import { DownloadService } from 'src/app/core/services/download.service';
 })
 export class SplitBillsComponent {
   bills:Subject<ExtendedSplittedBill[]> = new Subject<ExtendedSplittedBill[]>();
+  splitBillTotals:{
+    totalSales:number,
+    splittedBillTotal:number,
+    totalTax:number;
+    totalDiscount:number;
+  }={
+    totalSales:0,
+    splittedBillTotal:0,
+    totalTax:0,
+    totalDiscount:0,
+  }
   constructor(private reportService:ReportService,private dataProvider:DataProvider,private downloadService:DownloadService) {
     this.dataProvider.currentBusiness.subscribe((business)=>{
       this.reportService.dataChanged.subscribe(()=>{
@@ -37,6 +48,10 @@ export class SplitBillsComponent {
               });
             }
           }));
+          this.splitBillTotals.totalSales = finalizedBills.reduce((acc,curr)=>acc+curr.originalBillAmount,0);
+        this.splitBillTotals.splittedBillTotal = finalizedBills.reduce((acc,curr)=>acc+curr.billing.grandTotal,0);
+        this.splitBillTotals.totalTax = finalizedBills.reduce((acc, curr) => acc + curr.billing.taxes.reduce((acc, curr) => acc + curr.amount, 0), 0);
+        this.splitBillTotals.totalDiscount = finalizedBills.reduce((acc, curr) => acc + curr.billing.discount.reduce((acc, curr) => acc + curr.totalAppliedDiscount, 0),0);
           this.bills.next(finalizedBills);
         });
       });

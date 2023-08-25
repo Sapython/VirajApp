@@ -1,12 +1,12 @@
 <app-header
   [showOutletSelector]="false"
   pageTitle="Biller"
-  backRoute="../"
+  [allowBack]="true"
 ></app-header>
 <ion-content [fullscreen]="true">
   <main id="content">
     <form [formGroup]="settingsForm" (ngSubmit)="submit()" *ngIf="editMode">
-      <input placeholder="Hotel Name" formControlName="hotelName" type="text">
+      <input placeholder="Outlet Name" formControlName="hotelName" type="text">
       <input placeholder="Phone" formControlName="phone" type="text">
       <textarea placeholder="Address" formControlName="address" type="text"></textarea>
       <input placeholder="GST Number" formControlName="gst" type="text">
@@ -23,7 +23,7 @@
       <input [disabled]="true" placeholder="GST Number" formControlName="gst" type="text">
       <input [disabled]="true" placeholder="FSSAI Number" formControlName="fssai" type="text"> -->
       <div class="label">
-        <p>Hotel Name</p>
+        <p>Outlet Name</p>
         <p>{{settingsForm.value.hotelName}}</p>
       </div>
       <div class="label">
@@ -45,6 +45,7 @@
       <div class="actions">
         <button type="submit">Edit Business Details</button>
       </div>
+      <div class="spacer"></div>
     </form>
   </main>
 </ion-content>

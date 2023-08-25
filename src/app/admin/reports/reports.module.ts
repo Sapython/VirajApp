@@ -39,6 +39,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { DateGroupPipe } from './history/date-group.pipe';
 import { ModePipe } from './history/mode.pipe';
 import { TableGroupsPipe } from './history/table-groups.pipe';
+import { CancelledBillsComponent } from './report-view/cancelled-bills/cancelled-bills.component';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { TableGroupsPipe } from './history/table-groups.pipe';
     HistoryComponent,
     DateGroupPipe,
     ModePipe,
-    TableGroupsPipe
+    TableGroupsPipe,
+    CancelledBillsComponent
   ],
 })
 export class ReportsPageModule {}

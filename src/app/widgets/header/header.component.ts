@@ -3,7 +3,7 @@ import { DataProvider } from 'src/app/core/services/data-provider/data-provider.
 import { UserBusiness } from 'src/app/core/types/user.structure';
 import Fuse from 'fuse.js';
 import { FormControl } from '@angular/forms';
-import { IonModal } from '@ionic/angular';
+import { IonModal, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Timestamp } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit{
   @Input() backRoute:string = '';
   @Input() showOutletSelector:boolean = true;
   @Input() customBackProfileRoute:string = '';
+  @Input() allowBack:boolean = false;
   filteredBusiness:UserBusiness[] = [];
   fuseInstance:Fuse<UserBusiness> = new Fuse([],{keys:['name']});
   allUserBusiness:UserBusiness = {
@@ -31,13 +32,29 @@ export class HeaderComponent implements OnInit{
     name:'All',
   }
   @ViewChild('outletSelector') modal:IonModal|undefined;
-  constructor(public dataProvider:DataProvider,private router:Router) {
+  constructor(public dataProvider:DataProvider,private navController:NavController,private router:Router) {
     this.dataProvider.currentBusiness.subscribe((business)=>{
       this.fuseInstance.setCollection(this.dataProvider.allBusiness);
     });
-    // this.router.events.subscribe((event)=>{
-    //   // if the route is admin/activity then 
-    // })
+  }
+
+  handleBack(){
+    this.navController.setDirection('back');
+    if (this.backRoute){
+      this.navController.navigateBack(this.backRoute);
+    } else {
+      console.log("History back",this.router.url);
+      if (this.router.url == '/admin/settings/users'){
+        this.router.navigate(['admin/settings']);
+        return
+      }
+      if (this.router.url == '/admin/settings/payment'){
+        this.router.navigate(['admin/settings']);
+        return
+      }
+      history.back();
+      console.log("History back");
+    }
   }
 
   ngOnInit() {

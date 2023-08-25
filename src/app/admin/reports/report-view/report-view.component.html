@@ -1,4 +1,4 @@
-<app-header backRoute="../../../reports" pageTitle="Vrajera"></app-header>
+<app-header [allowBack]="true" pageTitle="Vrajera"></app-header>
 <ion-content class="ion-padding">
   <div class="summaryCard">
     <h4 *ngIf="stage == 'billWise'">All Bills Wise Report</h4>
@@ -22,6 +22,8 @@
     <h4 *ngIf="stage == 'waiterWiseItems'">Waiter Wise Items Report</h4>
     <h4 *ngIf="stage == 'tableWiseActivity'">Table Wise Activity</h4>
     <h4 *ngIf="stage == 'tableWiseSales'">Table Wise Sales</h4>
+    <h4 *ngIf="stage == 'cancelledBills'">Cancelled Bills Report</h4>
+    <h4 *ngIf="stage == 'billSplits'">Splitted Bills Report</h4>
     <mat-date-range-picker hidden touchUi #picker></mat-date-range-picker>
     <mat-date-range-input
       tabindex="-1"

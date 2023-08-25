@@ -43,7 +43,7 @@ import { QuickBillComponent } from './core/services/activityDetail/quick-bill/qu
     provideFirestore(() => getFirestore()),
     provideFunctions(() => {
       let functions = getFunctions();
-      // connectFunctionsEmulator(functions, 'localhost', 5001);
+      connectFunctionsEmulator(functions, 'localhost', 5001);
       return functions;
     }),
     provideMessaging(() => getMessaging()),

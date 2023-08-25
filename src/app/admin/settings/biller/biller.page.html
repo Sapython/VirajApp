@@ -1,4 +1,4 @@
-<app-header [showOutletSelector]="false" pageTitle="Biller" backRoute="../"></app-header>
+<app-header [allowBack]="true" [showOutletSelector]="false" pageTitle="Biller"></app-header>
 <ion-content [fullscreen]="true">
   <ion-breadcrumbs>
     <ion-breadcrumb routerDirection="back" routerLink="../../settings">Settings</ion-breadcrumb>
@@ -41,6 +41,7 @@
       <ion-label>Allow to add multiple discounts to a bill</ion-label>
       <ion-toggle [(ngModel)]="settings.multipleDiscount" #multipleDiscount (ngModelChange)="updateSettings({ multipleDiscount: multipleDiscount.checked })"></ion-toggle>
     </ion-item>
+    <div class="spacer"></div>
   </ion-list>
   <ion-spinner name="crescent" *ngIf="!settings"></ion-spinner>
 </ion-content>

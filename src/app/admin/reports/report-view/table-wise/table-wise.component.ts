@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { KotConstructor } from 'src/app/core/types/kot.structure';
 import { Subscription, ReplaySubject } from 'rxjs';
 import { BillConstructor } from 'src/app/core/types/bill.structure';
@@ -13,13 +13,22 @@ import { DownloadService } from 'src/app/core/services/download.service';
   templateUrl: './table-wise.component.html',
   styleUrls: ['./table-wise.component.scss'],
 })
-export class TableWiseComponent {
+export class TableWiseComponent implements OnInit, OnDestroy {
   downloadPDfSubscription: Subscription = Subscription.EMPTY;
   downloadExcelSubscription: Subscription = Subscription.EMPTY;
   reportChangedSubscription: Subscription = Subscription.EMPTY;
   tableWiseSales: ReplaySubject<TableWiseSales[]> = new ReplaySubject<
     TableWiseSales[]
   >();
+  tableWiseTotals:{
+    sales:number,
+    numberOfOrders:number,
+    averageSales:number
+  }={
+    sales:0,
+    numberOfOrders:0,
+    averageSales:0
+  }
   loading: boolean = true;
   joinArray(bill: KotConstructor[]) {
     // join to form a string of ids with comma
@@ -42,20 +51,26 @@ export class TableWiseComponent {
             )
             .then((bills) => {
               console.log('Bills ', bills);
-              bills.forEach((bill) => {
+              bills.forEach((bill:any) => {
                 if (
                   tableWiseSales.findIndex(
-                    (res) => res.table == bill.table.name,
+                    (res:any) => {
+                      console.log('res.table ', res.table,bill.table);
+                      return (res.table.id ? res.table.id : res.table) == (bill.table.id ? bill.table.id : bill.table)
+                    },
                   ) == -1
                 ) {
                   tableWiseSales.push({
-                    table: bill.table.name,
+                    table: bill.table,
                     orders: [bill.billing.grandTotal],
                   });
                 } else {
                   tableWiseSales[
                     tableWiseSales.findIndex(
-                      (res) => res.table == bill.table.name,
+                      (res:any) => {
+                        console.log('res.table ', res.table,bill.table);
+                        return (res.table.id ? res.table.id : res.table) == (bill.table.id ? bill.table.id : bill.table)
+                      }
                     )
                   ].orders.push(bill.billing.grandTotal);
                 }
@@ -67,9 +82,15 @@ export class TableWiseComponent {
                   sales: res.orders.reduce((a, b) => a + b),
                   numberOfOrders: res.orders.length,
                   averageSales:
-                    res.orders.reduce((a, b) => a + b) / res.orders.length,
+                  this.roundOff(res.orders.reduce((a, b) => a + b) / res.orders.length),
                 });
               });
+              tableWiseSalesArray.forEach((res)=>{
+                this.tableWiseTotals.sales += res.sales;
+                this.tableWiseTotals.numberOfOrders += res.numberOfOrders;
+                this.tableWiseTotals.averageSales += res.averageSales;
+              })
+              console.log('Table Wise Sales ', tableWiseSalesArray);
               this.tableWiseSales.next(tableWiseSalesArray);
             });
         },
@@ -180,6 +201,10 @@ y = data.cursor.y;
     this.reportChangedSubscription.unsubscribe();
     this.downloadPDfSubscription.unsubscribe();
     this.downloadExcelSubscription.unsubscribe();
+  }
+
+  roundOff(number:number){
+    return Math.round((number + Number.EPSILON) * 100) / 100;
   }
   
 }

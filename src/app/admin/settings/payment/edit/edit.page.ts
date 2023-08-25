@@ -66,18 +66,34 @@ export class EditPage implements OnInit {
     });
     loader.present();
     let business = await firstValueFrom(this.dataProvider.currentBusiness);
-    if (this.paymentMethodForm.valid){
-      this.databaseService.addPaymentMethod(business.businessId,this.paymentMethodForm.value).then(()=>{
-        this.alertify.presentToast("Payment method saved");
+    if (this.editMode){
+      let data = {
+        ...this.currentPaymentMethod,
+        ...this.paymentMethodForm.value
+      }
+      this.databaseService.updatePaymentMethod(business.businessId,data).then(()=>{
+        this.alertify.presentToast("Payment method updated.");
         this.router.navigate(['admin/settings/payment']);
-      })
-      .catch((error)=>{
+      }).catch((error)=>{
         console.log("Error",error);
-        this.alertify.presentToast("Failed saving payment method");
-      })
-      .finally(()=>{
+        this.alertify.presentToast("Failed updating payment method");
+      }).finally(()=>{
         loader.dismiss();
-      });
+      })
+    } else {
+      if (this.paymentMethodForm.valid){
+        this.databaseService.addPaymentMethod(business.businessId,this.paymentMethodForm.value).then(()=>{
+          this.alertify.presentToast("Payment method saved");
+          this.router.navigate(['admin/settings/payment']);
+        })
+        .catch((error)=>{
+          console.log("Error",error);
+          this.alertify.presentToast("Failed saving payment method");
+        })
+        .finally(()=>{
+          loader.dismiss();
+        });
+      }
     }
   }
 

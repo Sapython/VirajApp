@@ -17,6 +17,7 @@ export interface CustomerInfo {
   lastBillAmount?: number;
   lastBillId?: string;
   updated:Timestamp;
+  created:Timestamp;
 }
 
 export interface UserConstructor {
