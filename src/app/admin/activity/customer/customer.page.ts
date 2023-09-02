@@ -44,6 +44,7 @@ export class CustomerPage implements OnInit {
         ,0)/customers.length);
         this.stats.newCustomers = this.recentlyAddedCustomers.length;
         this.stats.existingCustomers = this.stats.totalCustomers - this.stats.newCustomers;
+        console.log("recentlyAddedCustomers",this.recentlyAddedCustomers);
       });
     });
     this.searchSubject.pipe(debounceTime(600)).subscribe((query)=>{
