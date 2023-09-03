@@ -23,6 +23,8 @@ export class DaySummaryComponent {
       totalKots: 0,
       totalProducts: 0,
       totalDiscountedBills: 0,
+      totalCancelledBills: 0,
+      totalCancelledAmount: 0,
       totalNcBills: 0,
       totalNcAmount: 0,
       paymentChannels:{}
@@ -36,6 +38,8 @@ export class DaySummaryComponent {
       totalKots: 0,
       totalProducts: 0,
       totalDiscountedBills: 0,
+      totalCancelledBills: 0,
+      totalCancelledAmount: 0,
       totalNcBills: 0,
       totalNcAmount: 0,
       paymentChannels:{}
@@ -49,6 +53,8 @@ export class DaySummaryComponent {
       totalKots: 0,
       totalProducts: 0,
       totalDiscountedBills: 0,
+      totalCancelledBills: 0,
+      totalCancelledAmount: 0,
       totalNcBills: 0,
       totalNcAmount: 0,
       paymentChannels:{}
@@ -62,6 +68,8 @@ export class DaySummaryComponent {
       totalKots: 0,
       totalProducts: 0,
       totalDiscountedBills: 0,
+      totalCancelledBills: 0,
+      totalCancelledAmount: 0,
       totalNcBills: 0,
       totalNcAmount: 0,
       paymentChannels:{}
@@ -97,18 +105,20 @@ export class DaySummaryComponent {
               this.channelWiseDaySummary = {
                 all: {
                   totalBills: bills.length,
-                  totalAmount: this.roundOff(bills.reduce(
+                  totalAmount: this.roundOff(
+                    bills.filter((res) => res.stage != 'cancelled')
+                    .reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0,
                   )),
-                  netSales: this.roundOff(bills.reduce(
+                  netSales: this.roundOff(bills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0,
                   ) - bills.reduce(
                     (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                     0,
                   )),
-                  totalDiscount: this.roundOff(bills.reduce(
+                  totalDiscount: this.roundOff(bills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) =>
                       acc +
                       res.billing.discount.reduce(
@@ -117,7 +127,7 @@ export class DaySummaryComponent {
                       ),
                     0,
                   )),
-                  totalTax: this.roundOff(bills.reduce(
+                  totalTax: this.roundOff(bills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                     0,
                   )),
@@ -131,43 +141,51 @@ export class DaySummaryComponent {
                         .reduce((a, b) => a + b, 0),
                     )
                     .reduce((a, b) => a + b, 0),
-                  totalDiscountedBills: bills.filter(
+                  totalDiscountedBills: bills.filter((res) => res.stage != 'cancelled').filter(
                     (res) => res.billing.discount.length > 0,
                   ).length,
+                  totalCancelledBills: bills.filter(
+                    (res) => res.stage == 'cancelled',
+                  ).length,
+                  totalCancelledAmount: this.roundOff(bills
+                    .filter((res) => res.stage == 'cancelled')
+                    .reduce((acc, res) => acc + res.billing.grandTotal, 0)),
                   totalNcBills: bills.filter((res) => res.nonChargeableDetail)
                     .length,
                   totalNcAmount: this.roundOff(bills
                     .filter((res) => res.nonChargeableDetail)
                     .reduce((acc, res) => acc + res.billing.subTotal, 0)),
-                  paymentChannels: bills.reduce((acc, res) => {
-                    if (res.settlement?.payments){
-                      res.settlement.payments.forEach((payment) => {
-                        if (acc && acc[payment.paymentMethod]) {
-                          acc[payment.paymentMethod] += payment.amount;
-                        } else {
+                    paymentChannels: bills.reduce((acc:any, res) => {
+                      console.log("res?.settlement?.payments",res?.settlement?.payments);
+                      if (res?.settlement?.payments){
+                        res.settlement.payments.forEach((payment) => {
                           if (!acc){
-                            acc = {[payment.paymentMethod]:0}
+                            acc = {};
                           }
-                          acc[payment.paymentMethod] = payment.amount;
-                        }
-                      })
-                    }
-                  },{} as any)
+                          if (acc[payment.paymentMethod]) {
+                            acc[payment.paymentMethod] += payment.amount;
+                          } else {
+                            acc[payment.paymentMethod] = payment.amount;
+                          }
+                        });
+                        return acc;
+                      }
+                    },{})
                 },
                 dineIn: {
                   totalBills: dineInBills.length,
-                  totalAmount: this.roundOff(dineInBills.reduce(
+                  totalAmount: this.roundOff(dineInBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0,
                   )),
-                  netSales: this.roundOff(dineInBills.reduce(
+                  netSales: this.roundOff(dineInBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0,
-                  )- dineInBills.reduce(
+                  )- dineInBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                     0,
                   )),
-                  totalDiscount: this.roundOff(dineInBills.reduce(
+                  totalDiscount: this.roundOff(dineInBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) =>
                       acc +
                       res.billing.discount.reduce(
@@ -176,7 +194,7 @@ export class DaySummaryComponent {
                       ),
                     0,
                   )),
-                  totalTax: this.roundOff(dineInBills.reduce(
+                  totalTax: this.roundOff(dineInBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                     0,
                   )),
@@ -193,39 +211,47 @@ export class DaySummaryComponent {
                   totalDiscountedBills: dineInBills.filter(
                     (res) => res.billing.discount.length > 0,
                   ).length,
+                  totalCancelledBills: dineInBills.filter(
+                    (res) => res.stage == 'cancelled',
+                  ).length,
+                  totalCancelledAmount: this.roundOff(dineInBills
+                    .filter((res) => res.stage == 'cancelled')
+                    .reduce((acc, res) => acc + res.billing.grandTotal, 0)),
                   totalNcBills: dineInBills.filter(
                     (res) => res.nonChargeableDetail,
                   ).length,
                   totalNcAmount: this.roundOff(dineInBills
                     .filter((res) => res.nonChargeableDetail)
                     .reduce((acc, res) => acc + res.billing.subTotal, 0)),
-                  paymentChannels: dineInBills.reduce((acc, res) => {
-                    if (res.settlement?.payments){
-                      res.settlement.payments.forEach((payment) => {
-                        if (acc && acc[payment.paymentMethod]) {
-                          acc[payment.paymentMethod] += payment.amount;
-                        } else {
+                    // paymentChannels is like this {cash: 100, card: 200}
+                    paymentChannels: dineInBills.reduce((acc:any, res) => {
+                      if (res?.settlement?.payments){
+                        res.settlement.payments.forEach((payment) => {
                           if (!acc){
-                            acc = {[payment.paymentMethod]:0}
+                            acc = {};
                           }
-                          acc[payment.paymentMethod] = payment.amount;
-                        }
-                      })
-                    }
-                  },{} as any)
+                          if (acc[payment.paymentMethod]) {
+                            acc[payment.paymentMethod] += payment.amount;
+                          } else {
+                            acc[payment.paymentMethod] = payment.amount;
+                          }
+                        });
+                        return acc;
+                      }
+                    },{})
                 },
                 takeaway: {
                   totalBills: takeawayBills.length,
-                  totalAmount: this.roundOff(takeawayBills.reduce(
+                  totalAmount: this.roundOff(takeawayBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0)),
-                  netSales: this.roundOff(takeawayBills.reduce(
+                  netSales: this.roundOff(takeawayBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0) - takeawayBills.reduce(
                       (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                       0,
                     )),
-                  totalDiscount: this.roundOff(takeawayBills.reduce(
+                  totalDiscount: this.roundOff(takeawayBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) =>
                       acc +
                       res.billing.discount.reduce(
@@ -234,7 +260,7 @@ export class DaySummaryComponent {
                       ),
                     0,
                   )),
-                  totalTax: this.roundOff(takeawayBills.reduce(
+                  totalTax: this.roundOff(takeawayBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                     0,
                   )),
@@ -248,44 +274,51 @@ export class DaySummaryComponent {
                         .reduce((a, b) => a + b, 0),
                     )
                     .reduce((a, b) => a + b, 0),
-                  totalDiscountedBills: takeawayBills.filter(
+                  totalDiscountedBills: takeawayBills.filter((res) => res.stage != 'cancelled').filter(
                     (res) => res.billing.discount.length > 0,
                   ).length,
+                  totalCancelledBills: takeawayBills.filter(
+                    (res) => res.stage == 'cancelled',
+                  ).length,
+                  totalCancelledAmount: this.roundOff(takeawayBills
+                    .filter((res) => res.stage == 'cancelled')
+                    .reduce((acc, res) => acc + res.billing.grandTotal, 0)),
                   totalNcBills: takeawayBills.filter(
                     (res) => res.nonChargeableDetail,
                   ).length,
                   totalNcAmount: this.roundOff(takeawayBills
                     .filter((res) => res.nonChargeableDetail)
                     .reduce((acc, res) => acc + res.billing.subTotal, 0)),
-                    paymentChannels: takeawayBills.reduce((acc, res) => {
-                      if (res.settlement?.payments){
+                    paymentChannels: takeawayBills.reduce((acc:any, res) => {
+                      if (res?.settlement?.payments){
                         res.settlement.payments.forEach((payment) => {
-                          if (acc && acc[payment.paymentMethod]) {
+                          if (!acc){
+                            acc = {};
+                          }
+                          if (acc[payment.paymentMethod]) {
                             acc[payment.paymentMethod] += payment.amount;
                           } else {
-                            if (!acc){
-                              acc = {[payment.paymentMethod]:0}
-                            }
                             acc[payment.paymentMethod] = payment.amount;
                           }
-                        })
+                        });
+                        return acc;
                       }
-                    },{} as any)
+                    },{})
                 },
                 online: {
                   totalBills: onlineBills.length,
-                  totalAmount: this.roundOff(onlineBills.reduce(
+                  totalAmount: this.roundOff(onlineBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0,
                   )),
-                  netSales: this.roundOff(onlineBills.reduce(
+                  netSales: this.roundOff(onlineBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.grandTotal,
                     0,
-                  ) - onlineBills.reduce(
+                  ) - onlineBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) => acc + res.billing.taxes.reduce((a, b) => a + b.amount, 0),
                     0,
                   )),
-                  totalDiscount: this.roundOff(onlineBills.reduce(
+                  totalDiscount: this.roundOff(onlineBills.filter((res) => res.stage != 'cancelled').reduce(
                     (acc, res) =>
                       acc +
                       res.billing.discount.reduce(
@@ -311,26 +344,33 @@ export class DaySummaryComponent {
                   totalDiscountedBills: onlineBills.filter(
                     (res) => res.billing.discount.length > 0,
                   ).length,
+                  totalCancelledAmount: this.roundOff(onlineBills
+                    .filter((res) => res.stage == 'cancelled')
+                    .reduce((acc, res) => acc + res.billing.grandTotal, 0)),
+                  totalCancelledBills: onlineBills.filter(
+                    (res) => res.stage == 'cancelled',
+                  ).length,
                   totalNcBills: onlineBills.filter(
                     (res) => res.nonChargeableDetail,
                   ).length,
                   totalNcAmount: this.roundOff(onlineBills
                     .filter((res) => res.nonChargeableDetail)
                     .reduce((acc, res) => acc + res.billing.subTotal, 0)),
-                    paymentChannels: onlineBills.reduce((acc, res) => {
-                      if (res.settlement?.payments){
+                    paymentChannels: onlineBills.reduce((acc:any, res) => {
+                      if (res?.settlement?.payments){
                         res.settlement.payments.forEach((payment) => {
-                          if (acc && acc[payment.paymentMethod]) {
+                          if (!acc){
+                            acc = {};
+                          }
+                          if (acc[payment.paymentMethod]) {
                             acc[payment.paymentMethod] += payment.amount;
                           } else {
-                            if (!acc){
-                              acc = {[payment.paymentMethod]:0}
-                            }
                             acc[payment.paymentMethod] = payment.amount;
                           }
-                        })
+                        });
+                        return acc;
                       }
-                    },{} as any)
+                    },{})
                 },
               };
             })

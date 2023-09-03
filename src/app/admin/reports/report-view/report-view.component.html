@@ -139,7 +139,10 @@
       <app-split-bills *ngIf="stage == 'billSplits'"></app-split-bills>
       <div class="loader"></div>
       <div class="spacer"></div>
-      <img src="assets/notFound.jpg" alt="" *ngIf="reportService.noData">
+      <div class="noData" *ngIf="reportService.noData">
+        <i class="ri-inbox-2-fill"></i>
+        <p>No Data Available</p>
+      </div>
     </div>
   </div>
   <br />

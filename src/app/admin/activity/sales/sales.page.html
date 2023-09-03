@@ -1,14 +1,5 @@
 <ng-container *ngIf="(this.dataProvider.currentBusiness|async)?.businessId=='all'">
   <p>Showing analytics for all outlets.</p>
-  <!-- <div class="paddedBody">
-    <div class="dates">
-      <p>Refreshing</p>
-      <ion-spinner name="crescent" *ngIf="refreshing"></ion-spinner>
-      <ion-button fill="clear" *ngIf="!refreshing">
-        <ion-icon slot="icon-only" name="refresh"></ion-icon>
-      </ion-button>
-    </div>
-  </div> -->
   <div class="summaryCard fadeUp">
     <div class="paddedBody">
       <div class="dates" (click)="picker.open()">
@@ -111,6 +102,18 @@
                 : "INR" }}</strong
               >
             </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelledBills}}</span
+                >
+              </p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -170,6 +173,18 @@
                 >{{ this.allOutletAnalyticsData?.salesChannels?.dineIn?.totalTaxes |
                 currency : "INR" }}</strong
               >
+            </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelledBills}}</span
+                >
+              </p>
             </div>
           </div>
         </ng-template>
@@ -232,6 +247,18 @@
                 currency : "INR" }}</strong
               >
             </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelledBills}}</span
+                >
+              </p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -291,6 +318,18 @@
                 >{{ this.allOutletAnalyticsData?.salesChannels?.online?.totalTaxes |
                 currency : "INR" }}</strong
               >
+            </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.allOutletAnalyticsData?.salesChannels?.all?.totalCancelledBills}}</span
+                >
+              </p>
             </div>
           </div>
         </ng-template>
@@ -362,12 +401,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.all?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.all?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -396,12 +433,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.dineIn?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.dineIn?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -430,12 +465,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.takeaway?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.takeaway?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -464,12 +497,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.online?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.allOutletAnalyticsData?.salesChannels?.online?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
       </swiper>
@@ -542,7 +573,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills
@@ -652,7 +683,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills
@@ -762,7 +793,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.highRange?.bills
@@ -869,7 +900,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.highRange?.bills
@@ -1003,12 +1034,10 @@
               </p>
             </ng-container>
           </div>
-          <img
-            *ngIf="!(analyticsData?.salesChannels?.all?.suspiciousActivities)?.length"
-            src="assets/notFound.jpg"
-            class="noData"
-            alt=""
-          />
+          <div class="noData" *ngIf="!(analyticsData?.salesChannels?.all?.suspiciousActivities)?.length">
+            <i class="ri-inbox-2-fill"></i>
+            <p>No Data Available</p>
+          </div>
         </ng-template>
         <ng-template swiperSlide>
           <div class="suspiciousActivity">
@@ -1044,12 +1073,10 @@
                 {{dineInSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
-            <img
-              *ngIf="!(analyticsData?.salesChannels?.dineIn?.suspiciousActivities)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(analyticsData?.salesChannels?.dineIn?.suspiciousActivities)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1086,12 +1113,10 @@
                 {{takeawaySuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
-            <img
-              *ngIf="!(analyticsData?.salesChannels?.takeaway?.suspiciousActivities)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(analyticsData?.salesChannels?.takeaway?.suspiciousActivities)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1128,12 +1153,10 @@
                 {{onlineSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
-            <img
-              *ngIf="!(analyticsData?.salesChannels?.online?.suspiciousActivities)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(analyticsData?.salesChannels?.online?.suspiciousActivities)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
       </swiper>
@@ -1143,7 +1166,7 @@
     <div class="heading">
       <p>User Wise Actions</p>
       <select
-        (change)="slideNext(actionSelector.value,userWiseActionSwiper)"
+        (change)="slideNext(actionSelector.value,userWiseActionSwiper);this.updateAllSlides();"
         #actionSelector
         [value]="0"
       >
@@ -1177,7 +1200,7 @@
                 <p class="name">{{user.userId}}</p>
                 <select
                   #activityMode
-                  (change)="updateSlides(userWiseActionSwiper)"
+                  (change)="updateSlides(userWiseActionSwiper);this.updateAllSlides();"
                 >
                   <option value="kots">KOTs</option>
                   <option value="bills">Bills</option>
@@ -1218,12 +1241,10 @@
                       {{allUserWiseActionsKotsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.kots)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.kots)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='bills'">
                   <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsBillsSeeMore hidden>
@@ -1269,12 +1290,10 @@
                       <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsBillsSeeMore.click()">
                         {{allUserWiseActionsBillsSeeMore.checked ? 'See Less' :  'See More'}}
                       </p>
-                    <img
-                      *ngIf="!(user.actions?.bills)?.length"
-                      src="assets/notFound.jpg"
-                      class="noData"
-                      alt=""
-                    />
+                    <div class="noData" *ngIf="!(user.actions?.bills)?.length">
+                      <i class="ri-inbox-2-fill"></i>
+                      <p>No Data Available</p>
+                    </div>
                   </ng-container>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='discounts'">
@@ -1305,12 +1324,10 @@
                       {{allUserWiseActionsDiscountsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.discounts)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.discounts)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='settlements'">
                   <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsSettlementsSeeMore hidden>
@@ -1337,12 +1354,10 @@
                       {{allUserWiseActionsSettlementsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.settlements)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.settlements)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='ncs'">
                   <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsNcsSeeMore hidden>
@@ -1364,12 +1379,10 @@
                       {{allUserWiseActionsNcsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.ncs)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.ncs)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
               </div>
             </div>
@@ -1491,6 +1504,18 @@
                 : "INR" }}</strong
               >
             </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.analyticsData?.salesChannels?.all?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.analyticsData?.salesChannels?.all?.totalCancelledBills}}</span
+                >
+              </p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1550,6 +1575,18 @@
                 >{{ this.analyticsData?.salesChannels?.dineIn?.totalTaxes |
                 currency : "INR" }}</strong
               >
+            </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.analyticsData?.salesChannels?.dineIn?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.analyticsData?.salesChannels?.dineIn?.totalCancelledBills}}</span
+                >
+              </p>
             </div>
           </div>
         </ng-template>
@@ -1612,6 +1649,18 @@
                 currency : "INR" }}</strong
               >
             </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.analyticsData?.salesChannels?.takeaway?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.analyticsData?.salesChannels?.takeaway?.totalCancelledBills}}</span
+                >
+              </p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1671,6 +1720,18 @@
                 >{{ this.analyticsData?.salesChannels?.online?.totalTaxes |
                 currency : "INR" }}</strong
               >
+            </div>
+            <div class="card cancelled">
+              <p>Cancelled</p>
+              <strong>
+                {{ this.analyticsData?.salesChannels?.online?.totalCancelled | currency : "INR" }}
+                </strong>
+              <p>
+                Bills
+                <span
+                  >{{this.analyticsData?.salesChannels?.online?.totalCancelledBills}}</span
+                >
+              </p>
             </div>
           </div>
         </ng-template>
@@ -1742,12 +1803,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.analyticsData?.salesChannels?.all?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.analyticsData?.salesChannels?.all?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1776,12 +1835,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.analyticsData?.salesChannels?.dineIn?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.analyticsData?.salesChannels?.dineIn?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1810,12 +1867,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.analyticsData?.salesChannels?.takeaway?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.analyticsData?.salesChannels?.takeaway?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -1844,12 +1899,10 @@
                 </div>
               </div>
             </div>
-            <img
-              *ngIf="!(this.analyticsData?.salesChannels?.online?.paymentReceived | keyvalue)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(this.analyticsData?.salesChannels?.online?.paymentReceived | keyvalue)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
       </swiper>
@@ -1922,7 +1975,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills
@@ -2032,7 +2085,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills
@@ -2142,7 +2195,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.highRange?.bills
@@ -2249,7 +2302,7 @@
             </div>
             <div class="channel">
               <div class="title">
-                <p>Low Range</p>
+                <p>High Range</p>
                 <p>
                   {{
                   (analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.highRange?.bills
@@ -2356,7 +2409,7 @@
               </p>
             </div>
             <hr />
-            <select hidden #mostSellingToggle>
+            <select hidden #mostSellingToggle (change)="this.updateAllSlides();">
               <option value="byPrice"></option>
               <option value="byQuantity"></option>
             </select>
@@ -2404,12 +2457,10 @@
               </ng-container>
             </div>
             <!-- no data -->
-            <img
-              *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
             <div
               class="modes"
               *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
@@ -2437,12 +2488,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.all?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2452,7 +2501,7 @@
               <p>Category Name</p>
             </div>
             <hr />
-            <select hidden #mostSellingToggle>
+            <select hidden #mostSellingToggle (change)="this.updateAllSlides();">
               <option value="byPrice"></option>
               <option value="byQuantity"></option>
             </select>
@@ -2499,12 +2548,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
             <div
               class="modes"
               *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
@@ -2532,12 +2579,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.dineIn?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2547,7 +2592,7 @@
               <p>Category Name</p>
             </div>
             <hr />
-            <select hidden #mostSellingToggle>
+            <select hidden #mostSellingToggle (change)="this.updateAllSlides();">
               <option value="byPrice"></option>
               <option value="byQuantity"></option>
             </select>
@@ -2594,12 +2639,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
             <div
               class="modes"
               *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
@@ -2627,12 +2670,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.takeaway?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2642,7 +2683,7 @@
               <p>Category Name</p>
             </div>
             <hr />
-            <select hidden #mostSellingToggle>
+            <select hidden #mostSellingToggle (change)="this.updateAllSlides();">
               <option value="byPrice"></option>
               <option value="byQuantity"></option>
             </select>
@@ -2689,12 +2730,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byPrice'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
             <div
               class="modes"
               *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byQuantity?.length && mostSellingToggle.value == 'byQuantity'"
@@ -2722,12 +2761,10 @@
                 </p>
               </ng-container>
             </div>
-            <img
-              *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="analyticsData?.salesChannels?.online?.itemWiseSales?.byPrice?.length==0 && mostSellingToggle.value == 'byQuantity'">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
       </swiper>
@@ -2794,12 +2831,10 @@
               </p>
             </ng-container>
           </div>
-          <img
-            *ngIf="!(analyticsData?.salesChannels?.all?.suspiciousActivities)?.length"
-            src="assets/notFound.jpg"
-            class="noData"
-            alt=""
-          />
+          <div class="noData" *ngIf="!(analyticsData?.salesChannels?.all?.suspiciousActivities)?.length">
+            <i class="ri-inbox-2-fill"></i>
+            <p>No Data Available</p>
+          </div>
         </ng-template>
         <ng-template swiperSlide>
           <div class="suspiciousActivity">
@@ -2838,12 +2873,10 @@
                 {{dineInSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
-            <img
-              *ngIf="!(analyticsData?.salesChannels?.dineIn?.suspiciousActivities)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(analyticsData?.salesChannels?.dineIn?.suspiciousActivities)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2883,12 +2916,10 @@
                 {{takeawaySuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
-            <img
-              *ngIf="!(analyticsData?.salesChannels?.takeaway?.suspiciousActivities)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(analyticsData?.salesChannels?.takeaway?.suspiciousActivities)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2928,12 +2959,10 @@
                 {{onlineSuspiciousActivitySeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
-            <img
-              *ngIf="!(analyticsData?.salesChannels?.online?.suspiciousActivities)?.length"
-              src="assets/notFound.jpg"
-              class="noData"
-              alt=""
-            />
+            <div class="noData" *ngIf="!(analyticsData?.salesChannels?.online?.suspiciousActivities)?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
       </swiper>
@@ -3018,12 +3047,10 @@
                       {{allUserWiseActionsKotsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.kots)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.kots)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='bills'">
                   <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsBillsSeeMore hidden>
@@ -3069,12 +3096,10 @@
                       <p class="seeMore" *ngIf="i == 5" (click)="allUserWiseActionsBillsSeeMore.click()">
                         {{allUserWiseActionsBillsSeeMore.checked ? 'See Less' :  'See More'}}
                       </p>
-                    <img
-                      *ngIf="!(user.actions?.bills)?.length"
-                      src="assets/notFound.jpg"
-                      class="noData"
-                      alt=""
-                    />
+                    <div class="noData" *ngIf="!(user.actions?.bills)?.length">
+                      <i class="ri-inbox-2-fill"></i>
+                      <p>No Data Available</p>
+                    </div>
                   </ng-container>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='discounts'">
@@ -3105,12 +3130,10 @@
                       {{allUserWiseActionsDiscountsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.discounts)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.discounts)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='settlements'">
                   <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsSettlementsSeeMore hidden>
@@ -3137,12 +3160,10 @@
                       {{allUserWiseActionsSettlementsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.settlements)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.settlements)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="activityMode.value=='ncs'">
                   <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsNcsSeeMore hidden>
@@ -3164,12 +3185,10 @@
                       {{allUserWiseActionsNcsSeeMore.checked ? 'See Less' :  'See More'}}
                     </p>
                   </ng-container>
-                  <img
-                    *ngIf="!(user.actions?.ncs)?.length"
-                    src="assets/notFound.jpg"
-                    class="noData"
-                    alt=""
-                  />
+                  <div class="noData" *ngIf="!(user.actions?.ncs)?.length">
+                    <i class="ri-inbox-2-fill"></i>
+                    <p>No Data Available</p>
+                  </div>
                 </ng-container>
               </div>
             </div>

@@ -27,6 +27,19 @@ export class DataProvider {
   allBusiness:UserBusiness[] = [];
   selectedMenu:Menu|undefined;
 
+  resetVariables(){
+    this.loggedIn = false;
+    this.loggedInSubject = new Subject<boolean>();
+    this.currentBusiness = new ReplaySubject<UserBusiness>();
+    this.menuLoadedSubject = new ReplaySubject<Menu>();
+    this.currentSettings = new ReplaySubject<any>();
+    this.routeChanged = new ReplaySubject<string>();
+    this.loading = false;
+    this.currentUser = undefined;
+    this.allBusiness = [];
+    this.selectedMenu = undefined;
+  }
+
   selectMainOutlet(){
     this.currentBusiness.next(this.allBusiness[0]);
   }

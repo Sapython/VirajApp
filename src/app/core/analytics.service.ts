@@ -9,6 +9,10 @@ export class AnalyticsService {
   cachedData:{date:Date,data:AnalyticsData,business:string}[] = [];
   constructor(private firestore:Firestore) { }
 
+  resetVariables(){
+    this.cachedData = [];
+  }
+
   async getAnalytics(date:Date,businessId:string,endDate?:Date,forcedNew?:boolean){
     // console.log("Analytics date",'business',businessId,'analytics',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString());
     // return docData(docRef);
@@ -41,9 +45,14 @@ export class AnalyticsService {
       // get all docRefs
       let data = await Promise.all(docRefs.map(async (docRef)=>{
         // first find it in cached data if the date exists
-        let cachedData = this.cachedData.find((cachedData)=>{
+        let cachedDatas = this.cachedData.filter((cachedData)=>{
           return cachedData.date.getFullYear() === docRef.date.getFullYear() && cachedData.date.getMonth() === docRef.date.getMonth() && cachedData.date.getDate() === docRef.date.getDate() && cachedData.business === businessId;
         });
+        // sort cachedDatas based upon date and then set cachedData = latest cachedData
+        cachedDatas.sort((a,b)=>{
+          return b.date.getTime() - a.date.getTime();
+        });
+        let cachedData = cachedDatas[0];
         if (cachedData && cachedData.data && !forcedNew){
           // console.log("Cloning",cachedData);
           return cachedData;
@@ -66,9 +75,13 @@ export class AnalyticsService {
       }).filter((data)=>data));
     } else {
       // first find it in cached data if the date exists
-      let cachedData = this.cachedData.find((cachedData)=>{
+      let cachedDatas = this.cachedData.filter((cachedData)=>{
         return cachedData.date.getFullYear() === date.getFullYear() && cachedData.date.getMonth() === date.getMonth() && cachedData.date.getDate() === date.getDate() && cachedData.business === businessId;
       });
+      cachedDatas.sort((a,b)=>{
+        return b.date.getTime() - a.date.getTime();
+      });
+      let cachedData = cachedDatas[0];
       if (cachedData && cachedData.data && !forcedNew){
         // console.log("Returning",cachedData.data);
         return cachedData.data as AnalyticsData;
@@ -101,6 +114,8 @@ export class AnalyticsService {
           totalDiscountedBills: 0,
           totalNcBills: 0,
           totalUnsettledBills: 0,
+          totalCancelled:0,
+          totalCancelledBills:0,
           hourlySales: [...new Array(24).fill(0)],
           averageHourlySales: [],
           paymentReceived: {},
@@ -156,6 +171,8 @@ export class AnalyticsService {
           totalDiscountedBills: 0,
           totalNcBills: 0,
           totalUnsettledBills: 0,
+          totalCancelled:0,
+          totalCancelledBills:0,
           hourlySales: [],
           averageHourlySales: [],
           paymentReceived: {},
@@ -211,6 +228,8 @@ export class AnalyticsService {
           totalDiscountedBills: 0,
           totalNcBills: 0,
           totalUnsettledBills: 0,
+          totalCancelled:0,
+          totalCancelledBills:0,
           hourlySales: [],
           averageHourlySales: [],
           paymentReceived: {},
@@ -266,6 +285,8 @@ export class AnalyticsService {
           totalDiscountedBills: 0,
           totalNcBills: 0,
           totalUnsettledBills: 0,
+          totalCancelled:0,
+          totalCancelledBills:0,
           hourlySales: [],
           averageHourlySales: [],
           paymentReceived: {},
@@ -340,6 +361,8 @@ export class AnalyticsService {
       analyticsData.salesChannels.all.totalUnsettledBills += analytics.salesChannels.all.totalUnsettledBills;
       analyticsData.salesChannels.all.totalDiscountedBills += analytics.salesChannels.all.totalDiscountedBills;
       analyticsData.salesChannels.all.totalNcBills += analytics.salesChannels.all.totalNcBills;
+      analyticsData.salesChannels.all.totalCancelled += analytics.salesChannels.all.totalCancelled;
+      analyticsData.salesChannels.all.totalCancelledBills += analytics.salesChannels.all.totalCancelledBills;
       analyticsData.salesChannels.all.hourlySales = analyticsData.salesChannels.all.hourlySales.map((value, index) => {
         return value + analytics.salesChannels.all.hourlySales[index];
       });
@@ -372,6 +395,8 @@ export class AnalyticsService {
       analyticsData.salesChannels.dineIn.totalUnsettledBills += analytics.salesChannels.dineIn.totalUnsettledBills;
       analyticsData.salesChannels.dineIn.totalDiscountedBills += analytics.salesChannels.dineIn.totalDiscountedBills;
       analyticsData.salesChannels.dineIn.totalNcBills += analytics.salesChannels.dineIn.totalNcBills;
+      analyticsData.salesChannels.dineIn.totalCancelled += analytics.salesChannels.dineIn.totalCancelled;
+      analyticsData.salesChannels.dineIn.totalCancelledBills += analytics.salesChannels.dineIn.totalCancelledBills;
       analyticsData.salesChannels.dineIn.hourlySales = analyticsData.salesChannels.dineIn.hourlySales.map((value, index) => {
         return value + analytics.salesChannels.dineIn.hourlySales[index];
       }
@@ -405,6 +430,8 @@ export class AnalyticsService {
       analyticsData.salesChannels.takeaway.totalUnsettledBills += analytics.salesChannels.takeaway.totalUnsettledBills;
       analyticsData.salesChannels.takeaway.totalDiscountedBills += analytics.salesChannels.takeaway.totalDiscountedBills;
       analyticsData.salesChannels.takeaway.totalNcBills += analytics.salesChannels.takeaway.totalNcBills;
+      analyticsData.salesChannels.takeaway.totalCancelled += analytics.salesChannels.dineIn.totalCancelled;
+      analyticsData.salesChannels.takeaway.totalCancelledBills += analytics.salesChannels.dineIn.totalCancelledBills;
       analyticsData.salesChannels.takeaway.hourlySales = analyticsData.salesChannels.takeaway.hourlySales.map((value, index) => {
         return value + analytics.salesChannels.takeaway.hourlySales[index];
       }
@@ -438,6 +465,8 @@ export class AnalyticsService {
       analyticsData.salesChannels.online.totalUnsettledBills += analytics.salesChannels.online.totalUnsettledBills;
       analyticsData.salesChannels.online.totalDiscountedBills += analytics.salesChannels.online.totalDiscountedBills;
       analyticsData.salesChannels.online.totalNcBills += analytics.salesChannels.online.totalNcBills;
+      analyticsData.salesChannels.online.totalCancelled += analytics.salesChannels.dineIn.totalCancelled;
+      analyticsData.salesChannels.online.totalCancelledBills += analytics.salesChannels.dineIn.totalCancelledBills;
       analyticsData.salesChannels.online.hourlySales = analyticsData.salesChannels.online.hourlySales.map((value, index) => {
         return value + analytics.salesChannels.online.hourlySales[index];
       }

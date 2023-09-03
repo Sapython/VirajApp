@@ -89,12 +89,9 @@ export class SalesPage implements OnInit {
       }
     });
 
-    // this.multipleOutletAnalyticsDataModified.subscribe(()=>{
-    //   console.log("Merging");
-    //   this.allOutletAnalyticsData = this.analyticsService.mergeAnalyticsData(this.multipleOutletAnalyticsData);
-    //   this.attachData(this.allOutletAnalyticsData);
-    //   console.log("this.multipleOutletAnalyticsData",this.multipleOutletAnalyticsData,this.allOutletAnalyticsData);
-    // });
+    setInterval(()=>{
+      this.updateAllSlides();
+    },300);
   }
 
 
@@ -345,10 +342,12 @@ export class SalesPage implements OnInit {
       console.log("swiperRef",swiperRef,index);
       swiperRef.swiperRef.slideTo(Number(index));
     }
+    this.updateAllSlides();
   }
 
   slideChanged(selector:any,swiperContainer:SwiperComponent|undefined){
     selector.value = (swiperContainer?.swiperRef.activeIndex) || 0;
+    this.updateAllSlides();
   }
 
   updateSlides(billWiseSwiperContainer:any){
@@ -416,6 +415,8 @@ export interface ChannelWiseAnalyticsData {
   totalDiscount: number;
   totalNC: number;
   totalTaxes: number;
+  totalCancelled: number;
+  totalCancelledBills: number;
   hourlySales: number[];
   averageHourlySales: number[];
   totalSettledBills: number;

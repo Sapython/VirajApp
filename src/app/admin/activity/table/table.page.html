@@ -74,7 +74,10 @@
           <p>{{table.billPrice | currency:'INR'}}</p>
           <p>{{table.timeSpent}}</p>
         </div>
-        <img src="assets/notFound.jpg" *ngIf="tables.length == 0" alt="">
+        <div class="noData" *ngIf="tables.length == 0">
+          <i class="ri-inbox-2-fill"></i>
+          <p>No Data Available</p>
+        </div>
       </div>
     </ng-container>
   </div>
@@ -120,7 +123,10 @@
           <p>{{table.timeSpent}}</p>
         </div>
       </ng-container>
-      <img src="assets/notFound.jpg" *ngIf="takeawayTokens.length == 0" alt="">
+      <div class="noData" *ngIf="takeawayTokens.length == 0">
+        <i class="ri-inbox-2-fill"></i>
+        <p>No Data Available</p>
+      </div>
     </div>
   </div>
 </div>
@@ -165,7 +171,10 @@
           <p>{{table.timeSpent}}</p>
         </div>
       </ng-container>
-      <img src="assets/notFound.jpg" *ngIf="onlineTokens.length == 0" alt="">
+      <div class="noData" *ngIf="onlineTokens.length == 0">
+        <i class="ri-inbox-2-fill"></i>
+        <p>No Data Available</p>
+      </div>
     </div>
   </div>
 </div>

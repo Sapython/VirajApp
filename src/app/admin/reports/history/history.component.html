@@ -88,7 +88,10 @@
         </ion-button>
       </div>
     </div>
-    <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
+    <div class="noData" *ngIf="bills.length == 0">
+      <i class="ri-inbox-2-fill"></i>
+      <p>No Data Available</p>
+    </div>
   </div>
   <ion-accordion-group *ngIf="groupByTable && !groupByDate">
     <ion-accordion [value]="table.table" *ngFor="
@@ -121,7 +124,10 @@
             </ion-button>
           </div>
         </div>
-        <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
+        <div class="noData" *ngIf="bills.length == 0">
+          <i class="ri-inbox-2-fill"></i>
+          <p>No Data Available</p>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -156,7 +162,10 @@
             </ion-button>
           </div>
         </div>
-        <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
+        <div class="noData" *ngIf="bills.length == 0">
+          <i class="ri-inbox-2-fill"></i>
+          <p>No Data Available</p>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>
@@ -198,7 +207,10 @@
                 </ion-button>
               </div>
             </div>
-            <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
+            <div class="noData" *ngIf="bills.length == 0">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ion-accordion>
       </ion-accordion-group>
@@ -224,7 +236,10 @@
             </ion-button>
           </div>
         </div>
-        <img src="assets/notFound.jpg" alt="Not Found" *ngIf="bills.length == 0" class="notFound">
+        <div class="noData" *ngIf="bills.length == 0">
+          <i class="ri-inbox-2-fill"></i>
+          <p>No Data Available</p>
+        </div>
       </div>
     </ion-accordion>
   </ion-accordion-group>

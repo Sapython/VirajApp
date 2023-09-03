@@ -6,6 +6,8 @@ import { DataProvider } from '../data-provider/data-provider.service';
 import { UserRecord } from '../../types/user.structure';
 import { Router } from '@angular/router';
 import { AlertsAndNotificationsService } from '../alerts-and-notification/alerts-and-notifications.service';
+import { DatabaseService } from '../database/database.service';
+import { AnalyticsService } from '../../analytics.service';
 const debug:boolean = false;
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class AuthService {
   private authenticateActionFunction = httpsCallable(this.functions, 'authenticateAction');
   private addExistingUserFunction = httpsCallable(this.functions, 'addExistingUser');
   private verifyOtpExistingUserFunction = httpsCallable(this.functions, 'verifyOtpExistingUser');
-  constructor(private functions: Functions,private auth:Auth,private dataProvider:DataProvider,private firestore:Firestore,private router:Router,private alertify:AlertsAndNotificationsService) {
+  constructor(private functions: Functions,private auth:Auth,private dataProvider:DataProvider,private firestore:Firestore,private router:Router,private alertify:AlertsAndNotificationsService,private databaseService:DatabaseService,private analyticsService:AnalyticsService) {
     this.dataProvider.loading = true;
     onAuthStateChanged(this.auth, async (user) => {
       console.log("USER changed",user);
@@ -236,6 +238,9 @@ export class AuthService {
   }
 
   logOut(){
+    this.dataProvider.resetVariables();
+    this.databaseService.resetVariables();
+    this.analyticsService.resetVariables();
     localStorage.clear();
     this.router.navigate(['/login']);
     return signOut(this.auth);

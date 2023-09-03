@@ -63,18 +63,14 @@
 					*ngIf="filteredRecentlyAddedCustomers.length ? filteredRecentlyAddedCustomers.length == 0 : recentlyAddedCustomers.length == 0"
 				>
 					No Customers Found
-					<img src="assets/notFound.jpg" class="noData" alt="">
+					<i class="ri-inbox-2-fill"></i>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	<div class="notFound" *ngIf="recentlyAddedCustomers.length==0">
 		<p>No New Customers Found</p>
-		<img
-          src="assets/notFound.jpg"
-          class="noData"
-          alt=""
-        />
+		<i class="ri-inbox-2-fill"></i>
 	</div>
 </div>
 
@@ -116,18 +112,14 @@
 					*ngIf="filteredCustomers.length ? filteredCustomers.length == 0 : customers.length == 0"
 				>
 					No Customers Found
-					<img src="assets/notFound.jpg" class="noData" alt="">
+					<i class="ri-inbox-2-fill"></i>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	<div class="notFound" *ngIf="customers.length==0">
 		<p>No Customers Found</p>
-		<img
-          src="assets/notFound.jpg"
-          class="noData"
-          alt=""
-        />
+		<i class="ri-inbox-2-fill"></i>
 	</div>
 </div>
 <div class="bottomSpacer"></div>

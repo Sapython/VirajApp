@@ -28,7 +28,7 @@
       <p>Verified</p>
       <p color="primary">{{user.emailVerified ? "Verified" : 'Not-Verified'}}</p>
     </div>
-    <div class="settingItem item" id="open-logout-sheet">
+    <div class="settingItem item" id="open-logout-sheet-profile">
       <ion-icon slot="start" name="log-out"></ion-icon>
       <p>Logout</p>
       <ion-icon name="chevron-forward-outline"></ion-icon>
@@ -36,7 +36,7 @@
   <ion-action-sheet
     mode="ios"
     (didDismiss)="logout($event)"
-    trigger="open-logout-sheet"
+    trigger="open-logout-sheet-profile"
     header="Actions"
     [buttons]="logOutActionsSheetButtons"
   ></ion-action-sheet>
