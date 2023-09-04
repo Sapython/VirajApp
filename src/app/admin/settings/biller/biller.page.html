@@ -41,6 +41,10 @@
       <ion-label>Allow to add multiple discounts to a bill</ion-label>
       <ion-toggle [(ngModel)]="settings.multipleDiscount" #multipleDiscount (ngModelChange)="updateSettings({ multipleDiscount: multipleDiscount.checked })"></ion-toggle>
     </ion-item>
+    <!-- <ion-item>
+      <ion-label>Delete bill instead of cancel when finalized.</ion-label>
+      <ion-toggle [(ngModel)]="settings.deleteCancelledBill" #deleteCancelledBill (ngModelChange)="updateSettings({ deleteCancelledBill: deleteCancelledBill.checked })"></ion-toggle>
+    </ion-item> -->
     <div class="spacer"></div>
   </ion-list>
   <ion-spinner name="crescent" *ngIf="!settings"></ion-spinner>

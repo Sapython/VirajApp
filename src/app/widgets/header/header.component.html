@@ -7,7 +7,6 @@
   <span>
     <div class="outlet" (click)="showOutletSelector ? outletSelector.present() : {}">
       <p>{{(dataProvider.currentBusiness | async)?.name | titlecase}}</p>
-      <!-- <ion-icon name="chevron-down-outline"></ion-icon> -->
       <i class="ri-arrow-down-s-line" *ngIf="showOutletSelector"></i>
     </div>
     <button [routerLink]="customBackProfileRoute ? customBackProfileRoute : '../profile'" class="profile"><i class="ri-user-fill"></i></button>

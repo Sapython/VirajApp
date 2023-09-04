@@ -138,21 +138,23 @@
       </tr>
       <tr class="totals">
         <!-- totals -->
-        <td>Bills: {{ billTotals.numberOfBills }}</td>
-        <td>Orders: {{ billTotals.numberOfOrders }}</td>
-        <td>Total: {{ billTotals.total | currency : "INR" }}</td>
+        <td>Bills: {{billTotals.numberOfBills}}</td>
+        <td>Orders: {{billTotals.numberOfOrders}}</td>
+        <td>Total: {{ billTotals.total | currency:'INR'}}</td>
         <td>Number Of KOTS: {{ billTotals.numberOfKots }}</td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td>Total Bill Time: {{ billTotals.totalBillTime }}</td>
         <td></td>
-        <td>
-          Total Discount: {{ billTotals.totalDiscount | currency : "INR" }}
-        </td>
+        <td>Total Discount: {{ billTotals.totalDiscount | currency:'INR' }}</td>
         <td></td>
-        <td>Total Tax: {{ billTotals.totalTax | currency : "INR" }}</td>
+        <td></td>
+        <td></td>
+        <td>Total Tax: {{ billTotals.totalTax | currency:'INR' }}</td>
       </tr>
     </ng-container>
   </tbody>

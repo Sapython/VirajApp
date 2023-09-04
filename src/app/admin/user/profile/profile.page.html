@@ -28,6 +28,10 @@
       <p>Verified</p>
       <p color="primary">{{user.emailVerified ? "Verified" : 'Not-Verified'}}</p>
     </div>
+    <div class="item">
+      <p>Delete bill after finalize when cancelled</p>
+      <p color="primary"><ion-toggle [(ngModel)]="settings.deleteCancelledBill" #deleteCancelledBill (ngModelChange)="updateSettings({ deleteCancelledBill: deleteCancelledBill.checked })"></ion-toggle></p>
+    </div>
     <div class="settingItem item" id="open-logout-sheet-profile">
       <ion-icon slot="start" name="log-out"></ion-icon>
       <p>Logout</p>
