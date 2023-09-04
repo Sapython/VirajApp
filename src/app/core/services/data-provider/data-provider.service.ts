@@ -18,10 +18,10 @@ export class DataProvider {
   }
   loggedIn:boolean = false;
   loggedInSubject:Subject<boolean> = new Subject<boolean>();;
-  currentBusiness:ReplaySubject<UserBusiness> = new ReplaySubject<UserBusiness>();
-  menuLoadedSubject:ReplaySubject<Menu> = new ReplaySubject<Menu>();
-  currentSettings:ReplaySubject<any> = new ReplaySubject<any>();
-  routeChanged:ReplaySubject<string> = new ReplaySubject<string>();
+  currentBusiness:ReplaySubject<UserBusiness> = new ReplaySubject<UserBusiness>(1);
+  menuLoadedSubject:ReplaySubject<Menu> = new ReplaySubject<Menu>(1);
+  currentSettings:ReplaySubject<any> = new ReplaySubject<any>(1);
+  routeChanged:ReplaySubject<string> = new ReplaySubject<string>(1);
   loading:boolean = false;
   currentUser:User|undefined;
   allBusiness:UserBusiness[] = [];
@@ -30,10 +30,10 @@ export class DataProvider {
   resetVariables(){
     this.loggedIn = false;
     this.loggedInSubject = new Subject<boolean>();
-    this.currentBusiness = new ReplaySubject<UserBusiness>();
-    this.menuLoadedSubject = new ReplaySubject<Menu>();
-    this.currentSettings = new ReplaySubject<any>();
-    this.routeChanged = new ReplaySubject<string>();
+    this.currentBusiness = new ReplaySubject<UserBusiness>(1);
+    this.menuLoadedSubject = new ReplaySubject<Menu>(1);
+    this.currentSettings = new ReplaySubject<any>(1);
+    this.routeChanged = new ReplaySubject<string>(1);
     this.loading = false;
     this.currentUser = undefined;
     this.allBusiness = [];

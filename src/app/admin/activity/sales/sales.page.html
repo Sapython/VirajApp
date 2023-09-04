@@ -1993,7 +1993,7 @@
             </div>
           </div>
           <div class="modes" *ngIf="typeSelector.value == 'table'">
-            <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseTableWiseSeeMore hidden>
+            <input type="checkbox" (change)="updateAllSlides()" #billWiseTableWiseSeeMore hidden>
             <ng-container
               *ngFor="let table of analyticsData?.salesChannels?.all?.billWiseSales?.tableWise; let i = index"
             >
@@ -2015,6 +2015,10 @@
                 {{billWiseTableWiseSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.all?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
           <div class="modes" *ngIf="typeSelector.value == 'time'">
             <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseTimeWiseSeeMore hidden>
@@ -2043,6 +2047,10 @@
                 {{billWiseTimeWiseSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.all?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2125,6 +2133,10 @@
                 {{billWiseTableWiseSalesSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.dineIn?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
           <div class="modes" *ngIf="typeSelector.value == 'time'">
             <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseDineinTableWiseTimeSeeMore hidden>
@@ -2153,6 +2165,10 @@
                 {{billWiseDineinTableWiseTimeSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.dineIn?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2235,6 +2251,10 @@
                 {{billWiseTakeawayTableWiseTimeSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.takeaway?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
           <div class="modes" *ngIf="typeSelector.value == 'time'">
             <ng-container
@@ -2260,6 +2280,10 @@
               </div>
               <p *ngIf="i == 10"></p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.takeaway?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
         <ng-template swiperSlide>
@@ -2342,6 +2366,10 @@
                 {{billWiseOnlineTableWiseTimeSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.online?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
           <div class="modes" *ngIf="typeSelector.value == 'time'">
             <input type="checkbox" name="" id="" (change)="updateAllSlides()" #billWiseSalesOnlineSeeMore hidden>
@@ -2370,6 +2398,10 @@
                 {{billWiseSalesOnlineSeeMore.checked ? 'See Less' :  'See More'}}
               </p>
             </ng-container>
+            <div class="noData" *ngIf="!analyticsData?.salesChannels?.online?.billWiseSales?.tableWise?.length">
+              <i class="ri-inbox-2-fill"></i>
+              <p>No Data Available</p>
+            </div>
           </div>
         </ng-template>
       </swiper>

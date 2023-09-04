@@ -3,7 +3,6 @@
   <main id="content">
     <app-tabs [tabs]="['reports','history']" #tab></app-tabs>
     <br />
-
     <ng-container *ngIf="tab.currentTab == 'reports'">
       <div class="search gm">
         <input
@@ -16,11 +15,6 @@
       </div>
       <div class="grid">
         <div class="reportCard" data-aos="fade-up" *ngFor="let format of filteredReportFormats">
-          <!-- <div class="detail">
-            <div class="icon">
-              <i class="ri-file-text-line"></i>
-            </div>
-          </div> -->
           <span>
             <h4>{{format.title}}</h4>
             <p>{{format.description}}</p>

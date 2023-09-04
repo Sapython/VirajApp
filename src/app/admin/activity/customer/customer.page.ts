@@ -30,22 +30,7 @@ export class CustomerPage implements OnInit {
   );
   constructor(private dataProvider:DataProvider, private databaseService:DatabaseService,private functions:Functions, private loadingCtrl:LoadingController) {
     this.dataProvider.currentBusiness.subscribe((data)=>{
-      this.databaseService.getCustomers(data.businessId).then((customers)=>{
-        console.log("customers",customers);
-        this.customers = customers;
-        this.recentlyAddedCustomers = customers.filter((customer)=>{
-          // filter today's customer
-          return customer.created?.toDate().toDateString() == new Date().toDateString();
-        });
-        this.stats.totalCustomers = customers.length;
-        this.stats.averageBills = this.roundOff(customers.reduce((acc, customer)=>{
-          return acc + (customer.totalSales || 0);
-        }
-        ,0)/customers.length);
-        this.stats.newCustomers = this.recentlyAddedCustomers.length;
-        this.stats.existingCustomers = this.stats.totalCustomers - this.stats.newCustomers;
-        console.log("recentlyAddedCustomers",this.recentlyAddedCustomers);
-      });
+      this.loadCustomers(data.businessId);
     });
     this.searchSubject.pipe(debounceTime(600)).subscribe((query)=>{
       if(query){
@@ -74,6 +59,7 @@ export class CustomerPage implements OnInit {
     let loader = await this.loadingCtrl.create({
       message:"Refreshing...",
     });
+    this.loadCustomers(currentBusiness.businessId);
     await loader.present();
     this.calculateLoyaltyPointForBusiness({businessId:currentBusiness.businessId})
     .then(()=>{
@@ -89,6 +75,25 @@ export class CustomerPage implements OnInit {
 
   roundOff(value:number){
     return Math.round((value + Number.EPSILON) * 100) / 100;
+  }
+
+  loadCustomers(businessId:string){
+    this.databaseService.getCustomers(businessId).then((customers)=>{
+      console.log("customers",customers);
+      this.customers = customers;
+      this.recentlyAddedCustomers = customers.filter((customer)=>{
+        // filter today's customer
+        return customer.created?.toDate().toDateString() == new Date().toDateString();
+      });
+      this.stats.totalCustomers = customers.length;
+      this.stats.averageBills = this.roundOff(customers.reduce((acc, customer)=>{
+        return acc + (customer.totalSales || 0);
+      }
+      ,0)/customers.length);
+      this.stats.newCustomers = this.recentlyAddedCustomers.length;
+      this.stats.existingCustomers = this.stats.totalCustomers - this.stats.newCustomers;
+      console.log("recentlyAddedCustomers",this.recentlyAddedCustomers);
+    });
   }
 
 }

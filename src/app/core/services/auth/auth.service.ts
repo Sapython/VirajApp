@@ -263,12 +263,20 @@ export class AuthService {
   }
 
   private filteredBusiness(business:any[]){
-    return business.filter((business:any)=>{
+    let filteredBusiness =  business.filter((business:any)=>{
       if(business.access.accessLevel == 'admin' || (business.access.accessType == 'role' && business.access.role == 'admin')){
         return true;
       } else {
         return false;
       }
     });
+    // remove duplicates filteredBusiness
+    let uniqueBusiness = filteredBusiness.filter((business:any,index:number)=>{
+      let businessIndex = filteredBusiness.findIndex((business2:any)=>{
+        return business.businessId == business2.businessId;
+      });
+      return businessIndex == index;
+    })
+    return uniqueBusiness;
   }
 }

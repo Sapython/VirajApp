@@ -1,4 +1,4 @@
-<table id="reportTable">
+<table id="reportTable" *ngIf="((kotEditsActivity | async)?.length)">
   <thead>
     <tr>
       <th>Kot No</th>
@@ -50,13 +50,10 @@
         </ol>
       </td>
     </tr>
-    <tr *ngIf="((kotEditsActivity|async) || []).length == 0">
-      <td
-        colspan="10"
-        style="text-align: center; font-weight: bold; font-size: 1.2rem;color:#aaa"
-      >
-        <p>No Data Available</p>
-      </td>
-    </tr>
   </tbody>
 </table>
+
+<div class="noData" *ngIf="!((kotEditsActivity | async)?.length)">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

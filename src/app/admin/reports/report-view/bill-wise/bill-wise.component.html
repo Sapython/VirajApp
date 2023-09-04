@@ -1,4 +1,4 @@
-<table class="styled-table" id="reportTable" *ngIf="!loading">
+<table class="styled-table" id="reportTable" *ngIf="(bills|async)?.length">
   <thead>
     <tr>
       <th>Bill No</th>
@@ -129,19 +129,10 @@
         <td></td>
         <td>Total Tax: {{ billTotals.totalTax | currency:'INR' }}</td>
       </tr>
-      <tr *ngIf="((bills | async) || []).length == 0">
-        <td
-          colspan="12"
-          style="
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #aaa;
-          "
-        >
-          <p>No Data Available</p>
-        </td>
-      </tr>
     </ng-container>
   </tbody>
 </table>
+<div class="noData" *ngIf="!(bills|async)?.length">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

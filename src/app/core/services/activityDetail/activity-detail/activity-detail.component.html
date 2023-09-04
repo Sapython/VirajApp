@@ -156,30 +156,34 @@
       </div>
     </ng-container>
     <ng-container *ngIf="activity?.type == 'billDiscounted'">
-      <div class="item">
-        <p>Customer Name</p>
-        <p>{{ activity?.data?.name }}</p>
-      </div>
-      <div class="item">
-        <p>Customer Phone</p>
-        <p>{{ activity?.data?.phone }}</p>
-      </div>
-      <div class="item">
-        <p>Reason</p>
-        <p>{{ activity?.data?.reason }}</p>
-      </div>
-      <div class="item">
-        <p>Time</p>
-        <p>{{ activity?.data?.time }}</p>
-      </div>
-      <div class="item">
-        <p>User Access</p>
-        <p>{{ activity?.data?.user.access }}</p>
-      </div>
-      <div class="item">
-        <p>Username</p>
-        <p>{{ activity?.data?.user.username }}</p>
-      </div>
+      <ng-container *ngFor="let discount of activity?.data?.discounts; let i = index;">
+        <hr>
+        <h3>Discount {{i+1}}</h3>
+        <div class="item">
+          <p>Customer Name</p>
+          <p>{{ activity?.data?.customerInfo?.name }}</p>
+        </div>
+        <div class="item">
+          <p>Customer Phone</p>
+          <p>{{ activity?.data?.customerInfo?.phone }}</p>
+        </div>
+        <div class="item">
+          <p>Reason</p>
+          <p>{{ discount?.reason }}</p>
+        </div>
+        <div class="item">
+          <p>Value</p>
+          <p>{{ discount?.value }}</p>
+        </div>
+        <div class="item">
+          <p>Applied Value</p>
+          <p>{{ discount?.totalAppliedDiscount }}</p>
+        </div>
+        <div class="item">
+          <p>Username</p>
+          <p>{{ activity?.data?.user }}</p>
+        </div>
+      </ng-container>
     </ng-container>
     <ng-container *ngIf="activity?.type == 'billSplit'">
       <div class="item">

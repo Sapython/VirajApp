@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, getDocs, collection, DocumentData, getDoc, doc, addDoc, updateDoc, setDoc, collectionData, docData, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, getDocs, collection, DocumentData, getDoc, doc, addDoc, updateDoc, setDoc, collectionData, docData, deleteDoc, query, where } from '@angular/fire/firestore';
 import { DataProvider } from '../data-provider/data-provider.service';
 import { Menu } from '../../types/menu.structure';
 import { Category } from '../../types/category.structure';
@@ -153,10 +153,10 @@ export class DatabaseService {
 
   getTakeawayTokens(businessId:string){
     return collectionData(
-      collection(
+      query(collection(
         this.firestore,
         'business/' + businessId + '/tokens'
-      ),{idField:'id'}
+      ),where('completed','!=',true)),{idField:'id'}
     );
   }
 

@@ -137,12 +137,14 @@
       <app-table-merges *ngIf="stage == 'tableWiseActivity'"></app-table-merges>
       <app-table-wise *ngIf="stage == 'tableWiseSales'"></app-table-wise>
       <app-split-bills *ngIf="stage == 'billSplits'"></app-split-bills>
+      <app-cancelled-bills *ngIf="stage == 'cancelledBills'"></app-cancelled-bills>
+      <app-combo *ngIf="stage == 'comboSales'"></app-combo>
       <div class="loader"></div>
       <div class="spacer"></div>
-      <div class="noData" *ngIf="reportService.noData">
+      <!-- <div class="noData" *ngIf="reportService.noData">
         <i class="ri-inbox-2-fill"></i>
         <p>No Data Available</p>
-      </div>
+      </div> -->
     </div>
   </div>
   <br />

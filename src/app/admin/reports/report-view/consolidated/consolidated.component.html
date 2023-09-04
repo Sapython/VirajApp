@@ -1,4 +1,4 @@
-<table class="styled-table" id="reportTable">
+<table class="styled-table" id="reportTable" *ngIf="((this.reportService.consolidatedSummary.bills)?.length)">
   <thead>
     <tr>
       <th>Bill No</th>
@@ -38,3 +38,7 @@
     </tr>
   </tbody>
 </table>
+<div class="noData" *ngIf="!((this.reportService.consolidatedSummary.bills)?.length)">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

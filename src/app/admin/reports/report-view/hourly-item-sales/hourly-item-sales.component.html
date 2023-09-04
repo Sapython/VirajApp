@@ -1,4 +1,4 @@
-<table id="reportTable" *ngIf="!loading">
+<table id="reportTable" *ngIf="((items | async)?.length)">
   <thead>
     <tr>
       <th>Product</th>
@@ -41,13 +41,9 @@
         <td *ngFor="let item of totals.hourlyTotal">{{ item }}</td>
       </tr>
     </ng-container>
-    <tr *ngIf="((items|async) || []).length == 0">
-      <td
-        colspan="5"
-        style="text-align: center; font-weight: bold; font-size: 1.2rem;color:#aaa"
-      >
-        <p>No Data Available</p>
-      </td>
-    </tr>
   </tbody>
 </table>
+<div class="noData" *ngIf="!((items | async)?.length)">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

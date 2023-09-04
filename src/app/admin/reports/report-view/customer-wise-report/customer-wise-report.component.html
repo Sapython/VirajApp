@@ -1,4 +1,4 @@
-<table class="styled-table" id="reportTable" *ngIf="!reportService.loading">
+<table class="styled-table" id="reportTable" *ngIf="((customerWiseReport)?.length)">
   <thead>
     <tr>
       <th>Customer Phone</th>
@@ -36,3 +36,7 @@
     </tr>
   </tbody>
 </table>
+<div class="noData" *ngIf="!((customerWiseReport)?.length)">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

@@ -105,7 +105,6 @@ export class HistoryComponent  implements OnInit {
     })
   }
   
-
   endDateChanged(value: any) {
     console.log('value', value);
   }
@@ -158,7 +157,6 @@ export class HistoryComponent  implements OnInit {
             return acc;
           }, [] as any[]);
           console.log('BILL: ', doc.data());
-
           return {
             ...doc.data(),
             id: doc.id,

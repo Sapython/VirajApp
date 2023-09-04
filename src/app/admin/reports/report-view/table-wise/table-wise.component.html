@@ -1,4 +1,4 @@
-<table id="reportTable">
+<table id="reportTable" *ngIf="((tableWiseSales | async)?.length)">
   <thead>
     <tr>
       <th>Table Name</th>
@@ -30,13 +30,9 @@
         <td>{{this.tableWiseTotals.averageSales | currency:'INR'}}</td>
       </tr>
     </ng-container>
-    <tr *ngIf="((tableWiseSales|async) || []).length == 0">
-      <td
-        colspan="5"
-        style="text-align: center; font-weight: bold; font-size: 1.2rem;color:#aaa"
-      >
-        <p>No Data Available</p>
-      </td>
-    </tr>
   </tbody>
 </table>
+<div class="noData" *ngIf="!((tableWiseSales | async)?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+  </div>

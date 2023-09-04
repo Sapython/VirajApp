@@ -1,4 +1,4 @@
-<table class="styled-table" id="reportTable" *ngIf="!loading">
+<table class="styled-table" id="reportTable" *ngIf="((waiterWiseSales | async)?.users?.length)">
   <thead>
     <tr>
       <th>Product Name</th>
@@ -25,13 +25,9 @@
         <li class="noWrap">Avg. Sales: {{userTotal.averageSales}}</li>
       </td>
     </tr>
-    <tr *ngIf="(waiterWiseSales|async)?.productSales?.length == 0">
-      <td
-        colspan="5"
-        style="text-align: center; font-weight: bold; font-size: 1.2rem;color:#aaa"
-      >
-        <p>No Data Available</p>
-      </td>
-    </tr>
   </tbody>
 </table>
+<div class="noData" *ngIf="!((waiterWiseSales | async)?.users?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+</div>

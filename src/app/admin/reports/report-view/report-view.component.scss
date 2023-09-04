@@ -245,4 +245,16 @@ mat-date-range-input {
   .spacer {
     height: 200px;
   }
+  .noData{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    i{
+      color:#c7c7c7;
+    }
+    p{
+      color: var(--Vrajera-primary-text);
+    }
+  }
 }

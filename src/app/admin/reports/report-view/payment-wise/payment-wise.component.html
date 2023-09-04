@@ -1,4 +1,4 @@
-<table class="styled-table" id="reportTable" *ngIf="!loading">
+<table class="styled-table" id="reportTable" *ngIf="((paymentMethods | async | keyvalue)?.length)">
   <thead>
     <tr>
       <th>Method</th>
@@ -18,13 +18,10 @@
       <td>Methods: {{totalMethods}}</td>
       <td>Total: {{totalAmount}}</td>
     </tr>
-    <tr *ngIf="(paymentMethods|async|keyvalue).length == 0">
-      <td
-        colspan="5"
-        style="text-align: center; font-weight: bold; font-size: 1.2rem;color:#aaa"
-      >
-        <p>No Data Available</p>
-      </td>
-    </tr>
   </tbody>
 </table>
+
+<div class="noData" *ngIf="!((paymentMethods | async | keyvalue)?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+</div>

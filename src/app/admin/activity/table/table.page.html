@@ -1,4 +1,3 @@
-<!-- <h1>Tables</h1> -->
 <div class="summaryCard fadeUp">
   <div class="heading">
     <p>Tables Summary</p>
@@ -116,7 +115,6 @@
           class="table gm fadeUp"
           [style]="'animation-delay:'+i*50+'ms'"
           [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
-          *ngIf="!table.completed"
         >
           <p>{{table.name}}</p>
           <p>{{table.billPrice | currency:'INR'}}</p>
@@ -164,7 +162,6 @@
           class="table gm fadeUp"
           [style]="'animation-delay:'+i*50+'ms'"
           [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
-          *ngIf="!table.completed"
         >
           <p>{{table.name}}</p>
           <p>{{table.billPrice | currency:'INR'}}</p>

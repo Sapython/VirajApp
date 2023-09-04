@@ -1,4 +1,4 @@
-<table id="reportTable">
+<table id="reportTable" *ngIf="((bills | async)?.length)">
 	<thead>
 	  <tr>
 		<th>Original Bill No</th>
@@ -51,3 +51,7 @@
 	  </tr>
 	</tbody>
   </table>
+  <div class="noData" *ngIf="!((bills | async)?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+  </div>
