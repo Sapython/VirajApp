@@ -3134,6 +3134,10 @@
                         <p>No Data Available</p>
                       </div>
                     </ng-container>
+                    <div class="noData" *ngIf="!(user.actions?.bills)?.length">
+                      <i class="ri-inbox-2-fill"></i>
+                      <p>No Data Available</p>
+                    </div>
                   </ng-container>
                   <ng-container *ngIf="activityMode.value=='discounts'">
                     <input type="checkbox" (change)="updateAllSlides()" name="" id="" #allUserWiseActionsDiscountsSeeMore hidden>
