@@ -26,6 +26,12 @@ export class ReportsPage implements OnInit {
         'List of bills from all channels, with their sales and settlements.',
     },
     {
+      title: 'Settled Bills',
+      code: 'settledBills',
+      description:
+        'List of settled bills from all channels, with their sales and settlements.',
+    },
+    {
       title: 'Dine In Bills',
       code: 'dineInBills',
       description:
@@ -186,6 +192,7 @@ interface ReportFormat {
   | 'billSplits'
   | 'cancelledBills'
   | 'comboSales'
+  | 'settledBills'
   | 'tableWiseActivity';
   description: string;
 }

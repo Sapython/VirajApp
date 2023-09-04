@@ -16,7 +16,7 @@ import { BillConstructor } from 'src/app/core/types/bill.structure';
 })
 export class ReportViewComponent implements AfterViewInit {
   loading: boolean = false;
-  stage:'billWise'| 'kotWise'| 'billSplits' | 'itemWise'| 'discounted'| 'ncBills'| 'takeawayBills'| 'onlineBills'| 'daySummary'| 'consolidated'| 'takeawayTokenWise'| 'onlineTokenWise'| 'tableWise'| 'billEdits'| 'customerWiseReport'| 'dineInBills'| 'hourlyItemSales'| 'kotEdits'| 'paymentWise'| 'waiterWiseItems'| 'tableWiseSales'| 'tableWiseActivity' | 'cancelledBills' | 'comboSales' |undefined;
+  stage:'billWise'| 'kotWise'| 'billSplits' | 'itemWise'| 'discounted'| 'ncBills'| 'takeawayBills'| 'onlineBills'| 'daySummary'| 'consolidated'| 'takeawayTokenWise'| 'onlineTokenWise'| 'tableWise'| 'billEdits'| 'customerWiseReport'| 'dineInBills'| 'hourlyItemSales'| 'kotEdits'| 'paymentWise'| 'waiterWiseItems'| 'tableWiseSales'| 'tableWiseActivity' | 'cancelledBills' | 'settledBills' | 'comboSales' |undefined;
   constructor(
     private activatedRoute:ActivatedRoute,
     public reportService: ReportService,

@@ -40,6 +40,7 @@ import { DateGroupPipe } from './history/date-group.pipe';
 import { ModePipe } from './history/mode.pipe';
 import { TableGroupsPipe } from './history/table-groups.pipe';
 import { CancelledBillsComponent } from './report-view/cancelled-bills/cancelled-bills.component';
+import { SettledBillsComponent } from './report-view/settled-bills/settled-bills.component';
 
 @NgModule({
   imports: [
@@ -83,7 +84,8 @@ import { CancelledBillsComponent } from './report-view/cancelled-bills/cancelled
     DateGroupPipe,
     ModePipe,
     TableGroupsPipe,
-    CancelledBillsComponent
+    CancelledBillsComponent,
+    SettledBillsComponent
   ],
 })
 export class ReportsPageModule {}
