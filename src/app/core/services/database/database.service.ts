@@ -49,6 +49,10 @@ export class DatabaseService {
     }
   }
 
+  resetUsers(businessId:string){
+    this.cachedData[businessId]['users'] = undefined;
+  }
+
   async getUsers(businessId:string){
     // retrieve users from path business/{{businessId}}
     var users:any[] = [];

@@ -15,7 +15,7 @@
           <p>{{user.username}}</p>
         </span>
         <span>
-          <p>{{user.accessType == 'role' ? user.role : user.propertiesAllowed.length}}</p>
+          <p>{{user.accessType == 'role' ? user.role : user.propertiesAllowed?.length}}</p>
           <ion-icon name="chevron-forward-outline"></ion-icon>
         </span>
       </div>

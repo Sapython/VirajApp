@@ -363,9 +363,6 @@ export class SalesPage implements OnInit {
     this.swiperSuspiciousActivity?.swiperRef.update();
     this.userWiseActionSwiper?.swiperRef.update();
   }
-
-  
-
 }
 
 export interface AnalyticsData {

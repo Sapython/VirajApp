@@ -418,7 +418,7 @@ export class EditUserPage implements OnInit {
                 console.log('Current user', this.currentUser);
                 this.editMode = true;
                 this.accessForm.patchValue(this.currentUser);
-                if (this.currentUser.propertiesAllowed){
+                if (this.currentUser.accessType == 'custom'){
                   this.currentUser.propertiesAllowed.forEach((prop:any) => {
                     let code = this.accessCodes.find(
                       (accessCode) => accessCode.type == 'access' && prop == accessCode.accessCode
@@ -495,6 +495,7 @@ export class EditUserPage implements OnInit {
       this.databaseService.deleteUser(this.currentUser.id,this.currentBusiness!.businessId).then((result)=>{
         this.alertify.presentToast('User deleted successfully');
         this.router.navigate(['admin','settings','users']);
+        this.databaseService.resetUsers(this.currentBusiness!.businessId);
       }).catch((error)=>{
         console.log('Error',error);
         this.alertify.presentToast('Error deleting user');
@@ -519,11 +520,35 @@ export class EditUserPage implements OnInit {
       // update user
       console.log('Updating user', this.accessForm.value);
       let data = this.accessForm.value;
+      if (data.accessType == 'role') {
+        if (!data.role) {
+          this.alertify.presentToast('Please select a role');
+          return;
+        }
+      } else {
+        let allowedProperties = this.accessCodes.filter((accessCode) => {
+          if(accessCode.type=='access'){
+            return accessCode.allowed;
+          } else {
+            return false
+          }
+        }).map((accessCode)=>{
+          if (accessCode.type=='access'){
+            return accessCode.accessCode;
+          } else {
+            return false;
+          }
+        }).filter((u)=>u);
+        data['propertiesAllowed'] = allowedProperties;
+        delete data['role'];
+      }
       delete data['confirmPassword']
       delete data['password']
-      delete data['email']
+      delete data['email'];
+      console.log("this.accessForm.value",this.accessForm.value);
       this.databaseService.updateUser(this.accessForm.value,this.currentBusiness.businessId).then((result) => {
         this.alertify.presentToast('User updated successfully');
+        this.databaseService.resetUsers(this.currentBusiness!.businessId);
         this.router.navigate(['admin','settings','users']);
       }).catch((error)=>{
         console.log('Error',error);
@@ -599,11 +624,26 @@ export class EditUserPage implements OnInit {
             let newUserData: any = {
               updatedBy: this.dataProvider.currentUser?.uid,
               username: result.uid,
-              ...result.business[0].access,
               lastUpdated: Timestamp.now(),
             };
+            if(this.accessForm.value.accessType == 'role'){
+              newUserData['accessType'] = 'role';
+              newUserData['role'] = this.accessForm.value.role;
+            } else {
+              newUserData['accessType'] = 'custom';
+              newUserData['propertiesAllowed'] = this.accessCodes
+              .filter((accessCode) => {
+                return accessCode.type=='access' && accessCode.allowed;
+              })
+              .map((accessCode) => {
+                if (accessCode.type=='access')
+                return accessCode.accessCode;
+                else return false;
+              }).filter((u)=>u);
+            }
             console.log("Adding new user",newUserData);
             this.databaseService.addUser(newUserData,this.currentBusiness!.businessId);
+            this.databaseService.resetUsers(this.currentBusiness!.businessId);
             this.router.navigate(['admin','settings','users']);
           })
           .catch((error) => {
