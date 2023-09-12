@@ -169,6 +169,8 @@ export class DaySummaryComponent {
                           }
                         });
                         return acc;
+                      } else {
+                        return acc;
                       }
                     },{})
                 },
@@ -237,6 +239,8 @@ export class DaySummaryComponent {
                           }
                         });
                         return acc;
+                      } else {
+                        return acc;
                       }
                     },{})
                 },
@@ -301,6 +305,8 @@ export class DaySummaryComponent {
                             acc[payment.paymentMethod] = payment.amount;
                           }
                         });
+                        return acc;
+                      } else {
                         return acc;
                       }
                     },{})
@@ -368,6 +374,8 @@ export class DaySummaryComponent {
                             acc[payment.paymentMethod] = payment.amount;
                           }
                         });
+                        return acc;
+                      } else {
                         return acc;
                       }
                     },{})
