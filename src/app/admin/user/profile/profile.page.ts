@@ -16,6 +16,7 @@ export class ProfilePage implements OnInit {
   user: User|undefined;
   settings:any;
   businessId:string|null = null;
+  counters: any[] = [];
   public logOutActionsSheetButtons = [
     {
       text: 'Logout',
@@ -36,12 +37,17 @@ export class ProfilePage implements OnInit {
     this.dataProvider.currentBusiness.subscribe((business)=>{
       this.user = this.dataProvider.currentUser;
       if (business){
+        console.log("business",business);
         this.businessId = business.businessId;
+        this.databaseService.getCounters(business.businessId).then((counters) => {
+          this.counters = counters.docs.map((counter) => {return {id: counter.id, ...counter.data()}});
+          console.log("this.counters",this.counters);
+        })
       }
     });
     this.dataProvider.currentSettings.subscribe((data)=>{
       this.settings = data;
-    })
+    });
   }
 
   ngOnInit() {
@@ -68,6 +74,13 @@ export class ProfilePage implements OnInit {
         this.alertify.presentToast('Settings updated failed');
       }
     }
+  }
+
+  async save(viewTokens:boolean){
+    this.dataProvider.loading = true;
+    await this.databaseService.updateCounters(this.businessId!,this.counters);
+    await this.databaseService.updateHoldTokenView(this.businessId!,viewTokens);
+    this.dataProvider.loading = true;
   }
 
 }

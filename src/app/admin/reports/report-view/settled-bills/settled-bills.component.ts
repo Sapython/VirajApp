@@ -61,7 +61,7 @@ export class SettledBillsComponent  implements OnInit {
               business.businessId
             )
             .then((bills) => {
-              bills = bills.filter((bill) => bill.mode == 'dineIn');
+              bills = bills.filter((bill) => bill.settlement);
               console.log('Bills ', bills);
               let timedBills: timedBillConstructor[] = bills.map((bill) => {
                 let totalBillTime = '';
@@ -214,6 +214,7 @@ y = data.cursor.y;
       csv.push(row.join(separator));
     }
     var csv_string = csv.join('\n');
+    csv_string = csv_string.replace(/₹/g, ' ');
     // Download it
     var filename =
       'export_report-table_' + new Date().toLocaleString() + '.csv';

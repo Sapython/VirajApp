@@ -1,0 +1,41 @@
+<app-header [allowBack]="true" [showOutletSelector]="false" pageTitle="Payment"></app-header>
+<ion-content>
+  <main id="content">
+    <div class="heading">
+      <h3>Charges</h3>
+    </div>
+    <ion-item-group>
+      <ion-breadcrumbs>
+        <ion-breadcrumb routerDirection="back" routerLink="../../settings">Settings</ion-breadcrumb>
+        <ion-breadcrumb routerDirection="back" routerLink=".">Charges</ion-breadcrumb>
+      </ion-breadcrumbs>
+      <div class="paymentMethodContainer">
+        <div class="paymentMethod"
+          detail
+          button
+          routerLink="edit/dineIn"
+        >
+          <ion-label>Dine In Charges</ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </div>
+        <div class="paymentMethod"
+          detail
+          button
+          routerLink="edit/takeaway"
+        >
+          <ion-label>Takeaway Charges</ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </div>
+        <div class="paymentMethod"
+          detail
+          button
+          routerLink="edit/online"
+        >
+          <ion-label>Online Charges</ion-label>
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </div>
+      </div>
+    </ion-item-group>
+    <div class="spacer"></div>
+  </main>
+</ion-content>

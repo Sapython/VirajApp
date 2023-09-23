@@ -548,7 +548,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -566,7 +566,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100) + '%'
+                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100) + '%'
                   }"
                 ></div>
               </div>
@@ -584,7 +584,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -658,7 +658,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -676,7 +676,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100) + '%'
+                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.maxBillsInRange || 100))*100) + '%'
                   }"
                 ></div>
               </div>
@@ -694,7 +694,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -768,7 +768,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -786,7 +786,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0))*100) + '%'
+                    width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.maxBillsInRange || 100))*100) + '%'
                   }"
                 ></div>
               </div>
@@ -804,7 +804,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.takeaway?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.takeaway?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -875,7 +875,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -893,7 +893,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.totalSettledBills || 0))*100) + '%'
+                    width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.maxBillsInRange || 100))*100) + '%'
                   }"
                 ></div>
               </div>
@@ -911,7 +911,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.online?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.online?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -1950,7 +1950,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -1968,7 +1968,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100) + '%'
+                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100) + '%'
                   }"
                 ></div>
               </div>
@@ -1986,7 +1986,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / ((analyticsData?.salesChannels?.all?.totalSettledBills || 0) + (analyticsData?.salesChannels?.all?.totalUnsettledBills || 0)))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.all?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -2068,7 +2068,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.lowRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>
@@ -2086,7 +2086,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100) + '%'
+                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.mediumRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100) + '%'
                   }"
                 ></div>
               </div>
@@ -2104,7 +2104,7 @@
                 <div
                   class="progress"
                   [ngStyle]="{
-                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.dineIn?.totalSettledBills || 0))*100)+'%'
+                    width: ((((analyticsData?.salesChannels?.dineIn?.billWiseSales?.rangeWise?.highRange?.bills || []).length) / (analyticsData?.salesChannels?.all?.maxBillsInRange || 100))*100)+'%'
                   }"
                 ></div>
               </div>

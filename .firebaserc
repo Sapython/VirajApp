@@ -6,9 +6,16 @@
           "fbms-shreeva-demo"
         ]
       }
+    },
+    "vrajera-d1e58": {
+      "hosting": {
+        "app": [
+          "vrajera-d1e58"
+        ]
+      }
     }
   },
   "projects": {
-    "default": "fbms-shreeva-demo"
+    "default": "vrajera-d1e58"
   }
 }

@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { LoadingController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingController, NavController } from '@ionic/angular';
 import Chart from 'chart.js/auto';
 import { Subject, Subscription, debounceTime, firstValueFrom } from 'rxjs';
 import { AnalyticsService } from 'src/app/core/analytics.service';
@@ -30,6 +31,7 @@ export class SalesPage implements OnInit {
     startDate: new FormControl(new Date(), [Validators.required]),
     endDate: new FormControl(new Date(), [Validators.required]),
   });
+  currentBusiness:UserBusiness|undefined;
   analyticsSubscription:Subscription = Subscription.EMPTY;
   refreshing:boolean = false;
   @ViewChild('swiperAnalytics', { static: false }) swiperAnalytics?: SwiperComponent;
@@ -42,14 +44,14 @@ export class SalesPage implements OnInit {
     this.functions,
     'analyzeAnalyticsForBusiness'
   );
-  constructor(public dataProvider:DataProvider,private analyticsService:AnalyticsService,private loadingCtrl:LoadingController,private functions:Functions,private alertify:AlertsAndNotificationsService,public activityDetail:ActivityDetailService,private databaseService:DatabaseService) {
+  constructor(public dataProvider:DataProvider,private analyticsService:AnalyticsService,private loadingCtrl:LoadingController,private functions:Functions,private alertify:AlertsAndNotificationsService,public activityDetail:ActivityDetailService,private databaseService:DatabaseService,public router:Router) {
     this.dataProvider.currentBusiness.pipe(debounceTime(100)).subscribe(async (business)=>{
       this.databaseService.getCurrentSettings(business.businessId).then((settings)=>{
         console.log("settings",settings);
         if(settings){
           this.dataProvider.businessData = settings;
-        }
-      })
+        } 
+      });
       if (this.salesChartJS){
         this.salesChartJS.destroy();
       }
@@ -67,7 +69,7 @@ export class SalesPage implements OnInit {
           },
         },
       });
-      console.log("Created chart instance",this.salesChartJS);
+      console.log("Created cha-rt instance",this.salesChartJS);
       if (business.businessId == 'all'){
         let loader =await this.loadingCtrl.create({
           message:'Loading all outlets data'
@@ -75,25 +77,27 @@ export class SalesPage implements OnInit {
         await loader.present();
         await this.loadMultipleOutletData(this.dateRangeFormGroup.value.startDate,this.dataProvider.allBusiness,this.dateRangeFormGroup.value.endDate)
         loader.dismiss();
-        // this.dateRangeFormGroup.valueChanges.pipe(debounceTime(700)).subscribe(async (value)=>{
-        //   await loader.present();
-        //   await this.loadMultipleOutletData(value.startDate,this.dataProvider.allBusiness,value.endDate)
-        //   loader.dismiss();
-        // });
       } else {
         console.log("business",business);
-        this.loadData(new Date(),business);
-        this.dateRangeFormGroup.valueChanges.pipe(debounceTime(700)).subscribe(async (value)=>{
-          this.loadData(value.startDate,business,value.endDate);
-        });
+        this.loadData(this.dateRangeFormGroup.value.startDate,business,this.dateRangeFormGroup.value.endDate);
       }
     });
 
     setInterval(()=>{
       this.updateAllSlides();
     },300);
+    this.dateRangeFormGroup.valueChanges.pipe(debounceTime(700)).subscribe(async (value)=>{
+      let business = await firstValueFrom(this.dataProvider.currentBusiness);
+      if(business?.businessId != 'all'){
+        this.loadData(value.startDate,business,value.endDate);
+      }
+    });
   }
 
+  ionViewDidLoad(){
+    this.dateRangeFormGroup.patchValue({startDate:new Date(),endDate:new Date()});
+    console.log("Ion view loaded");
+  }
 
   async loadMultipleOutletData(startDate:Date,outlets:UserBusiness[],endDate?:Date){
     // subscribe to all of them for data and then next the multipleOutletAnalyticsDataModified subject
@@ -116,22 +120,29 @@ export class SalesPage implements OnInit {
   }
 
   async refreshData(){
+    // set dates to today
+    // this.dateRangeFormGroup.patchValue({startDate:new Date(),endDate:new Date()});
     let business = await firstValueFrom(this.dataProvider.currentBusiness);
     let loader =await this.loadingCtrl.create({
       message:'Refreshing data please wait...'
     });
     await loader.present();
-    console.log({businessId:business.businessId});
-    this.analyzeAnalyticsForBusiness({businessId:business.businessId}).then((result:any)=>{
-      console.log("Result",result);
-      this.alertify.presentToast("Data refreshed successfully");
-      this.dataProvider.currentBusiness.next(business);
-      this.loadData(new Date(),business);
-    }).catch((e)=>{
-      this.alertify.presentToast("Error refreshing data");
-    }).finally(()=>{
-      loader.dismiss();
-    });
+    console.log({businessId:business.businessId},this.dateRangeFormGroup.value);
+    // create a dateList by form startDate and endDate it should include all dates in between and the dates should be in ISO format
+    let dateList = [];
+    let startDate = new Date(this.dateRangeFormGroup.value.startDate);
+    let endDate = new Date(this.dateRangeFormGroup.value.endDate);
+    let currentDate = startDate;
+    while (currentDate <= endDate){
+      dateList.push(currentDate.toISOString());
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    console.log("dateList",dateList);
+    let res = await Promise.all(dateList.map(async (date)=>{
+      await this.analyzeAnalyticsForBusiness({businessId:business.businessId,date});
+    }));
+    this.loadData(this.dateRangeFormGroup.value.startDate,business,this.dateRangeFormGroup.value.endDate);
+    loader.dismiss();
   }
 
 
@@ -139,8 +150,9 @@ export class SalesPage implements OnInit {
     let loader = await this.loadingCtrl.create({
       message: 'Please wait...',
     });
+    console.log("Loading data for",startDate,endDate);
     await loader.present();
-    this.analyticsService.getAnalytics(startDate,business.businessId,endDate,true).then((analytics)=>{
+    this.analyticsService.getAnalytics(startDate,business.businessId,endDate).then((analytics)=>{
       this.analyticsData = analytics;
       console.log("Analytics data",this.analyticsData);
       this.attachData(this.analyticsData);
@@ -286,6 +298,7 @@ export class SalesPage implements OnInit {
   };
 
   ngOnInit(): void {
+    // this.loadData(this.dateRangeFormGroup.value.startDate,currentBusiness)
   }
 
   switchPaymentChannel(channel: string) {
@@ -479,6 +492,7 @@ export interface ChannelWiseAnalyticsData {
       }[]
     }[]
   };
+  maxBillsInRange:number;
   itemWiseSales: {
     byPrice: {
       name: string;

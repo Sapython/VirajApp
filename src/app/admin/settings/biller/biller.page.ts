@@ -20,6 +20,28 @@ export class BillerPage implements OnInit {
     });
     this.dataProvider.currentSettings.subscribe((data)=>{
       this.settings = data;
+      if (!this.settings.tokensResetSetting){
+        this.settings.tokensResetSetting = {
+          billNo: false,
+          takeawayTokenNo: false,
+          onlineTokenNo: false,
+          orderNo: false,
+          ncBillNo: false,
+          kotNo: false
+        };
+      }
+      
+      if (!this.settings.printSettings){
+        this.settings.printSettings = {
+          showBillTime: true,
+          showBillDate: true,
+          showBillNo: true,
+          showOrderId: true,
+          showCashier: true,
+          showMode: true,
+        };
+      }
+
     })
   }
 

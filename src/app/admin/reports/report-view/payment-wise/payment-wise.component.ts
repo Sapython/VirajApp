@@ -160,6 +160,7 @@ y = data.cursor.y;
       csv.push(row.join(separator));
     }
     var csv_string = csv.join('\n');
+    csv_string = csv_string.replace(/₹/g, ' ');
     // Download it
     var filename =
       'export_report-table_' + new Date().toLocaleString() + '.csv';

@@ -13,13 +13,10 @@ export class AnalyticsService {
     this.cachedData = [];
   }
 
-  async getAnalytics(date:Date,businessId:string,endDate?:Date,forcedNew?:boolean){
-    // console.log("Analytics date",'business',businessId,'analytics',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString());
-    // return docData(docRef);
+  async getAnalytics(date:Date,businessId:string,endDate?:Date){
     let docRefs = [];
-    // console.log("main doc ref for ",date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString());
     let docRef = doc(this.firestore,'business',businessId,'analyticsData',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString())
-    console.log("Fethcing for ",docRef.path);
+    console.log("Fetching for ",docRef.path);
     docRefs.push({
       ref:docRef,
       date:date
@@ -32,7 +29,7 @@ export class AnalyticsService {
         dates.push(new Date(currentDate));
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      // console.log("Dates",dates);
+      console.log("Dates",dates);
       dates.forEach((date)=>{
         docRefs.push(
           {
@@ -41,60 +38,20 @@ export class AnalyticsService {
           }
         )
       });
-      // console.log("Doc refs",docRefs);
-      // get all docRefs
       let data = await Promise.all(docRefs.map(async (docRef)=>{
-        // first find it in cached data if the date exists
-        let cachedDatas = this.cachedData.filter((cachedData)=>{
-          return cachedData.date.getFullYear() === docRef.date.getFullYear() && cachedData.date.getMonth() === docRef.date.getMonth() && cachedData.date.getDate() === docRef.date.getDate() && cachedData.business === businessId;
-        });
-        // sort cachedDatas based upon date and then set cachedData = latest cachedData
-        cachedDatas.sort((a,b)=>{
-          return b.date.getTime() - a.date.getTime();
-        });
-        let cachedData = cachedDatas[0];
-        if (cachedData && cachedData.data && !forcedNew){
-          // console.log("Cloning",cachedData);
-          return cachedData;
-        } else {
-          let data = await getDoc(docRef.ref);
-          this.cachedData.push({
-            date:docRef.date,
-            data:data.data() as AnalyticsData,
-            business:businessId
-          })
-          return {
-            date:docRef.date,
-            data:data.data() as AnalyticsData
-          }
+        let data = await getDoc(docRef.ref);
+        console.log("Fetching for ",docRef.ref.path);
+        return {
+          date:docRef.date,
+          data:data.data() as AnalyticsData
         }
       }));
-      // console.log("Multiple Datas",data);
       return this.mergeAnalyticsData(data.map((data)=>{
         return data.data;
       }).filter((data)=>data));
     } else {
-      // first find it in cached data if the date exists
-      let cachedDatas = this.cachedData.filter((cachedData)=>{
-        return cachedData.date.getFullYear() === date.getFullYear() && cachedData.date.getMonth() === date.getMonth() && cachedData.date.getDate() === date.getDate() && cachedData.business === businessId;
-      });
-      cachedDatas.sort((a,b)=>{
-        return b.date.getTime() - a.date.getTime();
-      });
-      let cachedData = cachedDatas[0];
-      if (cachedData && cachedData.data && !forcedNew){
-        // console.log("Returning",cachedData.data);
-        return cachedData.data as AnalyticsData;
-      } else {
-        let data = await getDoc(docRef);
-        this.cachedData.push({
-          date:date,
-          data:data.data() as AnalyticsData,
-          business:businessId
-        })
-        // console.log("Returning doc data ",data.data() as AnalyticsData);
-        return data.data() as AnalyticsData;
-      }
+      let data = await getDoc(docRef);
+      return data.data() as AnalyticsData;
     }
   }
 
@@ -138,6 +95,7 @@ export class AnalyticsService {
             time: [],
             maxTables: 0,
           },
+          maxBillsInRange:0,
           itemWiseSales: {
             byPrice: [],
             byQuantity: [],
@@ -176,6 +134,7 @@ export class AnalyticsService {
           hourlySales: [],
           averageHourlySales: [],
           paymentReceived: {},
+          maxBillsInRange:0,
           billWiseSales: {
             rangeWise: {
               lowRange: {
@@ -233,6 +192,7 @@ export class AnalyticsService {
           hourlySales: [],
           averageHourlySales: [],
           paymentReceived: {},
+          maxBillsInRange:0,
           billWiseSales: {
             rangeWise: {
               lowRange: {
@@ -290,6 +250,7 @@ export class AnalyticsService {
           hourlySales: [],
           averageHourlySales: [],
           paymentReceived: {},
+          maxBillsInRange:0,
           billWiseSales: {
             rangeWise: {
               lowRange: {
@@ -374,6 +335,7 @@ export class AnalyticsService {
         analyticsData.salesChannels.all.billWiseSales,
         analytics.salesChannels.all.billWiseSales,
       );
+      analyticsData.salesChannels.all.maxBillsInRange = Math.max(analyticsData.salesChannels.all.maxBillsInRange,analytics.salesChannels.all.maxBillsInRange);
       analyticsData.salesChannels.all.itemWiseSales = this.mergeItemWiseSales(
         analyticsData.salesChannels.all.itemWiseSales,
         analytics.salesChannels.all.itemWiseSales,
@@ -409,6 +371,7 @@ export class AnalyticsService {
         analyticsData.salesChannels.dineIn.billWiseSales,
         analytics.salesChannels.dineIn.billWiseSales,
       );
+      analyticsData.salesChannels.dineIn.maxBillsInRange = Math.max(analyticsData.salesChannels.dineIn.maxBillsInRange,analytics.salesChannels.dineIn.maxBillsInRange);
       analyticsData.salesChannels.dineIn.itemWiseSales = this.mergeItemWiseSales(
         analyticsData.salesChannels.dineIn.itemWiseSales,
         analytics.salesChannels.dineIn.itemWiseSales,
@@ -444,6 +407,7 @@ export class AnalyticsService {
         analyticsData.salesChannels.takeaway.billWiseSales,
         analytics.salesChannels.takeaway.billWiseSales,
       );
+      analyticsData.salesChannels.takeaway.maxBillsInRange = Math.max(analyticsData.salesChannels.takeaway.maxBillsInRange,analytics.salesChannels.takeaway.maxBillsInRange);
       analyticsData.salesChannels.takeaway.itemWiseSales = this.mergeItemWiseSales(
         analyticsData.salesChannels.takeaway.itemWiseSales,
         analytics.salesChannels.takeaway.itemWiseSales,
@@ -479,6 +443,7 @@ export class AnalyticsService {
         analyticsData.salesChannels.online.billWiseSales,
         analytics.salesChannels.online.billWiseSales,
       );
+      analyticsData.salesChannels.online.maxBillsInRange = Math.max(analyticsData.salesChannels.online.maxBillsInRange,analytics.salesChannels.online.maxBillsInRange);
       analyticsData.salesChannels.online.itemWiseSales = this.mergeItemWiseSales(
         analyticsData.salesChannels.online.itemWiseSales,
         analytics.salesChannels.online.itemWiseSales,

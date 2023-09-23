@@ -27,6 +27,14 @@ const routes: Routes = [
   {
     path: 'loyalty',
     loadChildren: () => import('./loyalty/loyalty.module').then( m => m.LoyaltyPageModule)
+  },
+  {
+    path: 'charges',
+    loadChildren: () => import('./charges/charges.module').then( m => m.ChargesPageModule)
+  },
+  {
+    path: 'counters',
+    loadChildren: () => import('./counters/counters.module').then( m => m.CountersPageModule)
   }
 ];
 

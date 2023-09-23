@@ -1,0 +1,299 @@
+<app-header [showOutletSelector]="false" [allowBack]="true" [pageTitle]="editMode ? 'Edit': 'Add'" ></app-header>
+<ion-content>
+  <main class="ion-padding">
+    <div class="notFound" *ngIf="!currentPaymentMethod && editMode">
+      <h3>Not Found</h3>
+      <p>The method you are looking for is not available.</p>
+    </div>
+    <ng-container *ngIf="charges">
+      <ng-container *ngIf="this.currentMethodId == 'dineIn'">
+        <h3>Dine In Charges</h3>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Delivery Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.delivery.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.dineIn.delivery.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.delivery.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.delivery.allowed && charges.dineIn.delivery.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.delivery.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.delivery.allowed && charges.dineIn.delivery.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.dineIn.delivery.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Service Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.service.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.dineIn.service.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.service.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.service.allowed && charges.dineIn.service.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.service.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.service.allowed && charges.dineIn.service.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.dineIn.service.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Container Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.container.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.dineIn.container.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.container.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.container.allowed && charges.dineIn.container.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.container.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.container.allowed && charges.dineIn.container.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.dineIn.container.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Tip Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.tip.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.dineIn.tip.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.tip.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.tip.allowed && charges.dineIn.tip.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.dineIn.tip.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.dineIn.tip.allowed && charges.dineIn.tip.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.dineIn.tip.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="this.currentMethodId == 'takeaway'">
+        <h3>Takeaway Charges</h3>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Delivery Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.delivery.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.takeaway.delivery.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.delivery.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.delivery.allowed && charges.takeaway.delivery.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.delivery.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.delivery.allowed && charges.takeaway.delivery.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.takeaway.delivery.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Service Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.service.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.takeaway.service.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.service.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.service.allowed && charges.takeaway.service.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.service.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.service.allowed && charges.takeaway.service.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.takeaway.service.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Container Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.container.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.takeaway.container.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.container.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.container.allowed && charges.takeaway.container.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.container.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.container.allowed && charges.takeaway.container.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.takeaway.container.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Tip Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.tip.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.takeaway.tip.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.tip.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.tip.allowed && charges.takeaway.tip.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.takeaway.tip.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.takeaway.tip.allowed && charges.takeaway.tip.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.takeaway.tip.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="this.currentMethodId == 'online'">
+        <h3>Online Charges</h3>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Delivery Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.delivery.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.online.delivery.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.delivery.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.delivery.allowed && charges.online.delivery.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.delivery.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.delivery.allowed && charges.online.delivery.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.online.delivery.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Service Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.service.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.online.service.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.service.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.service.allowed && charges.online.service.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.service.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.service.allowed && charges.online.service.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.online.service.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Container Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.container.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.online.container.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.container.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.container.allowed && charges.online.container.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.container.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.container.allowed && charges.online.container.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.online.container.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div class="summaryCard">
+          <div class="heading">
+            <p>Tip Charge</p>
+          </div>
+          <div class="content">
+            <ion-item>
+              <ion-label>Enabled</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.tip.allowed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!charges.online.tip.allowed">
+              <ion-label>Fixed Charge</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.tip.fixed"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.tip.allowed && charges.online.tip.fixed)">
+              <ion-label>Apply By Default</ion-label>
+              <ion-toggle [(ngModel)]="charges.online.tip.byDefault"></ion-toggle>
+            </ion-item>
+            <ion-item [disabled]="!(charges.online.tip.allowed && charges.online.tip.fixed)">
+              <ion-label position="floating">Charge In INR</ion-label>
+              <ion-input [(ngModel)]="charges.online.tip.charges" type="number" placeholder="Enter Charge"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </ng-container>
+      <br>
+      <ion-button color="primary" (click)="saveCharges()">Save</ion-button>
+      <div class="spacer"></div>
+    </ng-container>
+  </main>
+</ion-content>

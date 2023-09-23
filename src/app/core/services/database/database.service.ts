@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, getDocs, collection, DocumentData, getDoc, doc, addDoc, updateDoc, setDoc, collectionData, docData, deleteDoc, query, where } from '@angular/fire/firestore';
+import { Firestore, getDocs, collection, DocumentData, getDoc, doc, addDoc, updateDoc, setDoc, collectionData, docData, deleteDoc, query, where, runTransaction } from '@angular/fire/firestore';
 import { DataProvider } from '../data-provider/data-provider.service';
 import { Menu } from '../../types/menu.structure';
 import { Category } from '../../types/category.structure';
@@ -30,7 +30,7 @@ export class DatabaseService {
 
   async getBusinessSetting(businessId: string){
     var businessSetting:any;
-    if (!this.cachedData[businessId]['businessSettings']){
+    if (!(this.cachedData[businessId] && this.cachedData[businessId]['businessSettings'])){
       businessSetting = (await getDoc(doc(this.firestore,'business/' + businessId + '/settings/settings'))).data();
     } else {
       return this.cachedData[businessId]['businessSettings'];
@@ -265,5 +265,33 @@ export class DatabaseService {
     
     // /business/uqd9dm0its2v9xx6fey2q/bills/iqxulix4zfco25bczkmj1z759vl/splittedBills
     return getDoc(doc(this.firestore,`business/${business}/bills/${billId}/splittedBills/${splitBillId}`));
+  }
+
+  getCounters(businessId:string){
+    return getDocs(collection(this.firestore,'business/' + businessId + '/counters'));
+  }
+
+  async updateCounters(businessId:string,counters:any[]){
+    await runTransaction(this.firestore,async (transaction)=>{
+      for (const counter of counters) {
+        transaction.update(doc(this.firestore,'business/' + businessId + '/counters/' + counter.id),{...counter});
+      }
+    })
+  }
+
+  deleteCounter(businessId:string,counterId:string){
+    return deleteDoc(doc(this.firestore,'business/' + businessId + '/counters/' + counterId));
+  }
+
+  updateCounter(businessId:string,counter:any){
+    return updateDoc(doc(this.firestore,'business/' + businessId + '/counters/' + counter.id),{...counter});
+  }
+
+  addCounter(businessId:string,counter:any){
+    return addDoc(collection(this.firestore,'business/' + businessId + '/counters'),{...counter});
+  }
+
+  async updateHoldTokenView(businessId:string,viewTokens:boolean){
+    await updateDoc(doc(this.firestore,'business/' + businessId + '/settings/settings'),{viewOnHoldTokens:viewTokens});
   }
 }

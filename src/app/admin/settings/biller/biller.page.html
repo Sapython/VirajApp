@@ -5,46 +5,68 @@
     <ion-breadcrumb routerDirection="back" routerLink=".">Biller</ion-breadcrumb>
   </ion-breadcrumbs>
   <ion-list *ngIf="settings">
-    <!-- <ion-item>
+    <ion-item>
       <ion-label>Total Time to mark a table as late</ion-label>
-      <ion-input [(ngModel)]="settings.tableTimeOutTime" (change)="isValidNumber(tableTimeout.value) ? updateSettings({ tableTimeOutTime: tableTimeout.value }) : tableTimeout.value = 0;" type="number" placeholder="Time in minutes" #tableTimeout></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>This text will be added as a note on printed bill</ion-label>
-      <ion-input [(ngModel)]="settings.customBillNote" (change)="updateSettings({ customBillNote:  endBillNote.value})" type="text" placeholder="Thank you for visiting us" #endBillNote></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Prefix will be added to printed bill no</ion-label>
-      <ion-input [(ngModel)]="settings.billNoSuffix" type="text" placeholder="2023-" (change)="updateSettings({ billNoSuffix: billNoSuffix.value })" #billNoSuffix></ion-input>
-    </ion-item> -->
-    <ion-item>
-      <ion-label>Enable re-print kot option in manage kot panel</ion-label>
-      <ion-toggle [(ngModel)]="settings.kotRePrintable" (ngModelChange)="updateSettings({kotRePrintable:kotRePrintable.checked})" #kotRePrintable></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Allow kot edit</ion-label>
-      <ion-toggle [(ngModel)]="settings.kotEditable" #kotEditable (ngModelChange)="updateSettings({ kotEditable: kotEditable.checked })"></ion-toggle>
-    </ion-item>
-    <!-- <ion-item>
-      <ion-label>Total time till you can edit KOT</ion-label>
-      <ion-input [(ngModel)]="settings.editKotTime" (change)="isValidNumber(editKotTime.value) ? this.updateSettings({ editKotTime: editKotTime.value }) : editKotTime.value = 0;" #editKotTime type="number" placeholder="Time in seconds"></ion-input>
-    </ion-item> -->
-    <ion-item>
-      <ion-label>Directly print a bill when finalized</ion-label>
-      <ion-toggle [(ngModel)]="settings.printBillAfterFinalize" (ngModelChange)="updateSettings({printBillAfterFinalize: printBillAfterFinalize.checked})" #printBillAfterFinalize></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Directly print a bill when settled</ion-label>
-      <ion-toggle [(ngModel)]="settings.printBillAfterSettle" (ngModelChange)="updateSettings({printBillAfterSettle: printBillAfterSettle.checked})" #printBillAfterSettle></ion-toggle>
+      <input [(ngModel)]="settings.tableTimeOutTime" (change)="isValidNumber(tableTimeout.valueAsNumber) ? updateSettings({ tableTimeOutTime: tableTimeout.valueAsNumber }) : tableTimeout.value = '0';" type="number" placeholder="Time in minutes" #tableTimeout/>
     </ion-item>
     <ion-item>
       <ion-label>Allow to add multiple discounts to a bill</ion-label>
       <ion-toggle [(ngModel)]="settings.multipleDiscount" #multipleDiscount (ngModelChange)="updateSettings({ multipleDiscount: multipleDiscount.checked })"></ion-toggle>
     </ion-item>
-    <!-- <ion-item>
-      <ion-label>Delete bill instead of cancel when finalized.</ion-label>
-      <ion-toggle [(ngModel)]="settings.deleteCancelledBill" #deleteCancelledBill (ngModelChange)="updateSettings({ deleteCancelledBill: deleteCancelledBill.checked })"></ion-toggle>
-    </ion-item> -->
+    <ion-item>
+      <ion-label><h1>Print Settings</h1></ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Show Time On Bill</ion-label>
+      <ion-toggle [(ngModel)]="settings.printSettings.showBillTime" #multipleDiscount (ngModelChange)="updateSettings({ printSettings: settings.printSettings })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Show Date On Bill</ion-label>
+      <ion-toggle [(ngModel)]="settings.printSettings.showBillDate" #multipleDiscount (ngModelChange)="updateSettings({ printSettings: settings.printSettings })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Show Bill no On Bill</ion-label>
+      <ion-toggle [(ngModel)]="settings.printSettings.showBillNo" #multipleDiscount (ngModelChange)="updateSettings({ printSettings: settings.printSettings })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Show Cashier Name On Bill</ion-label>
+      <ion-toggle [(ngModel)]="settings.printSettings.showCashier" #multipleDiscount (ngModelChange)="updateSettings({ printSettings: settings.printSettings })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Show Order Id On Bill</ion-label>
+      <ion-toggle [(ngModel)]="settings.printSettings.showOrderId" #multipleDiscount (ngModelChange)="updateSettings({ printSettings: settings.printSettings })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Show Mode On Bill</ion-label>
+      <ion-toggle [(ngModel)]="settings.printSettings.showMode" #multipleDiscount (ngModelChange)="updateSettings({ printSettings: settings.printSettings })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label><h1>Token Settings</h1></ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reset Bill No Every Day</ion-label>
+      <ion-toggle [(ngModel)]="settings.tokensResetSetting.billNo" #multipleDiscount (ngModelChange)="updateSettings({ tokensResetSetting: settings.tokensResetSetting })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reset Takeaway Token No Every Day</ion-label>
+      <ion-toggle [(ngModel)]="settings.tokensResetSetting.takeawayTokenNo" #multipleDiscount (ngModelChange)="updateSettings({ tokensResetSetting: settings.tokensResetSetting })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reset Online Token No Every Day</ion-label>
+      <ion-toggle [(ngModel)]="settings.tokensResetSetting.onlineTokenNo" #multipleDiscount (ngModelChange)="updateSettings({ tokensResetSetting: settings.tokensResetSetting })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reset Order No Every Day</ion-label>
+      <ion-toggle [(ngModel)]="settings.tokensResetSetting.orderNo" #multipleDiscount (ngModelChange)="updateSettings({ tokensResetSetting: settings.tokensResetSetting })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reset NC Bill No Every Day</ion-label>
+      <ion-toggle [(ngModel)]="settings.tokensResetSetting.ncBillNo" #multipleDiscount (ngModelChange)="updateSettings({ tokensResetSetting: settings.tokensResetSetting })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reset Kot No Every Day</ion-label>
+      <ion-toggle [(ngModel)]="settings.tokensResetSetting.kotNo" #multipleDiscount (ngModelChange)="updateSettings({ tokensResetSetting: settings.tokensResetSetting })"></ion-toggle>
+    </ion-item>
     <div class="spacer"></div>
   </ion-list>
   <ion-spinner name="crescent" *ngIf="!settings"></ion-spinner>

@@ -47,7 +47,7 @@ div.header{
 		p{
 			margin:0px;
 			width: 70px;
-			height: 33px;
+			max-height: 33px;
 			word-wrap: initial;
 			font-size: var(--Vrajera-font-medium);
 		}
