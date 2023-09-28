@@ -137,6 +137,9 @@ export class SalesPage implements OnInit {
       dateList.push(currentDate.toISOString());
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    if (startDate ==  endDate){
+      dateList.push(startDate.toISOString());
+    }
     console.log("dateList",dateList);
     let res = await Promise.all(dateList.map(async (date)=>{
       await this.analyzeAnalyticsForBusiness({businessId:business.businessId,date});

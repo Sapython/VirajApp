@@ -67,27 +67,29 @@
     </ion-button>
   </div>
   <div class="bills" *ngIf="!groupByTable && !groupByDate">
-    <div class="bill" *ngFor="let bill of bills">
-      <div class="title">
-        <p>Order No: {{bill.orderNo}}</p>
-        <span><i class="ri-time-line"></i> {{bill.createdDate.toDate() | date:'short'}}</span>
+    <ng-container *ngFor="let bill of bills">
+      <div class="bill" *ngIf="bill">
+        <div class="title">
+          <p>Order No: {{bill?.orderNo}}</p>
+          <span><i class="ri-time-line"></i> {{bill?.createdDate?.toDate() | date:'short'}}</span>
+        </div>
+        <div class="detail">
+          <p>Bill No: {{bill?.billNo}}</p>
+          <span>
+            <p>Table: {{bill?.table?.name}}</p>
+            <p>Total: <strong>{{bill?.billing?.grandTotal | currency:'INR'}}</strong></p>
+          </span>
+        </div>
+        <div class="actions">
+          <ion-button (click)="viewKots(bill)" expand="block" fill="outline" shape="round">
+            See KOTs
+          </ion-button>
+          <ion-button (click)="viewBill(bill)" expand="block" fill="outline" shape="round">
+            See Bill
+          </ion-button>
+        </div>
       </div>
-      <div class="detail">
-        <p>Bill No: {{bill.billNo}}</p>
-        <span>
-          <p>Table: {{bill.table}}</p>
-          <p>Total: <strong>{{bill.billing.grandTotal | currency:'INR'}}</strong></p>
-        </span>
-      </div>
-      <div class="actions">
-        <ion-button (click)="viewKots(bill)" expand="block" fill="outline" shape="round">
-          See KOTs
-        </ion-button>
-        <ion-button (click)="viewBill(bill)" expand="block" fill="outline" shape="round">
-          See Bill
-        </ion-button>
-      </div>
-    </div>
+    </ng-container>
     <div class="noData" *ngIf="bills.length == 0">
       <i class="ri-inbox-2-fill"></i>
       <p>No Data Available</p>

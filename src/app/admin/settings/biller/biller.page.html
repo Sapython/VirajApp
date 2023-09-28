@@ -14,6 +14,14 @@
       <ion-toggle [(ngModel)]="settings.multipleDiscount" #multipleDiscount (ngModelChange)="updateSettings({ multipleDiscount: multipleDiscount.checked })"></ion-toggle>
     </ion-item>
     <ion-item>
+      <ion-label>Allow to reprint bill without password</ion-label>
+      <ion-toggle [(ngModel)]="settings.allowUnverifiedRePrint" #allowUnverifiedRePrint (ngModelChange)="updateSettings({ allowUnverifiedRePrint: allowUnverifiedRePrint.checked })"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Avail loyalty by default</ion-label>
+      <ion-toggle [(ngModel)]="settings.availLoyaltyDefault" #availLoyaltyDefault (ngModelChange)="updateSettings({ availLoyaltyDefault: availLoyaltyDefault.checked })"></ion-toggle>
+    </ion-item>
+    <ion-item>
       <ion-label><h1>Print Settings</h1></ion-label>
     </ion-item>
     <ion-item>

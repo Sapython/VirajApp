@@ -143,7 +143,7 @@ export class NonChargeableBillsComponent {
 
 
   async downloadPdf() {
-    const doc = new jsPDF('l');
+    const doc = new jsPDF('l','mm', [500, 300]);
     let title = 'Non-Chargeable Bills Wise';
     let logo = new Image();
     logo.src = 'assets/images/Vrajera.png';

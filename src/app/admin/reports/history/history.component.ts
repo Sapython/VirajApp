@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Fuse from 'fuse.js';
 import { Subject, debounceTime, first, firstValueFrom } from 'rxjs';
-import { BillConstructor, PrintableBill } from 'src/app/core/types/bill.structure';
+import {
+  BillConstructor,
+  PrintableBill,
+} from 'src/app/core/types/bill.structure';
 import { ReportService } from '../report.service';
 import { KotConstructor } from 'src/app/core/types/kot.structure';
 import { ModalController, PopoverController } from '@ionic/angular';
@@ -21,26 +24,26 @@ import { DownloadService } from 'src/app/core/services/download.service';
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
 })
-export class HistoryComponent  implements OnInit {
-  reportLoadTime:Date = new Date();
+export class HistoryComponent implements OnInit {
+  reportLoadTime: Date = new Date();
   selectedModes = [
     {
       name: 'Dine In',
       value: 'dineIn',
-      selected: true
+      selected: true,
     },
     {
       name: 'Take Away',
       value: 'takeAway',
-      selected: false
+      selected: false,
     },
     {
       name: 'Online',
       value: 'online',
-      selected: false
-    }
+      selected: false,
+    },
   ];
-  currentBusiness:BusinessRecord|null = null;
+  currentBusiness: BusinessRecord | null = null;
   totalSales: number = 0;
   groupByTable: boolean = false;
   groupByDate: boolean = false;
@@ -48,8 +51,8 @@ export class HistoryComponent  implements OnInit {
   minimumAmount: number = 0;
   totalKots: number = 0;
   totalBills: number = 0;
-  startingKotNumber:string | undefined = '0';
-  endingKotNumber:string | undefined = '0';
+  startingKotNumber: string | undefined = '0';
+  endingKotNumber: string | undefined = '0';
   // mode vars
   currentMode: 'all' | 'dineIn' | 'takeaway' | 'online' = 'all';
 
@@ -58,7 +61,15 @@ export class HistoryComponent  implements OnInit {
   filteredBills: ExtendedBillConstructor[] = [];
   fuseSearchInstance = new Fuse(this.bills, { keys: ['billNo', 'orderNo'] });
   numberSearchSubject: Subject<string> = new Subject<string>();
-  constructor(private reportService:ReportService,private modalController:ModalController,private dataProvider:DataProvider,private databaseService:DatabaseService,public changeDetectorRef:ChangeDetectorRef,private downloadService:DownloadService) {
+  tablesCache: any[] = [];
+  constructor(
+    private reportService: ReportService,
+    private modalController: ModalController,
+    private dataProvider: DataProvider,
+    private databaseService: DatabaseService,
+    public changeDetectorRef: ChangeDetectorRef,
+    private downloadService: DownloadService
+  ) {
     this.numberSearchSubject.pipe(debounceTime(600)).subscribe((searchTerm) => {
       if (searchTerm.length > 0) {
         this.filteredBills = this.fuseSearchInstance
@@ -71,15 +82,17 @@ export class HistoryComponent  implements OnInit {
         this.filteredBills = [];
       }
     });
-    this.dataProvider.currentBusiness.subscribe((business)=>{
-      console.log("menu",business);
-      this.databaseService.getCurrentSettings(business.businessId).then((settings)=>{
-        console.log("settings",settings);
-        if(settings){
-          this.dataProvider.businessData = settings;
-          this.getReport(business.businessId);
-        }
-      })
+    this.dataProvider.currentBusiness.subscribe((business) => {
+      console.log('menu', business);
+      this.databaseService
+        .getCurrentSettings(business.businessId)
+        .then((settings) => {
+          console.log('settings', settings);
+          if (settings) {
+            this.dataProvider.businessData = settings;
+            this.getReport(business.businessId);
+          }
+        });
       this.dateRangeFormGroup.valueChanges.subscribe((value) => {
         console.log('Picker range changed', value);
         if (this.dateRangeFormGroup.valid) {
@@ -88,23 +101,23 @@ export class HistoryComponent  implements OnInit {
       });
     });
   }
-  dateRangeFormGroup:FormGroup = new FormGroup({
-    startDate:new FormControl(null,[Validators.required]),
-    endDate:new FormControl(null,[Validators.required])
+  dateRangeFormGroup: FormGroup = new FormGroup({
+    startDate: new FormControl(null, [Validators.required]),
+    endDate: new FormControl(null, [Validators.required]),
   });
 
-  setDate(picker:any){
-    console.log("picker",picker);
+  setDate(picker: any) {
+    console.log('picker', picker);
   }
 
-  switchOtherModes(index:number){
-    this.selectedModes.forEach((mode,modeIndex)=>{
-      if(modeIndex!=index){
+  switchOtherModes(index: number) {
+    this.selectedModes.forEach((mode, modeIndex) => {
+      if (modeIndex != index) {
         mode.selected = false;
       }
-    })
+    });
   }
-  
+
   endDateChanged(value: any) {
     console.log('value', value);
   }
@@ -129,90 +142,153 @@ export class HistoryComponent  implements OnInit {
     });
     filteredBills.forEach((bill) => {
       // recalculate stats totalSales, startKot, endKot, totalKots, totalBills, startingKotNumber, endingKotNumber
-      this.totalSales += bill.billing.grandTotal;
-      this.totalKots += bill.kots.length;
+      this.totalSales += bill?.billing?.grandTotal || 0;
+      this.totalKots += bill?.kots?.length || 0;
       this.totalBills++;
-      if (bill.kots.length > 0){
-        if (this.startingKotNumber == '') {
+      if (bill && bill.kots && bill.kots.length > 0) {
+        if (this.startingKotNumber == '' && bill.kots[0]) {
           this.startingKotNumber = bill.kots[0].id;
         }
-        this.endingKotNumber = bill.kots[bill.kots.length - 1].id;
+        if (bill.kots[bill.kots.length - 1]) {
+          this.endingKotNumber = bill.kots[bill.kots.length - 1].id;
+        }
       }
     });
   }
 
-  getReport(businessId:string) {
+  getReport(businessId: string) {
     this.reportService
       .getBillsByDay(
         this.dateRangeFormGroup.value.startDate,
         businessId,
-        this.dateRangeFormGroup.value.endDate,
+        this.dateRangeFormGroup.value.endDate
       )
-      .then((bills:any) => {
-         console.log("bills",bills.docs);
-         this.reportLoadTime = new Date();
-        this.bills = bills.docs.map((doc:any) => {
-          let allProducts = doc.data().kots.reduce((acc:any, kot:any) => {
-            acc.push(...kot.products);
-            return acc;
-          }, [] as any[]);
-          console.log('BILL: ', doc.data());
+      .then(async (bills: any) => {
+        console.log('bills', bills.docs);
+        this.reportLoadTime = new Date();
+        this.bills = (await Promise.all(bills.docs.map(async (doc: any) => {
+          if (doc.data() && doc.data()['stage'] == 'hold') {
+            return false;
+          } else if (!doc.data()) {
+            return false;
+          }
+          var foundTable;
+          if (doc.data()['mode'] == 'takeaway') {
+            foundTable = this.tablesCache.find(
+              (table) => table.id == doc.data()['id'] && table.type == 'token'
+            );
+            if (!foundTable) {
+              let tableDoc = await this.reportService.getTablePromise(
+                businessId,
+                doc.data()['table'],
+                'tokens'
+              );
+              this.tablesCache.push({
+                ...tableDoc.data(),
+                id: doc.data()['table'],
+                type: 'token',
+              });
+              foundTable = {
+                ...tableDoc.data(),
+                id: doc.data()['table'],
+                type: 'token',
+              };
+            }
+          } else if (doc.data()['mode'] == 'dineIn') {
+            foundTable = this.tablesCache.find(
+              (table) =>
+                table.id == doc.data()['table'] && table.type == 'table'
+            );
+            if (!foundTable) {
+              let tableDoc = await this.reportService.getTablePromise(
+                businessId,
+                doc.data()['table'],
+                'tables'
+              );
+              this.tablesCache.push({
+                ...tableDoc.data(),
+                id: doc.data()['table'],
+                type: 'table',
+              });
+              foundTable = {
+                ...tableDoc.data(),
+                id: doc.data()['table'],
+                type: 'token',
+              };
+            }
+          } else if (doc.data()['mode'] == 'online') {
+            foundTable = this.tablesCache.find(
+              (table) =>
+                table.id == doc.data()['table'] && table.type == 'online'
+            );
+            if (!foundTable) {
+              let tableDoc = await this.reportService.getTablePromise(
+                businessId,
+                doc.data()['table'],
+                'onlineTokens'
+              );
+              this.tablesCache.push({
+                ...tableDoc.data(),
+                id: doc.data()['table'],
+                type: 'online',
+              });
+              foundTable = {
+                ...tableDoc.data(),
+                id: doc.data()['table'],
+                type: 'token',
+              };
+            }
+          }
           return {
             ...doc.data(),
             id: doc.id,
             kotVisible: false,
+            table: foundTable,
             flipped: false,
             kotOrBillVisible: false,
           } as ExtendedBillConstructor;
-        });
+        }))).filter((bill:any) => bill);
         this.totalKots = this.bills.reduce((acc, bill) => {
-          return acc + bill.kots.length;
+          return acc + (bill?.kots?.length || 0);
         }, 0);
         this.totalBills = this.bills.length;
         this.totalSales = this.bills.reduce((acc, bill) => {
-          return acc + bill.billing.grandTotal;
+          return acc + (bill?.billing?.grandTotal || 0);
         }, 0);
         this.regenerateStats();
         this.fuseSearchInstance.setCollection(this.bills);
+        console.log('this.bills::::', this.bills);
+
         this.loading = false;
-      }).catch((error)=>{
-        console.log("error",error);
+      })
+      .catch((error) => {
+        console.log('error', error);
       });
   }
 
   getGroupsByTable(bills: BillConstructor[]) {
-    let groups = bills.reduce(
-      (acc, bill) => {
-        let index = acc.findIndex((group) => group.table == bill.table);
-        if (index == -1) {
-          acc.push({ table: bill.table, bills: [bill] });
-        } else {
-          acc[index].bills.push(bill);
-        }
-        return acc;
-      },
-      [] as { table: { id: string; name: string }; bills: BillConstructor[] }[],
-    );
+    let groups = bills.reduce((acc, bill) => {
+      let index = acc.findIndex((group) => group.table == bill.table);
+      if (index == -1) {
+        acc.push({ table: bill.table, bills: [bill] });
+      } else {
+        acc[index].bills.push(bill);
+      }
+      return acc;
+    }, [] as { table: { id: string; name: string }; bills: BillConstructor[] }[]);
     return groups;
   }
 
-  async reprintBill(bill: BillConstructor) {
-    
-  }
+  async reprintBill(bill: BillConstructor) {}
 
-  async reprintKot(kot: KotConstructor, bill: BillConstructor) {
-    
-  }
+  async reprintKot(kot: KotConstructor, bill: BillConstructor) {}
 
   generateConsolidatedReport() {
     let filteredBills = this.bills.filter(
       (bill) =>
-        bill.billing.grandTotal >= this.minimumAmount &&
-        bill.stage == 'settled',
+        bill.billing.grandTotal >= this.minimumAmount && bill.stage == 'settled'
     );
-
   }
-
 
   getModeTitle(mode: 'dineIn' | 'takeaway' | 'online'): string {
     if (mode == 'dineIn') {
@@ -229,7 +305,7 @@ export class HistoryComponent  implements OnInit {
   exportToPdf() {
     // do it by selected mode
     let filteredBills = this.bills.filter(
-      (bill) => this.currentMode == 'all' || bill.mode == this.currentMode,
+      (bill) => this.currentMode == 'all' || bill.mode == this.currentMode
     );
     // create a jspdf doc with autotable
     // heading should be Bill No, Order No, Table, Time, Total, Mode
@@ -267,13 +343,18 @@ export class HistoryComponent  implements OnInit {
       ],
     });
     doc.save('Bills Report.pdf');
-    this.downloadService.saveAndOpenFile(doc.output('datauristring'), 'Bill History' + new Date().toLocaleString() + '.pdf','pdf','application/pdf');
+    this.downloadService.saveAndOpenFile(
+      doc.output('datauristring'),
+      'Bill History' + new Date().toLocaleString() + '.pdf',
+      'pdf',
+      'application/pdf'
+    );
   }
 
   exportToExcel() {
     // generate a csv file exactly same as exportToPdf function
     let filteredBills = this.bills.filter(
-      (bill) => this.currentMode == 'all' || bill.mode == this.currentMode,
+      (bill) => this.currentMode == 'all' || bill.mode == this.currentMode
     );
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += 'Total KOT,Total Bills,Starting KOT,End KOT,Total Sales\n';
@@ -313,10 +394,13 @@ export class HistoryComponent  implements OnInit {
     let base64Data = btoa(csvContent);
     this.downloadService.saveAndOpenFile(
       base64Data,
-      'Bill Edits Report' + new Date().toLocaleString() + '.csv','csv','text/csv');
+      'Bill Edits Report' + new Date().toLocaleString() + '.csv',
+      'csv',
+      'text/csv'
+    );
   }
 
-  async viewBill(billConstructor:BillConstructor){
+  async viewBill(billConstructor: BillConstructor) {
     let printableBillData = this.printableBillGenerator(
       billConstructor,
       billConstructor.kots.reduce((acc, kot) => {
@@ -326,28 +410,28 @@ export class HistoryComponent  implements OnInit {
       this.dataProvider.businessData,
       '',
       this.dataProvider.currentUser!.uid,
-      '',
+      ''
     );
     console.log('printableBillData', printableBillData);
     let popover = await this.modalController.create({
-      component:BillPreviewComponent,
-      initialBreakpoint:0.7,
-      breakpoints:[0.2,0.5,0.7,1],
-      componentProps:{
-        printableBillData:printableBillData
-      }
+      component: BillPreviewComponent,
+      initialBreakpoint: 0.7,
+      breakpoints: [0.2, 0.5, 0.7, 1],
+      componentProps: {
+        printableBillData: printableBillData,
+      },
     });
     popover.present();
   }
 
-  async viewKots(billConstructor:BillConstructor){
+  async viewKots(billConstructor: BillConstructor) {
     let popover = await this.modalController.create({
-      component:KotPreviewComponent,
-      initialBreakpoint:0.7,
-      breakpoints:[0.2,0.5,0.7,1],
-      componentProps:{
-        bill:billConstructor
-      }
+      component: KotPreviewComponent,
+      initialBreakpoint: 0.7,
+      breakpoints: [0.2, 0.5, 0.7, 1],
+      componentProps: {
+        bill: billConstructor,
+      },
     });
     popover.present();
   }
@@ -357,8 +441,8 @@ export class HistoryComponent  implements OnInit {
     products: any[],
     currentBusiness: BusinessRecord,
     billNoSuffix: string,
-    currentUser:string,
-    customBillNote: string,
+    currentUser: string,
+    customBillNote: string
   ): PrintableBill {
     return {
       businessDetails: {
@@ -376,7 +460,7 @@ export class HistoryComponent  implements OnInit {
         phone: bill.customerInfo.phone,
       },
       currentLoyalty: bill.currentLoyalty,
-      postDiscountSubTotal:bill.billing.postDiscountSubTotal,
+      postDiscountSubTotal: bill.billing.postDiscountSubTotal,
       billNoSuffix: billNoSuffix,
       billNo: bill.billNo || '',
       orderNo: bill.orderNo || '',
@@ -446,9 +530,8 @@ export class HistoryComponent  implements OnInit {
       notes: bill.instruction ? [bill.instruction] : [],
     };
   }
-  
 
-  async reloadReport(){
+  async reloadReport() {
     let business = await firstValueFrom(this.dataProvider.currentBusiness);
     this.getReport(business.businessId);
   }

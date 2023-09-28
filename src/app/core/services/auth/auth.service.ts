@@ -47,6 +47,8 @@ export class AuthService {
             lastLogin: tempUser['lastLogin'],
             username: tempUser['username']
           };
+          console.log("All business userDocData",userDocData);
+          
           if (userDocData.business.length > 0) {
             this.dataProvider.allBusiness = this.filteredBusiness(userDocData.business);
             if (this.dataProvider.allBusiness.length == 0){
@@ -215,6 +217,7 @@ export class AuthService {
       this.alertify.presentToast("No business found under this user with admin access. Please contact support.")
       throw new Error("No business found under this user with admin access. Please contact support.")
     }
+    console.log("validBusinesses",validBusinesses);
     this.dataProvider.allBusiness = validBusinesses;
     return this.loginWithCustomToken(signInRequest.data['token'])
   }
@@ -263,13 +266,16 @@ export class AuthService {
   }
 
   private filteredBusiness(business:any[]){
+    console.log("All business",business);
     let filteredBusiness =  business.filter((business:any)=>{
+      console.log("All business business.access.accessLevel",business.access.accessLevel,business.access.accessType,business.access.role);
       if(business.access.accessLevel == 'admin' || (business.access.accessType == 'role' && business.access.role == 'admin')){
         return true;
       } else {
         return false;
       }
     });
+    console.log("filteredBusiness",filteredBusiness);
     // remove duplicates filteredBusiness
     let uniqueBusiness = filteredBusiness.filter((business:any,index:number)=>{
       let businessIndex = filteredBusiness.findIndex((business2:any)=>{
@@ -277,6 +283,7 @@ export class AuthService {
       });
       return businessIndex == index;
     })
+    console.log("uniqueBusiness",uniqueBusiness);
     return uniqueBusiness;
   }
 }

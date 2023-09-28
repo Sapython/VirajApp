@@ -143,7 +143,7 @@ export class CancelledBillsComponent implements OnInit {
   }
 
   async downloadPdf() {
-    const doc = new jsPDF('l');
+    const doc = new jsPDF('l','mm', [500, 300]);
     let title = 'Bill Wise';
     let logo = new Image();
     logo.src = 'assets/images/Vrajera.png';

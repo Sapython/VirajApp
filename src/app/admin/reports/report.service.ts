@@ -214,6 +214,16 @@ export class ReportService {
       where('created','<=',endDate),
     ));
   }
+
+
+  getTablePromise(businessId:string,tableId: string, type: 'tables' | 'tokens' | 'onlineTokens'){
+    return getDoc(doc(
+      this.firestore,
+      'business/' + businessId + '/' + type,
+      tableId,
+      )
+    );
+  }
 }
 
 interface ActivityBillConstructor extends BillConstructor {

@@ -50,6 +50,8 @@ div.header{
 			max-height: 33px;
 			word-wrap: initial;
 			font-size: var(--Vrajera-font-medium);
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 		i{
 			font-size: 25px;
