@@ -171,7 +171,7 @@ export class SalesPage implements OnInit {
   }
 
   analyzeAnalyticsForBusiness(data:{businessId:string,date:string}){
-    return this.requestHandler(`http://43.231.127.137/generateAnalytics?businessId=${data.businessId}&date=${data.date}`,'POST',{});
+    return this.requestHandler(`https://vrajera.in/generateAnalytics?businessId=${data.businessId}&date=${data.date}`,'POST',{});
   }
 
 
