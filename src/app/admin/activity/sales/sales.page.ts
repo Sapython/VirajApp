@@ -40,10 +40,29 @@ export class SalesPage implements OnInit {
   @ViewChild('swiperItemSales', { static: false }) swiperItemSales?: SwiperComponent;
   @ViewChild('swiperSuspiciousActivity', { static: false }) swiperSuspiciousActivity?: SwiperComponent;
   @ViewChild('userWiseActionSwiper', { static: false }) userWiseActionSwiper?: SwiperComponent;
-  private analyzeAnalyticsForBusiness = httpsCallable(
-    this.functions,
-    'analyzeAnalyticsForBusiness'
-  );
+  
+  requestHandler(url:string,method:string,body:any){
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify(body);
+    var requestOptions:any = {
+      method: method ? method : 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+    console.log("FETCHING REQUEST",url);
+    // return a promise resolved till json
+    return fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log("FETCHING REQUEST",result);
+        return result.data;
+      })
+      .catch(error => {
+        console.log('FETCHING REQUEST error', error);
+      });
+  }
   constructor(public dataProvider:DataProvider,private analyticsService:AnalyticsService,private loadingCtrl:LoadingController,private functions:Functions,private alertify:AlertsAndNotificationsService,public activityDetail:ActivityDetailService,private databaseService:DatabaseService,public router:Router) {
     this.dataProvider.currentBusiness.pipe(debounceTime(100)).subscribe(async (business)=>{
       this.databaseService.getCurrentSettings(business.businessId).then((settings)=>{
@@ -132,11 +151,14 @@ export class SalesPage implements OnInit {
     let dateList = [];
     let startDate = new Date(this.dateRangeFormGroup.value.startDate);
     let endDate = new Date(this.dateRangeFormGroup.value.endDate);
+    console.log("startDate",startDate,"endDate",endDate);
     let currentDate = startDate;
     while (currentDate <= endDate){
-      dateList.push(currentDate.toISOString());
+      console.log("currentDate",currentDate);
       currentDate.setDate(currentDate.getDate() + 1);
+      dateList.push(currentDate.toISOString());
     }
+    console.log("dateList previous",dateList);
     if (startDate ==  endDate){
       dateList.push(startDate.toISOString());
     }
@@ -146,6 +168,10 @@ export class SalesPage implements OnInit {
     }));
     this.loadData(this.dateRangeFormGroup.value.startDate,business,this.dateRangeFormGroup.value.endDate);
     loader.dismiss();
+  }
+
+  analyzeAnalyticsForBusiness(data:{businessId:string,date:string}){
+    return this.requestHandler(`http://43.231.127.137/generateAnalytics?businessId=${data.businessId}&date=${data.date}`,'POST',{});
   }
 
 

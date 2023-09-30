@@ -15,7 +15,7 @@ export class AnalyticsService {
 
   async getAnalytics(date:Date,businessId:string,endDate?:Date){
     let docRefs = [];
-    let docRef = doc(this.firestore,'business',businessId,'analyticsData',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString())
+    let docRef = doc(this.firestore,'business',businessId,'analyticsData',(date.getFullYear().toString() + '-' + (date.getMonth()+1).toString().padStart(2,'0') + '-' + date.getDate().toString().padStart(2,'0')))
     console.log("Fetching for ",docRef.path);
     docRefs.push({
       ref:docRef,
@@ -30,10 +30,13 @@ export class AnalyticsService {
         currentDate.setDate(currentDate.getDate() + 1);
       }
       console.log("Dates",dates);
+      // set dateString in this format 2023-09-30
+      // add the missing zero in month and date
+      let dateString = 
       dates.forEach((date)=>{
         docRefs.push(
           {
-            ref:doc(this.firestore,'business',businessId,'analyticsData',date.getFullYear().toString(),(date.getMonth()+1).toString(),date.getDate().toString()),
+            ref:doc(this.firestore,'business',businessId,'analyticsData',(date.getFullYear().toString() + '-' + (date.getMonth()+1).toString().padStart(2,'0') + '-' + date.getDate().toString().padStart(2,'0'))),
             date:date
           }
         )
