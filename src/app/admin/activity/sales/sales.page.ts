@@ -155,8 +155,8 @@ export class SalesPage implements OnInit {
     let currentDate = startDate;
     while (currentDate <= endDate){
       console.log("currentDate",currentDate);
-      currentDate.setDate(currentDate.getDate() + 1);
       dateList.push(currentDate.toISOString());
+      currentDate.setDate(currentDate.getDate() + 1);
     }
     console.log("dateList previous",dateList);
     if (startDate ==  endDate){
