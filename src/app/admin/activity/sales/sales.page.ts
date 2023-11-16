@@ -41,7 +41,7 @@ export class SalesPage implements OnInit {
   @ViewChild('swiperSuspiciousActivity', { static: false }) swiperSuspiciousActivity?: SwiperComponent;
   @ViewChild('userWiseActionSwiper', { static: false }) userWiseActionSwiper?: SwiperComponent;
   
-  requestHandler(url:string,method:string,body:any){
+  async requestHandler(url:string,method:string,body:any){
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify(body);
@@ -53,15 +53,15 @@ export class SalesPage implements OnInit {
     };
     console.log("FETCHING REQUEST",url);
     // return a promise resolved till json
-    return fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log("FETCHING REQUEST",result);
-        return result.data;
-      })
-      .catch(error => {
-        console.log('FETCHING REQUEST error', error);
-      });
+    try {
+      let request = await fetch(url, requestOptions)
+      var responseJson = await request.json();
+      return responseJson.data;
+    } catch (error) {
+      console.error("Error in requestHandler",error);
+      return undefined;
+    }
+
   }
   constructor(public dataProvider:DataProvider,private analyticsService:AnalyticsService,private loadingCtrl:LoadingController,private functions:Functions,private alertify:AlertsAndNotificationsService,public activityDetail:ActivityDetailService,private databaseService:DatabaseService,public router:Router) {
     this.dataProvider.currentBusiness.pipe(debounceTime(100)).subscribe(async (business)=>{
@@ -151,7 +151,7 @@ export class SalesPage implements OnInit {
     let dateList = [];
     let startDate = new Date(this.dateRangeFormGroup.value.startDate);
     let endDate = new Date(this.dateRangeFormGroup.value.endDate);
-    console.log("startDate",startDate,"endDate",endDate);
+    console.log("startDate",startDate.toISOString(),"endDate",endDate.toISOString());
     let currentDate = startDate;
     while (currentDate <= endDate){
       console.log("currentDate",currentDate);
@@ -164,8 +164,15 @@ export class SalesPage implements OnInit {
     }
     console.log("dateList",dateList);
     let res = await Promise.all(dateList.map(async (date)=>{
-      await this.analyzeAnalyticsForBusiness({businessId:business.businessId,date});
+      return await this.analyzeAnalyticsForBusiness({businessId:business.businessId,date});
     }));
+    // console.log("res",res);
+    // let mergeData;
+    // if (res.length >1){
+    //   mergeData = this.analyticsService.mergeAnalyticsData(res);
+    // }
+    // mergeData = res[0];
+    
     this.loadData(this.dateRangeFormGroup.value.startDate,business,this.dateRangeFormGroup.value.endDate);
     loader.dismiss();
   }

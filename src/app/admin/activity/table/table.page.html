@@ -113,7 +113,7 @@
       <ng-container *ngFor="let table of takeawayTokens; let i =index">
         <div
           class="table gm fadeUp"
-          *ngIf="table.bill.stage != 'hold'"
+          *ngIf="table.bill?.stage != 'hold'"
           [style]="'animation-delay:'+i*50+'ms'"
           [ngClass]="{'active':table.status=='occupied','late':settings?.tableTimeOutTime <= table.minutes,'finalized':table.bill?.stage=='finalized'}"
         >

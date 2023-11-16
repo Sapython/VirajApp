@@ -165,7 +165,7 @@ export class TablePage implements OnInit {
             return table;
           });
           let holdedItems = this.takeawayTokens.filter((table) => {
-            table.bill.stage == 'hold'
+            table.bill?.stage == 'hold'
           });
           // unsub from holded items
           holdedItems.forEach((table) => {
@@ -180,7 +180,7 @@ export class TablePage implements OnInit {
             }
           });
           this.takeawayTokens = this.takeawayTokens.filter((table) => {
-            table.bill.stage != 'hold'
+            table.bill?.stage != 'hold'
           });
         });
       this.databaseService
