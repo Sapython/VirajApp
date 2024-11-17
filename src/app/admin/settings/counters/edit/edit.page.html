@@ -1,0 +1,17 @@
+<app-header [showOutletSelector]="false" [allowBack]="true" [pageTitle]="editMode ? 'Edit': 'Add'" ></app-header>
+<ion-content>
+  <div class="notFound" *ngIf="!currentCounter && editMode">
+    <h3>Not Found</h3>
+    <p>The method you are looking for is not available.</p>
+  </div>
+  <ion-list *ngIf="currentCounter || !editMode">
+    <form [formGroup]="counterForm" (ngSubmit)="save()">
+      <input placeholder="Method name" formControlName="counterName" type="text">
+      <div class="actions">
+        <button type="button" routerLink="../../">Cancel</button>
+        <button type="submit">Submit</button>
+      </div>
+      <ion-button color="primary" shape="rounded" *ngIf="currentCounter" (click)="deleteMethod()" type="button">Delete <ion-icon name="trash"></ion-icon></ion-button>
+    </form>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,27 @@
+<table class="styled-table" id="reportTable" *ngIf="((paymentMethods | async | keyvalue)?.length)">
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Settlement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let bill of paymentMethods | async | keyvalue">
+      <td>
+        {{ bill.key }}
+      </td>
+      <td>
+        {{ bill.value }}
+      </td>
+    </tr>
+    <tr class="totals">
+      <td>Methods: {{totalMethods}}</td>
+      <td>Total: {{totalAmount}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="noData" *ngIf="!((paymentMethods | async | keyvalue)?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+</div>

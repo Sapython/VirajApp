@@ -1,0 +1,51 @@
+<table class="styled-table" id="reportTable" *ngIf="((bills | async)?.length)">
+	<thead>
+	  <tr>
+		<th>Bill No</th>
+		<th>Order No</th>
+		<th>Bill Amount</th>
+		<th>Loyalty Point</th>
+		<th>Loyalty Cost</th>
+		<th>Redeemed Point</th>
+		<th>Redeemed Cost</th>
+		<th>Bill Kots</th>
+		<th>Date-Time</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr *ngFor="let bill of bills | async">
+		<td>
+		  {{ bill.billNo || "Unsettled" }}
+		</td>
+		<td>
+		  {{ bill.orderNo }}
+		</td>
+		<td>
+		  {{ bill.billing.grandTotal }}
+		</td>
+		<td>
+		  {{ bill.currentLoyalty.totalLoyaltyPoints }}
+		</td>
+		<td>
+		  {{ bill.currentLoyalty.totalLoyaltyCost }}
+		</td>
+		<td>
+		  {{ bill.currentLoyalty.totalToBeRedeemedPoints }}
+		</td>
+		<td>
+		  {{ bill.currentLoyalty.totalToBeRedeemedCost }}
+		</td>
+		<td>
+		  {{ joinArray(bill.kots) }}
+		</td>
+		<td>
+		  {{ bill.createdDate.toDate() | date: "short" }}
+		</td>
+	  </tr>
+	</tbody>
+  </table>
+  
+  <div class="noData" *ngIf="!((bills | async)?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+  </div>

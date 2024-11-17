@@ -1,0 +1,26 @@
+<ion-content class="ion-padding">
+  <div class="heading">
+    <h3>KOTs</h3>
+    <strong
+      >Total Kots: <span>{{ bill?.kots?.length }}</span></strong
+    >
+  </div>
+  <table *ngIf="bill">
+    <tr>
+      <th>Token No</th>
+      <th>Products</th>
+      <th>Time</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let kot of bill.kots">
+      <td>{{ kot.id }}</td>
+      <td>{{ kot.products.length }}</td>
+      <td>{{ kot.createdDate.toDate() | date: "shortTime" }}</td>
+      <td>
+        <ion-button fill="clear" (click)="downloadKotInvoice(kot,bill)">
+          <ion-icon slot="icon-only" name="download"></ion-icon>
+        </ion-button>
+      </td>
+    </tr>
+  </table>
+</ion-content>

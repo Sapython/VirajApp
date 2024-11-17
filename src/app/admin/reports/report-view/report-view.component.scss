@@ -1,0 +1,260 @@
+:host {
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+}
+h4 {
+  padding: 0px 10px;
+}
+mat-date-range-input {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  color: var(--Vrajera-primary-text);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  button {
+    border-radius: 12px;
+    border: 2px solid #ff5e35;
+    background: #fff;
+    padding: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ff5e35;
+    font-size: 12px;
+    i {
+      font-size: 20px;
+      color: #ff5e35;
+    }
+  }
+}
+.body {
+  height: 100%;
+}
+
+.summaryCard {
+  border-radius: 16px;
+  border: 1px solid #d8d8d8;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  .heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 17px;
+    border-bottom: 2px solid #c7c7c7;
+    gap: 10px;
+    margin-bottom: 20px;
+    p {
+      margin: 0px;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    select {
+      border-radius: 8px;
+      border: 2px solid #ff5e35;
+      background: #fff;
+      padding: 4px 8px;
+      color: #ff5e35;
+      font-size: 13px;
+    }
+    .actual {
+      display: block;
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: #ff5e35;
+    }
+    .average {
+      display: block;
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: rgba(0, 183, 255, 1);
+    }
+  }
+  swiper {
+    width: 100%;
+  }
+  .mode {
+    display: grid;
+    grid-template-areas:
+      "total discount"
+      "total nc"
+      "tax tax";
+    gap: 10px;
+    border-radius: 12px;
+    border: 1px solid #d8d8d8;
+    background: #fff;
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+    .total {
+      grid-area: total;
+    }
+    .discount {
+      grid-area: discount;
+    }
+    .nc {
+      grid-area: nc;
+    }
+    .taxes {
+      grid-area: tax;
+    }
+    .card {
+      border-radius: 12px;
+      border: 1px solid #ff5e35;
+      background: #fff8f6;
+      padding: 14px;
+      strong {
+        font-size: 20px;
+        color: green;
+      }
+      span {
+        color: #888;
+      }
+      &:nth-child(2) {
+        strong {
+          color: tomato;
+        }
+      }
+      &:nth-child(3) {
+        strong {
+          color: coral;
+        }
+      }
+      &:nth-child(4) {
+        strong {
+          color: cornflowerblue;
+        }
+      }
+    }
+  }
+  .paddedBody {
+    padding: 10px;
+  }
+  ion-item.consolidated {
+    border-radius: 20px;
+    margin: 10px;
+  }
+}
+
+.stats{
+	padding: 20px;
+	.stat{
+		display: flex;
+		justify-content: space-between;
+		padding: 10px 5px;
+		border-bottom: 1px solid #b3b3b3;
+		p{
+			margin:0px;
+		}
+		p:nth-child(1){
+			color:var(--Vrajera-primary);
+		}
+		p:nth-child(2){
+			color:var(--Vrajera-success);
+		}
+	}
+}
+
+.tableContainer {
+  border: 1px solid #b3b3b3;
+  background: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  overflow-y: auto;
+  table#reportTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-collapse: collapse;
+    border-radius: 1em;
+  }
+  table#reportTable thead {
+    position: sticky;
+    top: 0px;
+  }
+  table#reportTable thead tr {
+    background-color: var(--Vrajera-primary-text);
+    color: #ffffff;
+    text-align: left;
+    th {
+      font-size: var(--Vrajera-font-xlarge);
+    }
+  }
+  table#reportTable th,
+  table#reportTable td {
+    padding: 8px 4px;
+  }
+  table#reportTable tbody tr {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  table#reportTable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+
+  table#reportTable tbody tr:last-of-type {
+    border-bottom: 2px solid var(--Vrajera-primary-text);
+  }
+  table#reportTable tbody tr.active-row {
+    font-weight: bold;
+    color: var(--Vrajera-primary-text);
+  }
+  table#reportTable thead th{
+    white-space: nowrap
+  }
+  table#reportTable tbody td.noWrap{
+    white-space: nowrap
+  }
+  table#reportTable tbody tr.totals{
+    background-color: var(--Vrajera-primary-shade);
+    color: var(--Vrajera-primary-text);
+    font-weight: bold;
+    font-size: var(--Vrajera-font-large);
+    white-space: nowrap;
+    td{
+      white-space: nowrap;
+    }
+  }
+  table#reportTable tbody tr.totals{
+    background-color: var(--Vrajera-primary-shade);
+    color: var(--Vrajera-primary-text);
+    font-weight: bold;
+    font-size: var(--Vrajera-font-large);
+    white-space: nowrap;
+    td{
+      white-space: nowrap;
+    }
+  }
+  .spacer {
+    height: 200px;
+  }
+  .noData{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    i{
+      color:#c7c7c7;
+    }
+    p{
+      color: var(--Vrajera-primary-text);
+    }
+  }
+}

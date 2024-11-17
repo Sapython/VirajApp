@@ -1,0 +1,27 @@
+:host{
+	z-index: 9999;
+	margin-bottom: 30px;
+}
+.tabs{
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	padding-bottom: 15px;
+	width: 100%;
+	gap:20px;
+	padding: 0px 30px;
+	button{
+		width: 100%;
+		border-radius: 12px;
+		border: 2px solid #FF5E35;
+		background: #FFF;
+		color:#FF5E35;
+		padding: 8px 16px;
+		font-size: 17px;
+		&.active{
+			border-radius: 12px;
+			background: #FF5E35;
+			color:white;
+		}
+	}
+}

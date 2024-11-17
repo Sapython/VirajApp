@@ -1,0 +1,34 @@
+<table class="styled-table" id="reportTable" *ngIf="((tableMergeReport | async)?.length)">
+  <thead>
+    <tr>
+      <th>From Table</th>
+      <th>To Table</th>
+      <th>Time</th>
+      <th>Date</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let activity of tableMergeReport | async">
+      <td>
+        {{ activity.from.name }}
+      </td>
+      <td>
+        {{ activity.to.name }}
+      </td>
+      <td>
+        {{ activity.time.toDate() | date: "shortTime" }}
+      </td>
+      <td>
+        {{ activity.time.toDate() | date: "short" }}
+      </td>
+      <td>
+        {{ activity.type }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="noData" *ngIf="!((tableMergeReport | async)?.length)">
+	<i class="ri-inbox-2-fill"></i>
+	<h3>No Data Found</h3>
+</div>

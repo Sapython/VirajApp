@@ -1,0 +1,42 @@
+<table class="styled-table" id="reportTable" *ngIf="((customerWiseReport)?.length)">
+  <thead>
+    <tr>
+      <th>Customer Phone</th>
+      <th>Name</th>
+      <th>Loyalty Points</th>
+      <th>Average Bill</th>
+      <th>Bills</th>
+      <th>Items</th>
+      <th>Total Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let bill of customerWiseReport">
+      <td>
+        {{ bill.phone || "N/A" }}
+      </td>
+      <td>
+        {{ bill.name || 'N/A' }}
+      </td>
+      <td>
+        {{ bill.loyaltyPoints  || 'N/A'}}
+      </td>
+      <td>
+        {{ bill.averageBillPrice  || 'N/A'}}
+      </td>
+      <td>
+        {{ bill.bills  || 'N/A'}}
+      </td>
+      <td>
+        {{ bill.items || 'N/A' }}
+      </td>
+      <td>
+        {{ bill.totalAmount || 'N/A' }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="noData" *ngIf="!((customerWiseReport)?.length)">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

@@ -1,0 +1,24 @@
+<ion-item-group>
+  <ion-item>
+    <ion-label>
+      <h1>Taxes</h1>
+    </ion-label>
+    <ion-buttons slot="end">
+      <ion-button routerLink="tax-detail/new">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Add
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+  <ion-item
+    detail
+    button
+    *ngFor="let tax of taxes"
+    routerLink="tax-detail/{{tax.id}}"
+  >
+    <ion-label>{{tax.name}}</ion-label>
+    <ion-chip color="primary" mode="ios" outline="true">
+      <ion-label>{{tax.type}}</ion-label>
+    </ion-chip>
+  </ion-item>
+</ion-item-group>

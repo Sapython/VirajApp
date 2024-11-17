@@ -1,0 +1,50 @@
+<ion-content>
+  <app-header ></app-header>
+  <main id="content">
+    <div class="items">
+      <div class="settingItem" routerLink="biller">
+        <ion-icon slot="start" name="desktop"></ion-icon>
+        <p>Biller Settings</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="settingItem" routerLink="business">
+        <ion-icon slot="start" name="business"></ion-icon>
+        <p>Business Settings</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="settingItem" routerLink="users">
+        <ion-icon slot="start" name="people"></ion-icon>
+        <p>Users Settings</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="settingItem" routerLink="payment">
+        <ion-icon slot="start" name="wallet"></ion-icon>
+        <p>Payment Modes</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="settingItem" routerLink="charges">
+        <ion-icon slot="start" name="cash"></ion-icon>
+        <p>Charges</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="settingItem" routerLink="counters">
+        <ion-icon slot="start" name="storefront"></ion-icon>
+        <p>Counters</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="settingItem" id="open-logout-sheet">
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        <p>Logout</p>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="spacer"></div>
+    </div>
+    <ion-action-sheet
+      mode="ios"
+      (didDismiss)="logout($event)"
+      trigger="open-logout-sheet"
+      header="Actions"
+      [buttons]="logOutActionsSheetButtons"
+    ></ion-action-sheet>
+  </main>
+</ion-content>

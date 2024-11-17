@@ -1,0 +1,80 @@
+<app-header pageTitle="Profile" [allowBack]="true"></app-header>
+<ion-content>
+  <main id="content" *ngIf="user">
+    <ion-avatar>
+      <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.uid}}" />
+    </ion-avatar>
+    <div class="item">
+      <p>Username</p>
+      <p color="primary">{{user.uid}}</p>
+    </div>
+    <div class="item">
+      <p>Email</p>
+      <p color="primary">{{user.email}}</p>
+    </div>
+    <div class="item">
+      <p>Phone</p>
+      <p color="primary">{{user.phoneNumber}}</p>
+    </div>
+    <div class="item">
+      <p>Created</p>
+      <p color="primary">{{user.metadata.creationTime | date}}</p>
+    </div>
+    <div class="item">
+      <p>Last Login</p>
+      <p color="primary">{{user.metadata.lastSignInTime | date}}</p>
+    </div>
+    <div class="item">
+      <p>Verified</p>
+      <p color="primary">{{user.emailVerified ? "Verified" : 'Not-Verified'}}</p>
+    </div>
+    <div class="item" *ngIf="settings">
+      <p>Delete bill after finalize when cancelled</p>
+      <p color="primary"><ion-toggle [(ngModel)]="settings.deleteCancelledBill" #deleteCancelledBill (ngModelChange)="updateSettings({ deleteCancelledBill: deleteCancelledBill.checked })"></ion-toggle></p>
+    </div>
+    <div class="item" (click)="modal.present()">
+      <p>Show holded bills</p>
+      <ion-icon color="primary" name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="settingItem item" id="open-logout-sheet-profile">
+      <ion-icon slot="start" name="log-out"></ion-icon>
+      <p>Logout</p>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="spacer"></div>
+  <ion-action-sheet
+    mode="ios"
+    (didDismiss)="logout($event)"
+    trigger="open-logout-sheet-profile"
+    header="Actions"
+    [buttons]="logOutActionsSheetButtons"
+  ></ion-action-sheet>
+  </main>
+</ion-content>
+<ion-modal #modal trigger="open-modal" [initialBreakpoint]="0.25" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="save(true); modal.dismiss();">
+            See Tokens
+          </ion-button>
+        </ion-buttons>
+        <ion-title>Counters</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="save(false); modal.dismiss();">
+            Hide Tokens
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item *ngFor="let item of counters">
+          <ion-label>{{item.counterName}}</ion-label>
+          <ion-toggle [(ngModel)]="item.locked"></ion-toggle>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>

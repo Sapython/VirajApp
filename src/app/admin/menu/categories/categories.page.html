@@ -1,0 +1,51 @@
+<ion-item-group>
+	<ion-item>
+		<ion-label>
+			<h1>Categories</h1>
+		</ion-label>
+	</ion-item>
+	<ion-item-divider>
+		<ion-label>All Products</ion-label>
+	</ion-item-divider>
+	<ion-item detail button routerLink="category-detail/mainCategories/all">
+		<ion-label>All Products</ion-label>
+		<ion-chip color="primary" mode="ios" outline="true">
+			<ion-label>Dishes: {{products.length}}</ion-label>
+		</ion-chip>
+	</ion-item>
+	<ion-item-divider>
+		<ion-label>Vrajera Categories</ion-label>
+	</ion-item-divider>
+	<ion-item detail button *ngFor="let category of VrajeraCategories" routerLink="category-detail/recommendedCategories/{{category.id}}">
+		<ion-label>{{category.name}}</ion-label>
+		<ion-chip color="primary" mode="ios" outline="true">
+			<ion-label>Dishes: {{category.products.length}}</ion-label>
+		</ion-chip>
+	</ion-item>
+	<ion-item-divider>
+		<ion-label>View Categories</ion-label>
+	</ion-item-divider>
+	<ng-container *ngFor="let category of viewCategories">
+		<ion-item>
+			<ion-avatar slot="start">
+				<img src="https://api.dicebear.com/6.x/initials/svg?seed={{category.id}}" />
+			</ion-avatar>
+			<ion-label>{{category.id}}</ion-label>
+		</ion-item>
+		<ion-item detail button *ngFor="let category of category.viewCategories" routerLink="category-detail/viewCategories-{{category.id}}/{{category.id}}">
+			<ion-label>{{category.name}}</ion-label>
+			<ion-chip color="primary" mode="ios" outline="true">
+				<ion-label>Dishes: {{category.products.length}}</ion-label>
+			</ion-chip>
+		</ion-item>
+	</ng-container>
+	<ion-item-divider>
+		<ion-label>Main Categories</ion-label>
+	</ion-item-divider>
+	<ion-item detail button *ngFor="let category of mainCategories" routerLink="category-detail/mainCategories/{{category.id}}">
+		<ion-label>{{category.name}}</ion-label>
+		<ion-chip color="primary" mode="ios" outline="true">
+			<ion-label>Dishes: {{category.products.length}}</ion-label>
+		</ion-chip>
+	</ion-item>
+</ion-item-group>

@@ -1,0 +1,24 @@
+<ion-item-group>
+  <ion-item>
+    <ion-label>
+      <h1>Loyalty Settings</h1>
+    </ion-label>
+    <ion-buttons slot="end">
+      <ion-button routerLink="loyalty-detail/new">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Add
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+  <ion-item
+    detail
+    button
+    *ngFor="let loyalty of loyalties"
+    routerLink="loyalty-detail/{{loyalty.id}}"
+  >
+    <ion-label>{{loyalty.name}}</ion-label>
+    <ion-chip color="primary" mode="ios" outline="true">
+      <ion-label>{{loyalty.type}}</ion-label>
+    </ion-chip>
+  </ion-item>
+</ion-item-group>

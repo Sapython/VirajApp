@@ -1,0 +1,24 @@
+<ion-item-group>
+  <ion-item>
+    <ion-label>
+      <h1>Discounts</h1>
+    </ion-label>
+    <ion-buttons slot="end">
+      <ion-button routerLink="discount-detail/new">
+        <ion-icon slot="start" name="add"></ion-icon>
+        Add
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+  <ion-item
+    detail
+    button
+    *ngFor="let discount of discounts"
+    routerLink="discount-detail/{{discount.id}}"
+  >
+    <ion-label>{{discount.name}}</ion-label>
+    <ion-chip color="primary" mode="ios" outline="true">
+      <ion-label>{{discount.type}}</ion-label>
+    </ion-chip>
+  </ion-item>
+</ion-item-group>

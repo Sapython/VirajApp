@@ -1,0 +1,13 @@
+<ng-container *ngIf="printableBilllConstructor">
+  <div (click)="viewBill(printableBilllConstructor)">
+    <ion-spinner *ngIf="stage == 'loading'" name="crescent"></ion-spinner>
+    <ion-label color="success" *ngIf="stage == 'loaded'">
+      Order No: {{printableBilllConstructor?.orderNo}}
+      <ion-icon name="open"></ion-icon>
+    </ion-label>
+    <ion-label color="danger" *ngIf="stage == 'error'">Error</ion-label>
+  </div>
+</ng-container>
+<p class="error" *ngIf="!printableBilllConstructor">
+  Error
+</p>

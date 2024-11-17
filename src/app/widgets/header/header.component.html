@@ -1,0 +1,39 @@
+<div class="header">
+  <span>
+    <button class="back" (click)="handleBack()" *ngIf="allowBack"><i class="ri-arrow-left-s-line"></i></button>
+    <img *ngIf="!allowBack" src="assets/Vrajera.png" alt="">
+    <p class="virajFont">{{pageTitle}}</p>
+  </span>
+  <span>
+    <div class="outlet" (click)="showOutletSelector ? outletSelector.present() : {}">
+      <p>{{(dataProvider.currentBusiness | async)?.name | titlecase}}</p>
+      <i class="ri-arrow-down-s-line" *ngIf="showOutletSelector"></i>
+    </div>
+    <button [routerLink]="customBackProfileRoute ? customBackProfileRoute : '../profile'" class="profile"><i class="ri-user-fill"></i></button>
+  </span>
+</div>
+
+<ion-modal #outletSelector [initialBreakpoint]="0.6" (didPresent)="reset()" [breakpoints]="[0,0.6,0.8,1]">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Outlets</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <!-- <ion-searchbar placeholder="Filter Outlet" type="search" (ionInput)="search($event)" [debounce]="250" showCancelButton="always"></ion-searchbar> -->
+      <div class="search gm fadeUp">
+        <input type="search" (input)="search(searchBar.value)" #searchBar placeholder="Search Customer">
+        <i class="ri-search-2-line"></i>
+      </div>
+      <ion-item button detail (click)="dataProvider.currentBusiness.next(allUserBusiness);outletSelector.dismiss()" *ngIf="(this.dataProvider.routeChanged|async) == 'sales'">
+        <ion-checkbox mode="ios"  [checked]="(dataProvider.currentBusiness | async)?.businessId == 'all'"></ion-checkbox>
+        <ion-label>All Outlets</ion-label>
+      </ion-item>
+      <ion-item button detail (click)="dataProvider.currentBusiness.next(outlet);outletSelector.dismiss()" *ngFor="let outlet of filteredBusiness.length ? filteredBusiness : this.dataProvider.allBusiness">
+        <ion-checkbox mode="ios"  [checked]="(dataProvider.currentBusiness | async)?.businessId == outlet.businessId"></ion-checkbox>
+        <ion-label>{{outlet.name |titlecase}}</ion-label>
+      </ion-item>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,21 @@
+{
+  "targets": {
+    "fbms-shreeva-demo": {
+      "hosting": {
+        "app": [
+          "fbms-shreeva-demo"
+        ]
+      }
+    },
+    "vrajera-d1e58": {
+      "hosting": {
+        "app": [
+          "vrajera-d1e58"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "vrajera-d1e58"
+  }
+}

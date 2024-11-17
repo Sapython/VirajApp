@@ -1,0 +1,59 @@
+<table id="reportTable" *ngIf="((kotEditsActivity | async)?.length)">
+  <thead>
+    <tr>
+      <th>Kot No</th>
+      <th>Bill No</th>
+      <th>Order No</th>
+      <th>Reason</th>
+      <th>User</th>
+      <th>Table</th>
+      <th>Mode</th>
+      <th>Bill Start Time</th>
+      <th>Kot Edit Date-Time</th>
+      <th>Products</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let kot of kotEditsActivity|async">
+      <td class="noWrap">
+        {{ kot.id }}
+      </td>
+      <td class="noWrap">
+        {{ kot.billNo || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ kot.orderNo || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ kot.reason || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ kot.user || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ kot.table || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ kot.mode || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ (kot.billStartTime.toDate() | date:'short') || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        {{ (kot.kotEditTime.toDate() | date:'short') || 'N/A' }}
+      </td>
+      <td class="noWrap">
+        <ol>
+          <li *ngFor="let product of kot.products">
+            {{ product.name }} - {{ product.price }} - ({{ product.quantity }}) - ({{product.instruction}})
+          </li>
+        </ol>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="noData" *ngIf="!((kotEditsActivity | async)?.length)">
+  <i class="ri-inbox-2-fill"></i>
+  <h3>No Data Found</h3>
+</div>

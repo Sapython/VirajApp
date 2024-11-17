@@ -1,0 +1,5 @@
+<div class="tabs">
+  <button *ngFor="let button of tabs" [ngClass]="{active: currentTab == button}" (click)="currentTab = button;tabSwitched.emit(button)">
+    {{button | titlecase}}
+  </button>
+</div>

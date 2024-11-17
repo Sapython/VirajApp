@@ -1,0 +1,211 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+@import "swiper/scss";
+@import "swiper/scss/navigation";
+@import "swiper/scss/autoplay";
+@import "swiper/scss/pagination";
+@import "swiper/scss/controller";
+@import "remixicon/fonts/remixicon.css";
+
+@font-face {
+  font-family: "MergeOne-Regular";
+  src: url("assets/fonts/MergeOne-Regular.ttf");
+}
+@font-face {
+  font-family: "NATS-Regular";
+  src: url("assets/fonts/NATS-Regular.ttf");
+}
+
+:root {
+  // --ion-background-color:transparent;
+  --Vrajera-primary: #ff5e35;
+  --Vrajera-primary-hover: #dc5331;
+  --Vrajera-primary-hover-rgb: 255, 154, 129;
+  --Vrajera-primary-rgb: 255, 94, 53;
+  --Vrajera-primary: #ff5e35;
+  --Vrajera-accent: #ffc220;
+  --Vrajera-accent-hover: #ffb20f;
+  --Vrajera-primary-tint: #ff5e35;
+  --Vrajera-primary-shade: #ffe1c2;
+  --Vrajera-primary-text: #962e40;
+  --Vrajera-success: #038943;
+  --Vrajera-danger: #962e40;
+  --Vrajera-background: white;
+  --Vrajera-font: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-bold: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-regular: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-light: "MergeOne-Regular", sans-serif;
+  --Vrajera-font-small: 12px;
+  --Vrajera-font-medium: 14px;
+  --Vrajera-font-large: 16px;
+  --Vrajera-font-xlarge: 18px;
+  --Vrajera-font-xxlarge: 20px;
+  --Vrajera-font-xxxlarge: 22px;
+  --Vrajera-font-xxxxlarge: 24px;
+  --Vrajera-icon-small: 28px;
+  --Vrajera-icon-medium: 24px;
+  --Vrajera-icon-large: 26px;
+  --Vrajera-icon-xlarge: 30px;
+  --Vrajera-button-small: 14px;
+  --Vrajera-button-medium: 18px;
+  --Vrajera-button-medium: 18px;
+  --Vrajera-button-medium: 24px;
+  --Vrajera-border-default: 2px solid #ccc;
+  --Vrajera-border-radius: 4px;
+  --Vrajera-border-radius-large: 7px;
+  --Vrajera-border-radius-xlarge: 14px;
+  --Vrajera-shadow-light: 4px 1px 16px rgba(22, 22, 22, 0.1);
+  --Vrajera-shadow-medium: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  --Vrajera-shadow-heavy: 0px 8px 16px rgba(0, 0, 0, 0.25);
+  --swiper-theme-color: var(--Vrajera-primary);
+  font-family: "MergeOne-Regular", sans-serif;
+}
+*{
+  font-family: var(--Vrajera-font);
+}
+html{
+  scroll-behavior: smooth;
+}
+.virajFont {
+  font-family: "NATS-Regular";
+}
+ion-app {
+  // background-image: url('assets/background.svg');
+  // background-repeat: repeat;
+  // background-size: 300px;
+  // background-position: center;
+}
+main#content {
+  // background-image: url("./assets/background.jpg");
+  // background-repeat: repeat;
+  // background-size: 300px;
+  // background-position: center;
+  // background-attachment: fixed;
+  height: 100%;
+  overflow: scroll;
+  padding-top: 20px;
+}
+app-header{
+	position: sticky;
+	top:0px;
+}
+
+
+
+// animations
+.fadeUp{
+	animation: fadeUp 0.5s ease-in-out;
+}
+@keyframes fadeUp{
+	0%{
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	100%{
+		transform: translateY(0px);
+		opacity: 1;
+	}
+}
+.virajInput{
+  label{
+    position: absolute;
+    transform: translate(-180%,10px);
+    font-size: var(--Vrajera-font-medium);
+    color: var(--Vrajera-primary);
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  input{
+    border: 2px solid var(--Vrajera-primary);
+    border-radius: 4px;
+    height: 35px;
+    padding: 0px 10px;
+    color: var(--Vrajera-primary);
+    font-size: var(--Vrajera-font-medium);
+    transition: all 0.3s ease-in-out;
+    input::placeholder{
+      opacity:0;
+    }
+    &:focus{
+      outline:none;
+      border-bottom: 4px solid var(--Vrajera-primary);
+      & + label,
+      &:not(:placeholder-shown) + label{
+        transform:translate(-180%,-20px);
+      }
+    }
+  }
+  &:focus-within,&.active{
+    input{
+      border-bottom: 4px solid var(--Vrajera-primary);
+      & + label,
+      &:not(:placeholder-shown) + label{
+        transform:translate(-180%,-20px);
+      }
+    }
+  }
+}
+
+.swiper-pagination-fraction, .swiper-pagination-custom, .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal{
+  bottom: 8px;
+}
+
+mat-tab-group.noHeader{
+	mat-tab-header{
+		display: none;
+	}
+}
+
+mat-tab-group.padded{
+  padding-top: 20px;
+	// div.mat-mdc-tab-body-wrapper{
+  // }
+}
+
+.bottomSpacer{
+  height: 100px;
+
+}
+.activity-detail{
+  --width:90vw;
+  .popover-content{ width: 90vw; }
+}
+
+.noData{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  p{
+    color:#962e40;
+  }
+  i{
+    font-size: 40px;
+    color:#c7c7c7;
+  }
+}

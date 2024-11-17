@@ -1,0 +1,7 @@
+{
+  "name": "VrajeraApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

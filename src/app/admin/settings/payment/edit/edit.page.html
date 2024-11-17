@@ -1,0 +1,41 @@
+<app-header [showOutletSelector]="false" [allowBack]="true" [pageTitle]="editMode ? 'Edit': 'Add'" ></app-header>
+<ion-content>
+  <div class="notFound" *ngIf="!currentPaymentMethod && editMode">
+    <h3>Not Found</h3>
+    <p>The method you are looking for is not available.</p>
+  </div>
+  <ion-list *ngIf="currentPaymentMethod || !editMode">
+    <form [formGroup]="paymentMethodForm" (ngSubmit)="save()">
+      <input placeholder="Method name" formControlName="name" type="text">
+      <div class="checkbox">
+        <label for="detail">Phone Number Required</label>
+        <ion-toggle #detailRequired formControlName="detail"></ion-toggle>
+      </div>
+      <div class="actions">
+        <button type="button" routerLink="../../">Cancel</button>
+        <button type="submit">Submit</button>
+      </div>
+      <ion-button color="primary" shape="rounded" *ngIf="currentPaymentMethod" (click)="deleteMethod()" type="button">Delete <ion-icon name="trash"></ion-icon></ion-button>
+      <!-- <ion-list>
+        <ion-item>
+          <ion-label position="floating">Method Name <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="name" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Details Required</ion-label>
+          <ion-checkbox formControlName="detail"></ion-checkbox>
+        </ion-item>
+        <br>
+        <br>
+        <ion-row class="ion-justify-content-around">
+          <ion-button (click)="cancel()" type="button" routerLink="../../" expand="full" color="warning">
+            Cancel
+          </ion-button>
+          <ion-button type="submit" expand="full" color="success">
+            Save
+          </ion-button>
+        </ion-row>
+      </ion-list> -->
+    </form>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,15 @@
+<div class="tabs">
+  <!-- <div class="activeBar"
+    [style]="'grid-template-columns: repeat('+tabs.length+', 1fr);'"
+    >
+    <span [style]="'grid-column: '+(currentTabIndex+1)"></span>
+  </div> -->
+  <div class="activeBar">
+    <span
+      [style]="'width: calc(100% / '+tabs.length+' - '+ paddingOffset +'px); left: calc(100% / '+tabs.length+' * '+currentTabIndex+' +  ' + (paddingOffset / 2)+'px);'"
+    ></span>
+  </div>
+  <div class="tabBar">
+    <ng-content></ng-content>
+  </div>
+</div>
